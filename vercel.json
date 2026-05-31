@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "framework": "remix",
+  "buildCommand": "npx remix vite:build",
+  "outputDirectory": "build"
+}
