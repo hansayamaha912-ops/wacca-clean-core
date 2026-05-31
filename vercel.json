@@ -2,5 +2,8 @@
   "version": 2,
   "framework": "remix",
   "buildCommand": "npx remix vite:build",
-  "outputDirectory": "build"
+  "outputDirectory": "build",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "installCommand": "npm install --legacy-peer-deps"
 }
