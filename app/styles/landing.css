@@ -30,6 +30,12 @@ html, body {
   width: 200px;
   height: auto;
   max-width: 80vw;
+  transition: opacity 180ms ease;
+}
+
+/* hover -> subtle opacity change only (no scale) */
+.logo-container:hover .main-logo{
+  opacity: 0.92;
 }
 
 /* 放射状に広がるノードコンテナ */
@@ -86,10 +92,10 @@ body.state1 .nodes-wrapper {
   top: 50%;
   width: 1px;
   height: 45vh;
-  background: #ffffff;
+  background: #000000; /* black lines */
   transform-origin: center bottom;
   transform: rotate(var(--angle)) translateY(-50%) scaleX(0);
-  transition: transform 420ms ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* when expanded, grow lines horizontally */
