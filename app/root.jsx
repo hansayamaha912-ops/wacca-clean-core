@@ -7,7 +7,7 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <Links />
+  <Links />
       </head>
       <body style={{ margin: 0, backgroundColor: '#0a0a0c', color: '#fff', fontFamily: 'monospace' }}>
         <Outlet />
