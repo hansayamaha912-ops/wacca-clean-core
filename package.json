@@ -7,10 +7,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "shopify hydrogen build",
-    "dev": "shopify hydrogen dev --port 3456",
-    "vercel-build": "shopify hydrogen build",
-    "start": "shopify hydrogen serve",
+    "dev": "remix vite:dev",
+    "build": "remix vite:build",
+    "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
