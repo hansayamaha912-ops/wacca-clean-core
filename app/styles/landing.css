@@ -1,66 +1,97 @@
-/* 初期状態のスタイル */
-body.state0 {
-  /* landing.css */
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: #ffffff; /* 白背景 */
-  }
+/* ベーススタイル */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #ffffff;
+  overflow: hidden;
+}
 
-  #root, .viewport {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+/* 画面中央配置用コンテナ */
+.viewport {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 10;
-  }
+/* ロゴコンテナ */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
 
-  .logo-container:hover {
-    transform: scale(1.05);
-  }
+.logo-container:hover {
+  transform: scale(1.05);
+}
 
-  .main-logo {
-    width: 200px; /* 一旦の基準サイズ */
-    height: auto;
-    max-width: 80vw;
-  }
+.main-logo {
+  width: 200px;
+  height: auto;
+  max-width: 80vw;
+}
 
-  .nodes-wrapper {
-    position: absolute;
-    /* state1で広がるための初期位置 */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.48s ease;
-    pointer-events: none;
-  }
+/* 放射状に広がるノードコンテナ */
+.nodes-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.48s ease;
+  pointer-events: none;
+}
 
-  body.state1 .nodes-wrapper {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    pointer-events: auto;
-  }
+/* JSで state1 クラスが body につくと展開 */
+body.state1 .nodes-wrapper {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
 
-  /* node buttons - keep simple default */
-  .node-btn { position: absolute; background: none; border: none; cursor: pointer; }
+/* ノードボタン共通 */
+.node-btn {
+  position: absolute;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
 
-  /* small footer */
-  .landing-footer{ position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; }
+.node-btn:hover {
+  transform: scale(1.1);
+}
 
-  /* accessibility */
-  .logo-container:focus{ outline: 3px solid rgba(0,0,0,0.08); }
-  .logo-container:active{ transform: scale(0.98); }
-/* 隠れている状態のノードは操作不可 */
-｝
+/* フッター */
+.landing-footer {
+  position: fixed;
+  bottom: 18px;
+  left: 18px;
+  font-size: 0.85rem;
+}
+
+/* glow lines behind the logo (X layout) */
+.glow-line{
+  position: absolute;
+  width: 1px;
+  height: 50vh;
+  background: white;
+  box-shadow: 0 0 16px 4px rgba(255,255,255,0.9);
+  transform-origin: bottom center;
+  z-index: 1; /* behind logo which is z-index:10 */
+  opacity: 0;
+  transition: opacity 420ms ease, transform 480ms cubic-bezier(0.16,1,0.3,1);
+}
+.line-tl { transform: rotate(-45deg); bottom: 50%; right: 50%; }
+.line-tr { transform: rotate(45deg); bottom: 50%; left: 50%; }
+.line-bl { transform: rotate(45deg); top: 50%; right: 50%; transform-origin: top center; }
+.line-br { transform: rotate(-45deg); top: 50%; left: 50%; transform-origin: top center; }
+
+/* show when expanded */
+body.state1 .glow-line{ opacity: 1; }

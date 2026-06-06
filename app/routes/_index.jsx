@@ -74,6 +74,11 @@ export default function Index() {
     <main className="landing-root">
       <div className="viewport">
         <div className="logo-container" id="mainLogoTrigger" onClick={handleLogoClick} role="button" tabIndex={0}>
+          {/* glow lines behind the logo */}
+          <div className="glow-line line-tl" aria-hidden="true" />
+          <div className="glow-line line-tr" aria-hidden="true" />
+          <div className="glow-line line-bl" aria-hidden="true" />
+          <div className="glow-line line-br" aria-hidden="true" />
           <img src="/assets/白メイン黒ロゴ.png" alt="WACCA LOGO" className="main-logo" />
 
           <div className="nodes-wrapper" aria-hidden={!isOpen}>
