@@ -3,6 +3,9 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "shopify hydrogen build",
     "dev": "shopify hydrogen dev --port 3456",
