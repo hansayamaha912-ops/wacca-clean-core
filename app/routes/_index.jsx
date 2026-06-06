@@ -76,7 +76,7 @@ export default function Index() {
         <div className="logo-container" id="mainLogoTrigger" onClick={handleLogoClick} role="button" tabIndex={0}>
           <img src="/assets/白メイン黒ロゴ.png" alt="WACCA LOGO" className="main-logo" />
 
-          <div className="nodes-wrapper" aria-hidden={!isExpanded}>
+          <div className="nodes-wrapper" aria-hidden={!isOpen}>
             <button type="button" className="node-btn node-left1" onClick={(e) => { e.stopPropagation(); openModal('gloveModal'); }}>
               <img src="/assets/白メイン黒ロゴ.png" alt="Glove" />
             </button>
