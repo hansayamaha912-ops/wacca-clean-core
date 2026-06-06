@@ -1,74 +1,65 @@
 /* 初期状態のスタイル */
 body.state0 {
-  background-color: #ffffff;
-  margin: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+  /* landing.css */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff; /* 白背景 */
+  }
 
-/* センターに配置するロゴ容器 */
-.logo-container {
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  z-index: 10;
-}
-.logo-container:hover {
-  transform: scale(1.05);
-}
-.main-logo {
-  width: 120px;
-  height: auto;
-  display: block;
-}
+  #root, .viewport {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-/* 初期状態：ノードのラッパーは中央で透明に縮小しておく */
-.nodes-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
 
-/* 展開状態（state1）になったら一気に広げる */
-body.state1 .nodes-wrapper {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  pointer-events: auto;
-}
+  .logo-container:hover {
+    transform: scale(1.05);
+  }
 
-/* 各ノードボタンの共通スタイル */
-.node-btn {
-  position: absolute;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.node-btn:hover {
-  transform: scale(1.1);
-}
+  .main-logo {
+    width: 200px; /* 一旦の基準サイズ */
+    height: auto;
+    max-width: 80vw;
+  }
 
-/* 各ノードの位置を絶対座標で指定 */
-.node-left1  { top: -100px; left: -250px; }
-.node-left2  { top: 50px;   left: -300px; }
-.node-right1 { top: -80px;  left: 200px; }
-.node-right2 { top: 60px;   left: 280px; }
+  .nodes-wrapper {
+    position: absolute;
+    /* state1で広がるための初期位置 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
 
+  body.state1 .nodes-wrapper {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* node buttons - keep simple default */
+  .node-btn { position: absolute; background: none; border: none; cursor: pointer; }
+
+  /* small footer */
+  .landing-footer{ position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; }
+
+  /* accessibility */
+  .logo-container:focus{ outline: 3px solid rgba(0,0,0,0.08); }
+  .logo-container:active{ transform: scale(0.98); }
 /* 隠れている状態のノードは操作不可 */
-body.state0 .node-btn{ opacity:0; pointer-events:none; }
-body.state1 .node-btn{ opacity:1; pointer-events:auto; }
-
-/* 小さなフッター */
-.landing-footer{ position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; }
-
-/* アクセシビリティ */
-.logo-container:focus{ outline: 3px solid rgba(0,0,0,0.08); }
-.logo-container:active{ transform: scale(0.98); }
