@@ -10,7 +10,7 @@ export const meta = () => [
 
 export default function Index() {
   const audioRef = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // 初期 body class をセットし、アンマウント時にクリーンアップ
   useEffect(() => {
@@ -23,34 +23,45 @@ export default function Index() {
     };
   }, []);
 
-  // isExpanded と body.class を同期
+  // isOpen と body.class を同期
   useEffect(() => {
-    if (isExpanded) {
-      document.body.classList.remove('state0');
-      document.body.classList.add('state1');
-    } else {
-      document.body.classList.remove('state1');
-      document.body.classList.add('state0');
-    }
-  }, [isExpanded]);
+    document.body.classList.toggle('state1', isOpen);
+    document.body.classList.toggle('state0', !isOpen);
+  }, [isOpen]);
 
+  // audio の再生/停止ロジック: 重複再生を避ける（再生中なら停止、停止中なら再生）
   const handleLogoClick = async (e) => {
     e.preventDefault();
-    if (isExpanded) return;
-    setIsExpanded(true);
+    const next = !isOpen;
+    setIsOpen(next);
 
     const snd = audioRef.current;
-    if (snd) {
-      try {
-        await snd.play();
-      } catch (err) {
+    if (!snd) return;
+
+    if (next) {
+      // 開く方向: 再生していなければ再生
+      if (snd.paused) {
         try {
-          snd.muted = true;
           await snd.play();
-          snd.muted = false;
-        } catch (e) {
-          // noop
+        } catch (err) {
+          try {
+            snd.muted = true;
+            await snd.play();
+            snd.muted = false;
+          } catch (e) {
+            // noop
+          }
         }
+      }
+    } else {
+      // 閉じる方向: もし再生中なら停止して先頭に戻す
+      try {
+        if (!snd.paused) {
+          snd.pause();
+          snd.currentTime = 0;
+        }
+      } catch (e) {
+        // noop
       }
     }
   };
