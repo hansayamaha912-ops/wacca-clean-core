@@ -67,22 +67,22 @@ export default function Index() {
 
           <div className="nodes-wrapper" aria-hidden={!isExpanded}>
             <button type="button" className="node-btn node-left1" onClick={(e) => { e.stopPropagation(); openModal('gloveModal'); }}>
-              <img src="/assets/glove_thumbnail.png" alt="Glove" />
+              <img src="/assets/白メイン黒ロゴ.png" alt="Glove" />
             </button>
             <button type="button" className="node-btn node-left2" onClick={(e) => { e.stopPropagation(); openModal('tattooModal'); }}>
-              <img src="/assets/tattoo_thumbnail.png" alt="Tattoo" />
+              <img src="/assets/白メイン黒ロゴ.png" alt="Tattoo" />
             </button>
             <button type="button" className="node-btn node-right1" onClick={(e) => { e.stopPropagation(); openModal('accModal'); }}>
-              <img src="/assets/acc_thumbnail.png" alt="Accessory" />
+              <img src="/assets/白メイン黒ロゴ.png" alt="Accessory" />
             </button>
             <button type="button" className="node-btn node-right2" onClick={(e) => { e.stopPropagation(); openModal('otherModal'); }}>
-              <img src="/assets/other_thumbnail.png" alt="Other" />
+              <img src="/assets/白メイン黒ロゴ.png" alt="Other" />
             </button>
           </div>
         </div>
       </div>
 
-      <audio id="sndIntro" ref={audioRef} src="/assets/intro.mp3" preload="auto" />
+  <audio id="sndIntro" ref={audioRef} preload="auto" />
 
       <footer className="landing-footer">
         <Link to="/policies">特定商取引法に基づく表記</Link>
