@@ -4,8 +4,9 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
-    "dev": "remix vite:dev",
+    "build": "remix build",
+    "dev": "remix dev",
+    "vercel-build": "remix build",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
