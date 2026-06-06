@@ -23,12 +23,7 @@ html, body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.3s ease;
   z-index: 10;
-}
-
-.logo-container:hover {
-  transform: scale(1.05);
 }
 
 .main-logo {
@@ -76,22 +71,28 @@ body.state1 .nodes-wrapper {
   font-size: 0.85rem;
 }
 
-/* glow lines behind the logo (X layout) */
-.glow-line{
+/* lines container: generate 40 sharp white lines and animate scaleX */
+.lines-container{
   position: absolute;
-  width: 1px;
-  height: 50vh;
-  background: white;
-  box-shadow: 0 0 16px 4px rgba(255,255,255,0.9);
-  transform-origin: bottom center;
-  z-index: 1; /* behind logo which is z-index:10 */
-  opacity: 0;
-  transition: opacity 420ms ease, transform 480ms cubic-bezier(0.16,1,0.3,1);
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  z-index: 1;
 }
-.line-tl { transform: rotate(-45deg); bottom: 50%; right: 50%; }
-.line-tr { transform: rotate(45deg); bottom: 50%; left: 50%; }
-.line-bl { transform: rotate(45deg); top: 50%; right: 50%; transform-origin: top center; }
-.line-br { transform: rotate(-45deg); top: 50%; left: 50%; transform-origin: top center; }
+.lines-container .line{
+  --angle: 0deg;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1px;
+  height: 45vh;
+  background: #ffffff;
+  transform-origin: center bottom;
+  transform: rotate(var(--angle)) translateY(-50%) scaleX(0);
+  transition: transform 420ms ease;
+}
 
-/* show when expanded */
-body.state1 .glow-line{ opacity: 1; }
+/* when expanded, grow lines horizontally */
+body.state1 .lines-container .line{
+  transform: rotate(var(--angle)) translateY(-50%) scaleX(1);
+}

@@ -74,11 +74,17 @@ export default function Index() {
     <main className="landing-root">
       <div className="viewport">
         <div className="logo-container" id="mainLogoTrigger" onClick={handleLogoClick} role="button" tabIndex={0}>
-          {/* glow lines behind the logo */}
-          <div className="glow-line line-tl" aria-hidden="true" />
-          <div className="glow-line line-tr" aria-hidden="true" />
-          <div className="glow-line line-bl" aria-hidden="true" />
-          <div className="glow-line line-br" aria-hidden="true" />
+          {/* radial lines container (40 lines: left 20 + right 20) */}
+          <div className="lines-container" aria-hidden={!isOpen}>
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div
+                key={i}
+                className="line"
+                style={{ ['--angle']: `${i * (360 / 40)}deg` }}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
           <img src="/assets/白メイン黒ロゴ.png" alt="WACCA LOGO" className="main-logo" />
 
           <div className="nodes-wrapper" aria-hidden={!isOpen}>
