@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
-import stylesUrl from "../styles/landing.css";
+import stylesUrl from "~/styles/landing.css";
 
 export const links = () => [{ rel: 'stylesheet', href: stylesUrl }];
 
