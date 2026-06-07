@@ -1,104 +1,58 @@
-/* ベーススタイル */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  width: 100vw;
-  background-color: #ffffff;
-  overflow: hidden;
+html, body, #__remix {
+  margin: 0; padding: 0; height: 100vh; width: 100vw;
+  background-color: #ffffff !important; overflow: hidden;
 }
 
-/* 画面中央配置用コンテナ */
-.viewport {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
 
-/* ロゴコンテナ */
+/* コンテナは配置枠として機能 */
 .logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 10;
+  position: relative; width: 200px; height: 200px;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer; z-index: 10;
 }
 
-.main-logo {
-  width: 200px;
-  height: auto;
-  max-width: 80vw;
-  transition: opacity 180ms ease;
+/* ロゴ単体のアニメーション */
+.main-logo { 
+  width: 100%; height: auto; position: relative; z-index: 2; display: block;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* hover -> subtle opacity change only (no scale) */
-.logo-container:hover .main-logo{
-  opacity: 0.92;
+/* クリックして isOpen が true になるとこの状態が維持される */
+.logo-container.is-active .main-logo { 
+  transform: scale(0.66); 
+  opacity: 0.5; 
 }
 
-/* 放射状に広がるノードコンテナ */
-.nodes-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.48s ease;
-  pointer-events: none;
-}
+.nodes-layer { position: absolute; inset: 0; pointer-events: none; }
 
-/* JSで state1 クラスが body につくと展開 */
-body.state1 .nodes-wrapper {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  pointer-events: auto;
+.node-item {
+  position: absolute; top: 50%; left: 50%;
+  opacity: 0; 
+  transition: opacity 0.4s ease var(--delay);
+  transform-origin: left center;
 }
+body.state1 .node-item { opacity: 1; }
 
-/* ノードボタン共通 */
-.node-btn {
-  position: absolute;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
+.node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
+.node-item.right { transform: rotate(var(--ang)); }
 
-.node-btn:hover {
-  transform: scale(1.1);
+.node-item .line {
+  position: absolute; top: 50%; left: 0;
+  width: 0; height: 0.5px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s);
 }
+body.state1 .node-item .line { width: var(--len); }
 
-/* フッター */
-.landing-footer {
-  position: fixed;
-  bottom: 18px;
-  left: 18px;
-  font-size: 0.85rem;
-}
+.node-item.left .line { background: #808080; }
+.node-item.right .line { background: rgba(135, 206, 235, 0.6); }
 
-/* lines container: generate 40 sharp white lines and animate scaleX */
-.lines-container{
-  position: absolute;
-  inset: 0;
-  display: block;
-  pointer-events: none;
-  z-index: 1;
+/* 画像：回転を打ち消して常に水平 */
+.node-img {
+  position: absolute; top: 50%; left: var(--len);
+  width: 40px; display: block;
 }
-.lines-container .line{
-  --angle: 0deg;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1px;
-  height: 45vh;
-  background: #000000; /* black lines */
-  transform-origin: center bottom;
-  transform: rotate(var(--angle)) translateY(-50%) scaleX(0);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
+.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
+.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
-/* when expanded, grow lines horizontally */
-body.state1 .lines-container .line{
-  transform: rotate(var(--angle)) translateY(-50%) scaleX(1);
-}
+.landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; }
