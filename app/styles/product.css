@@ -1,3 +1,5 @@
+/* product.css */
+
 body, .product-page {
   background-color: #0a0a0c !important;
   color: #ffffff !important;
@@ -11,6 +13,7 @@ body, .product-page {
 .product-header { text-align: center; padding-bottom: 40px; }
 .site-logo { width: 100px; display: block; margin: 0 auto; }
 
+/* 2カラムレイアウト */
 .product-main {
   display: grid;
   grid-template-columns: 1fr 450px;
@@ -20,10 +23,17 @@ body, .product-page {
   align-items: start;
 }
 
+/* ギャラリー */
 .gallery { display: flex; flex-direction: column; gap: 20px; }
 .gallery img { width: 100%; border-radius: 8px; display: block; }
 
-.product-info { display: flex; flex-direction: column; position: sticky; top: 40px; }
+/* 右側エリア：スクロール追従 */
+.product-info { 
+  display: flex; 
+  flex-direction: column; 
+  position: sticky;
+  top: 40px;
+}
 
 /* ラグジュアリーなタイトルと番号 */
 .product-code { display: block; font-size: 0.7rem; color: #666; letter-spacing: 0.3em; margin-bottom: 10px; }
@@ -45,7 +55,7 @@ body, .product-page {
 .buy-btn {
   display: inline-block; padding: 15px 30px; background: transparent; border: 1px solid #fff;
   color: #fff; text-decoration: none; text-align: center; cursor: pointer;
-  width: 200px; font-weight: bold; letter-spacing: 0.2em; transition: all 0.3s;
+  width: 100%; max-width: 200px; font-weight: bold; letter-spacing: 0.2em; transition: all 0.3s;
 }
 .buy-btn:hover { background: #fff; color: #000; }
 
@@ -54,7 +64,22 @@ body, .product-page {
 .product-story p { font-size: 1rem; line-height: 1.8; letter-spacing: 0.02em; color: #d1d1d1; white-space: pre-line; max-width: 600px; }
 .product-story { margin-top: 40px; padding-top: 40px; border-top: 1px solid #333; }
 
+/* --- モバイル対応 (レスポンシブ) --- */
 @media (max-width: 1024px) {
-  .product-main { grid-template-columns: 1fr; }
-  .product-info { position: static; }
+  .product-page { padding: 20px 15px; }
+  .product-main { 
+    grid-template-columns: 1fr; 
+    gap: 40px;
+  }
+  .product-info { 
+    position: static; /* スマホでは追従を解除 */
+    padding-bottom: 40px;
+  }
+  
+  /* タイトル・価格のモバイル用サイズ調整 */
+  .product-info h1 { font-size: 1.6rem; }
+  .amount { font-size: 2rem; }
+  
+  /* 画像ギャラリーの余白を縮小 */
+  .gallery { gap: 10px; }
 }

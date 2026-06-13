@@ -57,3 +57,26 @@ body.state1 .node-item .line { width: var(--len); }
 .node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
 .landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; }
+/* landing.css */
+
+/* スマホ対応の基本設定 */
+@media (max-width: 768px) {
+  /* ロゴの大きさをスマホ用に小さくする */
+  .logo-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* ノードの長さをスマホ画面に収まるよう短くする */
+  .node-item {
+    /* 画面が小さい時はノードの伸びる長さを制限 */
+    --len: 150px !important; 
+  }
+
+  /* フッターの文字サイズ調整 */
+  .landing-footer {
+    font-size: 0.7rem;
+    bottom: 10px;
+    left: 10px;
+  }
+}
