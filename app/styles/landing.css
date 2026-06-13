@@ -80,3 +80,27 @@ body.state1 .node-item .line { width: var(--len); }
     left: 10px;
   }
 }
+/* landing.css の末尾に追加 */
+
+@media (max-width: 600px) {
+  /* 全体の縮小: スマホでは少しだけスケールダウンさせる */
+  #root, #__remix, .viewport {
+    transform-origin: center;
+    transform: scale(0.9); /* 0.9倍に縮小 */
+  }
+
+  /* ロゴコンテナのサイズを調整 */
+  .logo-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* フッターがロゴと重ならないように調整 */
+  .landing-footer {
+    font-size: 0.7rem;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+  }
+}

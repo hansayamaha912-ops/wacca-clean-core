@@ -22,12 +22,13 @@ export default function Index() {
   const [goSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Sm.m4a') : null);
 
   const getNodes = () => {
-    // 画面幅に応じてノードの長さを動的に決定
-    const baseLen = isMobile ? 120 : 300;
-    const extraLen = isMobile ? 80 : 300;
+    // 画面幅が狭い場合、長さを 120px ～ 200px に抑える
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
+    const baseLen = isMobile ? 100 : 300;
+    const randomRange = isMobile ? 100 : 300;
     
     return Array.from({ length: 21 }).map((_, i) => ({
-      length: baseLen + Math.random() * extraLen,
+      length: baseLen + Math.random() * randomRange,
       angle: (i - 10) * 3 + (Math.random() * 4 - 2),
       delay: Math.random() * 0.8 
     }));
