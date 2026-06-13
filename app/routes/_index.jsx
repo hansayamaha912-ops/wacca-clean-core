@@ -9,7 +9,6 @@ export const meta = () => [{ title: 'WACCA - Your City. Your Culture.' }];
 export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // 音声オブジェクトの生成（ブラウザ環境のみ実行）
   const [fireSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Fire.mp3') : null);
   const [goSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Sm.m4a') : null);
 
@@ -44,12 +43,16 @@ export default function Index() {
           {leftNodes.map((n, i) => (
             <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
               <div className="line" />
-              <img src="/assets/master.png" className="node-img" alt="Master" />
+              {/* 左側：/products へのリンクを追加 */}
+              <Link to="/products">
+                <img src="/assets/master.png" className="node-img" alt="Master" />
+              </Link>
             </div>
           ))}
           {rightNodes.map((n, i) => (
             <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
               <div className="line" />
+              {/* 右側：現状維持（クリックで何か起きる場合はボタン化などが必要） */}
               <img src="/assets/dick.png" className="node-img" alt="Dick" />
             </div>
           ))}

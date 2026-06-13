@@ -31,6 +31,7 @@ html, body, #__remix {
   opacity: 0; 
   transition: opacity 0.4s ease var(--delay);
   transform-origin: left center;
+  pointer-events: auto;
 }
 body.state1 .node-item { opacity: 1; }
 

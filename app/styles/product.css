@@ -1,0 +1,60 @@
+body, .product-page {
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+  margin: 0;
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-header { text-align: center; padding-bottom: 40px; }
+.site-logo { width: 100px; display: block; margin: 0 auto; }
+
+.product-main {
+  display: grid;
+  grid-template-columns: 1fr 450px;
+  gap: 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.gallery { display: flex; flex-direction: column; gap: 20px; }
+.gallery img { width: 100%; border-radius: 8px; display: block; }
+
+.product-info { display: flex; flex-direction: column; position: sticky; top: 40px; }
+
+/* ラグジュアリーなタイトルと番号 */
+.product-code { display: block; font-size: 0.7rem; color: #666; letter-spacing: 0.3em; margin-bottom: 10px; }
+.product-info h1 { font-family: 'Times New Roman', serif; font-weight: 400; font-size: 2.2rem; letter-spacing: 0.1em; margin: 0 0 20px 0; text-transform: uppercase; color: #fff; }
+
+/* 価格 */
+.price-display { margin: 20px 0; font-family: 'Times New Roman', serif; }
+.currency { font-size: 0.8rem; margin-right: 8px; color: #888; }
+.amount { font-size: 2.5rem; letter-spacing: 0.05em; }
+
+/* カウンター */
+.quantity-selector { margin-bottom: 30px; }
+.quantity-selector label { display: block; margin-bottom: 10px; font-size: 0.8rem; letter-spacing: 0.2em; color: #888; }
+.counter { display: flex; align-items: center; border: 1px solid #333; width: fit-content; padding: 5px 15px; }
+.counter button { background: none; border: none; color: #fff; padding: 5px 15px; cursor: pointer; font-size: 1.2rem; }
+.counter span { padding: 0 20px; font-weight: bold; }
+
+/* ボタン */
+.buy-btn {
+  display: inline-block; padding: 15px 30px; background: transparent; border: 1px solid #fff;
+  color: #fff; text-decoration: none; text-align: center; cursor: pointer;
+  width: 200px; font-weight: bold; letter-spacing: 0.2em; transition: all 0.3s;
+}
+.buy-btn:hover { background: #fff; color: #000; }
+
+/* ストーリーテキスト */
+.product-story h2 { font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 0.05em; }
+.product-story p { font-size: 1rem; line-height: 1.8; letter-spacing: 0.02em; color: #d1d1d1; white-space: pre-line; max-width: 600px; }
+.product-story { margin-top: 40px; padding-top: 40px; border-top: 1px solid #333; }
+
+@media (max-width: 1024px) {
+  .product-main { grid-template-columns: 1fr; }
+  .product-info { position: static; }
+}
