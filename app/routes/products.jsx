@@ -58,7 +58,7 @@ export default function ProductPage() {
           <div className="product-story">
             <h2>Masterhand: The Zenith of "The Hand"</h2>
             <p>
-              {`One day, while repeating the same prototypes in the studio, my hands suddenly stopped. I looked back and forth between my own reflection and the metallic "hand" I was trying to bring to life.
+              {`One day, while repeating the same prototypes in the studio, my hands suddenly stopped. I looked back and forth between my own reflection and the "hand" I was trying to bring to life.
 
 A hand possesses a truly multifaceted expression.
 
