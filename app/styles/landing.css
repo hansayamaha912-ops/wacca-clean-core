@@ -1,30 +1,89 @@
-html, body, #__remix { margin: 0; padding: 0; height: 100vh; width: 100vw; background-color: #ffffff !important; overflow: hidden; }
+/* ベーススタイル */
+html, body, #__remix {
+  margin: 0; padding: 0; height: 100vh; width: 100vw;
+  background-color: #ffffff !important; overflow: hidden;
+}
+
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
 
-.logo-container { position: relative; width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; }
-.main-logo { width: 100%; height: auto; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-.logo-container.is-active .main-logo { transform: scale(0.66); opacity: 0.5; }
+.logo-container {
+  position: relative; width: 200px; height: 200px;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer; z-index: 10;
+}
+
+.main-logo { 
+  width: 100%; height: auto; position: relative; z-index: 2; display: block;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container.is-active .main-logo { 
+  transform: scale(0.66); 
+  opacity: 0.5; 
+}
 
 .nodes-layer { position: absolute; inset: 0; pointer-events: none; }
-.node-item { position: absolute; top: 50%; opacity: 0; transition: opacity 0.4s ease var(--delay); pointer-events: auto; }
+
+.node-item {
+  position: absolute; top: 50%; left: 50%;
+  opacity: 0; 
+  transition: opacity 0.4s ease var(--delay);
+  transform-origin: left center;
+  pointer-events: auto;
+}
+
 body.state1 .node-item { opacity: 1; }
 
-.node-item.left { transform: rotate(calc(var(--ang) + 180deg)); transform-origin: right center; }
-.node-item.right { transform: rotate(var(--ang)); transform-origin: left center; }
+.node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
+.node-item.right { transform: rotate(var(--ang)); }
 
-.node-item .line { position: absolute; top: 50%; width: 0; height: 0.5px; transition: width 0.6s ease calc(var(--delay) + 0.2s); }
+.node-item .line {
+  position: absolute; top: 50%; left: 0;
+  width: 0; height: 0.5px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s);
+}
 body.state1 .node-item .line { width: var(--len); }
-.node-item.left .line { background: #808080; left: auto; right: 0; }
-.node-item.right .line { background: rgba(135, 206, 235, 0.6); left: 0; }
 
-.node-img { width: 40px; position: absolute; top: 50%; transform: translateY(-50%); }
-.node-item.left .node-img { right: var(--len); }
-.node-item.right .node-img { left: var(--len); }
+.node-item.left .line { background: #808080; }
+.node-item.right .line { background: rgba(135, 206, 235, 0.6); }
 
-.landing-footer { position: fixed; bottom: 20px; width: 100%; text-align: center; font-size: 0.7rem; font-family: sans-serif; letter-spacing: 0.1em; }
+.node-img {
+  position: absolute; top: 50%; left: var(--len);
+  width: 40px; display: block;
+}
+.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
+.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
-@media (max-width: 768px) {
-  .logo-container { width: 120px; height: 120px; }
-  .node-item { --len: 70px !important; }
-  .node-img { width: 25px !important; }
+.landing-footer { 
+  position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; 
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* スマホ対応（600px以下） */
+@media (max-width: 600px) {
+  .viewport { transform: scale(0.9); }
+  
+  .logo-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .node-item {
+    /* 長さを強制的に短くしてロゴとの干渉を避ける */
+    --len: 80px !important; 
+  }
+
+  .node-img {
+    width: 25px !important;
+  }
+
+  .landing-footer {
+    font-size: 0.65rem;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    left: 0;
+  }
 }
