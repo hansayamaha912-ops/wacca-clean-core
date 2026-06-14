@@ -3,14 +3,12 @@ import { useEffect, useState } from 'react';
 import stylesUrl from "../styles/landing.css?url";
 
 export const links = () => [{ rel: 'stylesheet', href: stylesUrl }];
-
 export const meta = () => [{ title: 'WACCA - Your City. Your Culture.' }];
 
 export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 初回レンダリング後にモバイル判定を行う
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -22,10 +20,9 @@ export default function Index() {
   const [goSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Sm.m4a') : null);
 
   const getNodes = () => {
-    // 画面幅が狭い場合、長さを抑える
-    const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 600;
-    const baseLen = isMobileNow ? 80 : 300;
-    const randomRange = isMobileNow ? 60 : 300;
+    const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
+    const baseLen = isMobileNow ? 60 : 300; // 短く設定
+    const randomRange = isMobileNow ? 40 : 300;
     
     return Array.from({ length: 21 }).map((_, i) => ({
       length: baseLen + Math.random() * randomRange,
@@ -37,18 +34,13 @@ export default function Index() {
   const [leftNodes, setLeftNodes] = useState([]);
   const [rightNodes, setRightNodes] = useState([]);
 
-  // isMobileが変わるたびにノードを再計算
   useEffect(() => {
     setLeftNodes(getNodes());
     setRightNodes(getNodes());
   }, [isMobile]);
 
   const handleLogoClick = () => {
-    if (!isOpen) {
-      fireSound?.play();
-    } else {
-      goSound?.play();
-    }
+    if (!isOpen) { fireSound?.play(); } else { goSound?.play(); }
     setIsOpen(!isOpen);
   };
 
@@ -60,36 +52,19 @@ export default function Index() {
     <main className="viewport">
       <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
         <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
-        
         <div className="nodes-layer">
           {leftNodes.map((n, i) => (
-            <div 
-              key={`l${i}`} 
-              className="node-item left" 
-              style={{ 
-                '--len': `${n.length}px`, 
-                '--ang': `${n.angle}deg`, 
-                '--delay': `${n.delay}s`,
-                left: isMobile ? 'calc(50% - 40px)' : '50%' 
-              }}
-            >
+            <div key={`l${i}`} className="node-item left" 
+              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s`, 
+              left: isMobile ? '20%' : '50%' }}>
               <div className="line" />
-              <Link to="/products">
-                <img src="/assets/master.png" className="node-img" alt="Master" />
-              </Link>
+              <Link to="/products"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
             </div>
           ))}
           {rightNodes.map((n, i) => (
-            <div 
-              key={`r${i}`} 
-              className="node-item right" 
-              style={{ 
-                '--len': `${n.length}px`, 
-                '--ang': `${n.angle}deg`, 
-                '--delay': `${n.delay}s`,
-                left: isMobile ? 'calc(50% + 40px)' : '50%' 
-              }}
-            >
+            <div key={`r${i}`} className="node-item right" 
+              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s`, 
+              left: isMobile ? '80%' : '50%' }}>
               <div className="line" />
               <img src="/assets/dick.png" className="node-img" alt="Dick" />
             </div>
