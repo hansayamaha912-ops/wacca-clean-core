@@ -23,7 +23,6 @@ export default function ProductPage() {
             <img src="/assets/1.jpg" alt="Detail 1" />
             <img src="/assets/2.jpg" alt="Detail 2" />
             <img src="/assets/3.jpg" alt="Detail 3" />
-            <img src="/assets/4.jpg" alt="Detail 4" />
             <img src="/assets/5.jpg" alt="Detail 5" />
           </div>
         </section>
