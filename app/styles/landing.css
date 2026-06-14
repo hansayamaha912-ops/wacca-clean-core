@@ -97,6 +97,12 @@ body.state1 .node-item .line { width: var(--len); }
 
   /* フッターがロゴと重ならないように調整 */
   .landing-footer {
+    /* フッターなどにも適用 */
+.landing-footer {
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
     font-size: 0.7rem;
     bottom: 20px;
     left: 20px;

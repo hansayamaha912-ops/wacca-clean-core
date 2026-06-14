@@ -1,85 +1,120 @@
-/* product.css */
-
+/* --- 共通設定 --- */
 body, .product-page {
+  font-family: 'Space Grotesk', sans-serif;
   background-color: #0a0a0c !important;
   color: #ffffff !important;
   margin: 0;
   padding: 40px 20px;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 .product-header { text-align: center; padding-bottom: 40px; }
 .site-logo { width: 100px; display: block; margin: 0 auto; }
 
-/* 2カラムレイアウト */
-.product-main {
-  display: grid;
-  grid-template-columns: 1fr 450px;
-  gap: 80px;
-  max-width: 1200px;
-  margin: 0 auto;
-  align-items: start;
+/* --- レイアウト --- */
+.product-main { 
+  display: grid; 
+  grid-template-columns: 1fr 450px; 
+  gap: 100px; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  align-items: start; 
+  padding: 0 40px; 
 }
 
-/* ギャラリー */
 .gallery { display: flex; flex-direction: column; gap: 20px; }
 .gallery img { width: 100%; border-radius: 8px; display: block; }
 
-/* 右側エリア：スクロール追従 */
+/* --- 右側エリア --- */
 .product-info { 
   display: flex; 
   flex-direction: column; 
-  position: sticky;
-  top: 40px;
+  position: sticky; 
+  top: 40px; 
+  gap: 30px; 
 }
 
-/* ラグジュアリーなタイトルと番号 */
-.product-code { display: block; font-size: 0.7rem; color: #666; letter-spacing: 0.3em; margin-bottom: 10px; }
-.product-info h1 { font-family: 'Times New Roman', serif; font-weight: 400; font-size: 2.2rem; letter-spacing: 0.1em; margin: 0 0 20px 0; text-transform: uppercase; color: #fff; }
+/* --- タイトルとコード --- */
+.product-code, .quantity-selector label, .currency-selector label { 
+  font-family: 'Rajdhani', sans-serif; 
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: 0.3em; 
+  color: #888; 
+  margin-bottom: 10px; 
+  display: block; 
+}
 
-/* 価格 */
-.price-display { margin: 20px 0; font-family: 'Times New Roman', serif; }
-.currency { font-size: 0.8rem; margin-right: 8px; color: #888; }
-.amount { font-size: 2.5rem; letter-spacing: 0.05em; }
+.product-info h1 { 
+  font-family: 'Times New Roman', serif; 
+  font-weight: 400; 
+  font-size: 2.5rem; 
+  letter-spacing: 0.1em; 
+  margin: 0; 
+  text-transform: uppercase; 
+}
 
-/* カウンター */
-.quantity-selector { margin-bottom: 30px; }
-.quantity-selector label { display: block; margin-bottom: 10px; font-size: 0.8rem; letter-spacing: 0.2em; color: #888; }
-.counter { display: flex; align-items: center; border: 1px solid #333; width: fit-content; padding: 5px 15px; }
-.counter button { background: none; border: none; color: #fff; padding: 5px 15px; cursor: pointer; font-size: 1.2rem; }
+/* --- 通貨・価格 --- */
+.currency-selector select {
+  background: #0a0a0c;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 10px;
+  width: 100%;
+  font-family: 'Rajdhani', sans-serif;
+  cursor: pointer;
+}
+
+.price-display { margin: 10px 0; display: flex; align-items: baseline; gap: 10px; }
+.currency { font-family: 'Rajdhani', sans-serif; font-size: 1rem; color: #666; }
+.amount { font-family: 'Rajdhani', sans-serif; font-size: 3.5rem; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+
+/* --- 数量カウンター --- */
+.counter { 
+  display: flex; 
+  align-items: center; 
+  border: 1px solid #444; 
+  width: fit-content; 
+  background: #111;
+}
+.counter button { 
+  background: transparent; 
+  border: none; 
+  color: #fff; 
+  padding: 15px 25px; 
+  cursor: pointer; 
+  font-size: 1.2rem; 
+}
 .counter span { padding: 0 20px; font-weight: bold; }
 
-/* ボタン */
+/* --- ボタン --- */
+.actions { margin-top: 20px; margin-bottom: 40px; }
 .buy-btn {
-  display: inline-block; padding: 15px 30px; background: transparent; border: 1px solid #fff;
-  color: #fff; text-decoration: none; text-align: center; cursor: pointer;
-  width: 100%; max-width: 200px; font-weight: bold; letter-spacing: 0.2em; transition: all 0.3s;
+  display: block; padding: 22px; background: #fff; color: #000;
+  font-family: 'Rajdhani', sans-serif; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.2em; text-decoration: none; text-align: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #fff;
 }
-.buy-btn:hover { background: #fff; color: #000; }
+.buy-btn:hover { background: transparent; color: #fff; transform: translateY(-2px); }
 
-/* ストーリーテキスト */
-.product-story h2 { font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 0.05em; }
-.product-story p { font-size: 1rem; line-height: 1.8; letter-spacing: 0.02em; color: #d1d1d1; white-space: pre-line; max-width: 600px; }
-.product-story { margin-top: 40px; padding-top: 40px; border-top: 1px solid #333; }
+/* --- ストーリー --- */
+.product-story { 
+  margin-top: 80px; 
+  padding-top: 60px; 
+  border-top: 1px solid #333; 
+}
+.product-story h2 { font-size: 1rem; margin-bottom: 30px; letter-spacing: 0.2em; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; }
 
-/* --- モバイル対応 (レスポンシブ) --- */
+.en-text { font-family: 'Space Grotesk', sans-serif; font-weight: 300; line-height: 1.9; color: #d1d1d1; white-space: pre-line; font-size: 1.05rem; }
+.jp-text { font-family: 'Noto Sans JP', sans-serif; font-weight: 300; line-height: 1.9; letter-spacing: 0.05em; color: #a0a0a0; white-space: pre-line; font-size: 1.05rem; }
+.divider { width: 50px; height: 1px; background: #333; margin: 40px 0; }
+.footer-sign { font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; letter-spacing: 0.2em; margin-top: 30px; color: #fff; }
+
+/* --- モバイル --- */
 @media (max-width: 1024px) {
-  .product-page { padding: 20px 15px; }
-  .product-main { 
-    grid-template-columns: 1fr; 
-    gap: 40px;
-  }
-  .product-info { 
-    position: static; /* スマホでは追従を解除 */
-    padding-bottom: 40px;
-  }
-  
-  /* タイトル・価格のモバイル用サイズ調整 */
-  .product-info h1 { font-size: 1.6rem; }
-  .amount { font-size: 2rem; }
-  
-  /* 画像ギャラリーの余白を縮小 */
-  .gallery { gap: 10px; }
+  .product-main { grid-template-columns: 1fr; gap: 40px; padding: 0 20px; }
+  .product-info { position: static; padding-bottom: 60px; }
+  .product-info h1 { font-size: 2rem; }
+  .amount { font-size: 2.5rem; }
 }
