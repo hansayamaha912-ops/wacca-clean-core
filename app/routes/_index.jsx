@@ -12,20 +12,20 @@ export default function Index() {
 
   // 初回レンダリング後にモバイル判定を行う
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const [fireSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Fire.mp3') : null);
   const [goSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Sm.m4a') : null);
 
   const getNodes = () => {
-    // 画面幅が狭い場合、長さを 120px ～ 200px に抑える
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
-    const baseLen = isMobile ? 100 : 300;
-    const randomRange = isMobile ? 100 : 300;
+    // 画面幅が狭い場合、長さを抑える
+    const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 600;
+    const baseLen = isMobileNow ? 80 : 300;
+    const randomRange = isMobileNow ? 60 : 300;
     
     return Array.from({ length: 21 }).map((_, i) => ({
       length: baseLen + Math.random() * randomRange,
@@ -63,7 +63,16 @@ export default function Index() {
         
         <div className="nodes-layer">
           {leftNodes.map((n, i) => (
-            <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+            <div 
+              key={`l${i}`} 
+              className="node-item left" 
+              style={{ 
+                '--len': `${n.length}px`, 
+                '--ang': `${n.angle}deg`, 
+                '--delay': `${n.delay}s`,
+                left: isMobile ? 'calc(50% - 40px)' : '50%' 
+              }}
+            >
               <div className="line" />
               <Link to="/products">
                 <img src="/assets/master.png" className="node-img" alt="Master" />
@@ -71,7 +80,16 @@ export default function Index() {
             </div>
           ))}
           {rightNodes.map((n, i) => (
-            <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+            <div 
+              key={`r${i}`} 
+              className="node-item right" 
+              style={{ 
+                '--len': `${n.length}px`, 
+                '--ang': `${n.angle}deg`, 
+                '--delay': `${n.delay}s`,
+                left: isMobile ? 'calc(50% + 40px)' : '50%' 
+              }}
+            >
               <div className="line" />
               <img src="/assets/dick.png" className="node-img" alt="Dick" />
             </div>
