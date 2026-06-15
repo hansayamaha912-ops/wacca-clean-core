@@ -21,7 +21,7 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    const baseLen = isMobileNow ? 60 : 300; // 短く設定
+    const baseLen = isMobileNow ? 90 : 300; 
     const randomRange = isMobileNow ? 40 : 300;
     
     return Array.from({ length: 21 }).map((_, i) => ({
@@ -55,16 +55,14 @@ export default function Index() {
         <div className="nodes-layer">
           {leftNodes.map((n, i) => (
             <div key={`l${i}`} className="node-item left" 
-              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s`, 
-              left: isMobile ? '20%' : '50%' }}>
+              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
               <div className="line" />
               <Link to="/products"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
             </div>
           ))}
           {rightNodes.map((n, i) => (
             <div key={`r${i}`} className="node-item right" 
-              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s`, 
-              left: isMobile ? '80%' : '50%' }}>
+              style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
               <div className="line" />
               <img src="/assets/dick.png" className="node-img" alt="Dick" />
             </div>

@@ -17,10 +17,7 @@ html, body, #__remix {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logo-container.is-active .main-logo { 
-  transform: scale(0.66); 
-  opacity: 0.5; 
-}
+.logo-container.is-active .main-logo { transform: scale(0.66); opacity: 0.5; }
 
 .nodes-layer { position: absolute; inset: 0; pointer-events: none; }
 
@@ -64,26 +61,16 @@ body.state1 .node-item .line { width: var(--len); }
 /* スマホ対応（600px以下） */
 @media (max-width: 600px) {
   .viewport { transform: scale(0.9); }
-  
-  .logo-container {
-    width: 120px;
-    height: 120px;
-  }
+  .logo-container { width: 120px; height: 120px; }
 
-  .node-item {
-    /* 長さを強制的に短くしてロゴとの干渉を避ける */
-    --len: 80px !important; 
-  }
+  .node-item { --len: 90px !important; }
+  .node-img { width: 25px !important; }
 
-  .node-img {
-    width: 25px !important;
-  }
+  /* スマホ用に角度を広げて画像重なりを防止 */
+  body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 160deg)); }
+  body.state1 .node-item.right { transform: rotate(calc(var(--ang) - 20deg)); }
 
   .landing-footer {
-    font-size: 0.65rem;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-    left: 0;
+    font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0;
   }
 }
