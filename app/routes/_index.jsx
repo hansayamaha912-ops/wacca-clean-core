@@ -22,7 +22,7 @@ export default function Index() {
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
     const baseLen = isMobileNow ? 90 : 300; 
-    const randomRange = isMobileNow ? 40 : 300;
+    const randomRange = isMobileNow ? 20 : 300; 
     
     return Array.from({ length: 21 }).map((_, i) => ({
       length: baseLen + Math.random() * randomRange,
