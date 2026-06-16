@@ -4,22 +4,31 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
-// サーバーサイドでのみ初期化（Vercel環境変数を利用）
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+// サーバーサイドでのみ実行されるSupabase取得関数
+const getSupabase = () => {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+    throw new Error("Supabase environment variables are missing");
+  }
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+};
 
 export const loader = async () => {
+  const supabase = getSupabase();
   const { data } = await supabase.from('analytics').select('*').eq('id', 1).single();
   return json({ stats: data });
 };
 
 export const action = async ({ request }) => {
+  const supabase = getSupabase();
   const formData = await request.formData();
   const type = formData.get("type");
+  
   const { data } = await supabase.from('analytics').select('*').eq('id', 1).single();
   
   await supabase.from('analytics').update({
     [type === 'click' ? 'click_count' : 'view_count']: data[type === 'click' ? 'click_count' : 'view_count'] + 1
   }).eq('id', 1);
+  
   return json({ success: true });
 };
 
@@ -32,9 +41,12 @@ export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 初回訪問のカウントアップ
+  // 初回訪問のカウントアップ（localStorageで重複カウントを防ぐ）
   useEffect(() => {
-    fetcher.submit({ type: 'view' }, { method: "post" });
+    if (!localStorage.getItem('visited')) {
+      fetcher.submit({ type: 'view' }, { method: "post" });
+      localStorage.setItem('visited', 'true');
+    }
   }, []);
 
   useEffect(() => {
@@ -75,7 +87,6 @@ export default function Index() {
   const handleLogoClick = () => {
     if (!isOpen) { 
       fireSound?.play(); 
-      // クリック時にカウントアップ
       fetcher.submit({ type: 'click' }, { method: "post" });
     } else { 
       goSound?.play(); 
@@ -89,13 +100,11 @@ export default function Index() {
 
   return (
     <main className="viewport">
-      {/* カウンター表示エリア */}
       <div className="stats-display">
         Views: {stats?.view_count} | Clicks: {stats?.click_count}
       </div>
 
       <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-        {/* ...以下、ロゴとノードのレンダリング... */}
         <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
         <div className="nodes-layer">
           {leftNodes.map((n, i) => (
