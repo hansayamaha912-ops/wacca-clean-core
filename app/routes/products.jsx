@@ -111,7 +111,8 @@ The future traced by these fingertips is, entirely and ultimately, in your own h
 大切なのは、これを手にしたあなたが、何に手を伸ばすか。
 誰と繋がり、どんな新しい場所へ向かうのか。
 
-この製品は、同じ感性を持つ人たちと出会うための「招待状」でもあります。
+この製品は、同じ感性を持つ人たちと出会うための
+<br />「招待状」でもあります。
 ようこそ コミュニティへ`}</p>
               
               <div className="footer-sign">「What`s ur Twenty？」---WACCA</div>
