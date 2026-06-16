@@ -27,7 +27,7 @@ export default function Index() {
       // 左側に4個、右側に4個を対称に配置
       return Array.from({ length: 4 }).map((_, i) => ({
         length: 100, // 固定長
-        angle: (i * 20) - 30, // 左グループ：-30度から20度刻みで上方向へ
+        angle: (i * 30) - 60, // 左グループ：-60度から-30度刻みで上方向へ
         delay: i * 0.1
       }));
     }
