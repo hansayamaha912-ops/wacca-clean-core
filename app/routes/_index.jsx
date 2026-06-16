@@ -23,11 +23,11 @@ export default function Index() {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
     
     if (isMobileNow) {
-  return Array.from({ length: 18 }).map((_, i) => ({
+  return Array.from({ length: 12 }).map((_, i) => ({
     length: 200,
     // i=0,1,2,3 に対して、真横(0度/180度)を中心にした広がりを作る
     // 左(master)は180度を中心に、右(dick)は0度を中心に上下に振る
-    angle: (i % 2 === 0) ? (i * 10) : -(i * 13), 
+    angle: (i % 2 === 0) ? (i * 10) : -(i * 10), 
     delay: i * 0.1
   }));
 }
