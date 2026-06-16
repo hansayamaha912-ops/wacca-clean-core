@@ -21,11 +21,21 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    const baseLen = isMobileNow ? 90 : 300; 
-    const randomRange = isMobileNow ? 20 : 300; 
     
+    if (isMobileNow) {
+      // モバイル用：ノードを減らし（計8個）、角度を完全固定して絶対重ならないように配置
+      // 左側に4個、右側に4個を対称に配置
+      return Array.from({ length: 4 }).map((_, i) => ({
+        length: 100, // 固定長
+        angle: (i * 20) - 30, // 左グループ：-30度から20度刻みで上方向へ
+        delay: i * 0.1
+      }));
+    }
+
+    // PC用：従来の動的生成（計21個）
+    const baseLen = 300;
     return Array.from({ length: 21 }).map((_, i) => ({
-      length: baseLen + Math.random() * randomRange,
+      length: baseLen + Math.random() * 300,
       angle: (i - 10) * 3 + (Math.random() * 4 - 2),
       delay: Math.random() * 0.8 
     }));
@@ -35,6 +45,7 @@ export default function Index() {
   const [rightNodes, setRightNodes] = useState([]);
 
   useEffect(() => {
+    // 画面サイズが変わった時だけ再生成する
     setLeftNodes(getNodes());
     setRightNodes(getNodes());
   }, [isMobile]);

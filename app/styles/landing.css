@@ -61,14 +61,20 @@ body.state1 .node-item .line { width: var(--len); }
 /* スマホ対応（600px以下） */
 @media (max-width: 600px) {
   .viewport { transform: scale(0.9); }
-  .logo-container { width: 120px; height: 120px; }
+  .logo-container { width: 100px; height: 100px; }
 
-  .node-item { --len: 80px !important; }
-  .node-img { width: 25px !important; }
+  .node-item { --len: 85px !important; }
+  .node-img { width: 28px !important; }
 
-  /* 角度を大きく離して左右の干渉を回避 */
-  body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 140deg)); }
-  body.state1 .node-item.right { transform: rotate(calc(var(--ang) + 40deg)); }
+  /* 角度を固定し、左右のグループを中央から上下に離して配置（重なり防止） */
+  /* 左側のグループ（calc(var(--ang) + 起点)）: 上方向へ */
+  body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 120deg)); }
+  /* 右側のグループ（calc(var(--ang) + 起点)）: 下方向へ */
+  body.state1 .node-item.right { transform: rotate(calc(var(--ang) - 120deg)); }
+
+  .node-img {
+    transition: none; /* スマホではアニメーションを簡略化して軽量化 */
+  }
 
   .landing-footer {
     font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0;
