@@ -93,6 +93,7 @@ export default function Index() {
     setLeftNodes(getNodes());
     setRightNodes(getNodes());
   }, [isMobile]);
+  
 
   const handleLogoClick = () => {
     if (!isOpen) { 
