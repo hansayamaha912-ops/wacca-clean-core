@@ -18,6 +18,7 @@ export const loader = async () => {
   return json({ stats: data });
 };
 
+
 export const action = async ({ request }) => {
   const supabase = getSupabase();
   const formData = await request.formData();
