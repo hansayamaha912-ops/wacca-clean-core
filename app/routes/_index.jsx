@@ -23,14 +23,14 @@ export default function Index() {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
     
     if (isMobileNow) {
-      // モバイル用：ノードを減らし（計8個）、角度を完全固定して絶対重ならないように配置
-      // 左側に4個、右側に4個を対称に配置
-      return Array.from({ length: 4 }).map((_, i) => ({
-        length: 100, // 固定長
-        angle: (i * 30) - 60, // 左グループ：-60度から-30度刻みで上方向へ
-        delay: i * 0.1
-      }));
-    }
+  return Array.from({ length: 4 }).map((_, i) => ({
+    length: 110,
+    // i=0,1,2,3 に対して、真横(0度/180度)を中心にした広がりを作る
+    // 左(master)は180度を中心に、右(dick)は0度を中心に上下に振る
+    angle: (i % 2 === 0) ? (i * 10) : -(i * 10), 
+    delay: i * 0.1
+  }));
+}
 
     // PC用：従来の動的生成（計21個）
     const baseLen = 300;
