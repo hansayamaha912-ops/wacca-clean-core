@@ -4,12 +4,19 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
-// サーバーサイドでのみ実行されるSupabase取得関数
+// index.jsx の修正版
 const getSupabase = () => {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
-    throw new Error("Supabase environment variables are missing");
+  // 環境変数がVercelのビルド時ではなく、実行時に読み込まれるようにする
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_KEY;
+
+  if (!url || !key) {
+    // ここで何が起きているかログを出す
+    console.error("DEBUG: URL:", url, "KEY:", key);
+    return null; 
   }
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+  
+  return createClient(url, key);
 };
 
 export const loader = async () => {
