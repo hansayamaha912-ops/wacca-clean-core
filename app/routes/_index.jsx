@@ -112,7 +112,7 @@ export default function Index() {
     <main className="viewport">
       <div className="stats-display">
         {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
-        SENSE: {stats?.view_count} | TOUCH: {stats?.click_count}
+        04%: {stats?.view_count} | 26Φ: {stats?.click_count}
       </div>
 
       <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
