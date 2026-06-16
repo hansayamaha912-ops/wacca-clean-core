@@ -27,7 +27,7 @@ export default function Index() {
     length: 200,
     // i=0,1,2,3 に対して、真横(0度/180度)を中心にした広がりを作る
     // 左(master)は180度を中心に、右(dick)は0度を中心に上下に振る
-    angle: (i % 2 === 0) ? (i * 5) : -(i * 5), 
+    angle: (i % 2 === 0) ? (i * 8) : -(i * 5), 
     delay: i * 0.1
   }));
 }
