@@ -4,37 +4,33 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
+// Supabase初期化関数
 const getSupabase = () => {
-  // Vercelに登録されている名前に合わせます
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!url || !key) {
-    throw new Error("Supabase environment variables are missing");
-  }
+  if (!url || !key) throw new Error("Supabase env vars missing");
   return createClient(url, key);
 };
 
-// index.jsx
 export const loader = async () => {
   const supabase = getSupabase();
   const { data } = await supabase.from('analytics').select('*').eq('id', 1);
-  return json({ stats: data && data.length > 0 ? data[0] : { view_count: 0, click_count: 0 } });
+  const stats = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
+  return json({ stats });
 };
-
-// ... action も同様に 'analytics' テーブルを使う
-
 
 export const action = async ({ request }) => {
   const supabase = getSupabase();
   const formData = await request.formData();
   const type = formData.get("type");
   
-  const { data } = await supabase.from('analytics').select('*').eq('id', 1).single();
+  const { data } = await supabase.from('analytics').select('*').eq('id', 1);
+  const current = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
   
-  await supabase.from('analytics').update({
-    [type === 'click' ? 'click_count' : 'view_count']: data[type === 'click' ? 'click_count' : 'view_count'] + 1
-  }).eq('id', 1);
+  const updateKey = type === 'click' ? 'click_count' : 'view_count';
+  await supabase.from('analytics')
+    .update({ [updateKey]: (current[updateKey] || 0) + 1 })
+    .eq('id', 1);
   
   return json({ success: true });
 };
@@ -47,12 +43,19 @@ export default function Index() {
   const fetcher = useFetcher();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
 
-  // 初回訪問のカウントアップ（localStorageで重複カウントを防ぐ）
+  // 訪問カウントアップ & 位置情報取得
   useEffect(() => {
-    if (!localStorage.getItem('visited')) {
-      fetcher.submit({ type: 'view' }, { method: "post" });
-      localStorage.setItem('visited', 'true');
+    fetcher.submit({ type: 'view' }, { method: "post" });
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setLocation({ 
+          lat: pos.coords.latitude.toFixed(2), 
+          lng: pos.coords.longitude.toFixed(2) 
+        });
+      });
     }
   }, []);
 
@@ -108,7 +111,8 @@ export default function Index() {
   return (
     <main className="viewport">
       <div className="stats-display">
-        Views: {stats?.view_count} | Clicks: {stats?.click_count}
+        {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
+        SENSE: {stats?.view_count} | TOUCH: {stats?.click_count}
       </div>
 
       <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
