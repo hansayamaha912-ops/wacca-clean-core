@@ -15,11 +15,14 @@ const getSupabase = () => {
   return createClient(url, key);
 };
 
+// index.jsx
 export const loader = async () => {
   const supabase = getSupabase();
-  const { data } = await supabase.from('analytics').select('*').eq('id', 1).single();
-  return json({ stats: data });
+  const { data } = await supabase.from('analitics').select('*').eq('id', 1);
+  return json({ stats: data && data.length > 0 ? data[0] : { view_count: 0, click_count: 0 } });
 };
+
+// ... action も同様に 'analitics' テーブルを使う
 
 
 export const action = async ({ request }) => {
