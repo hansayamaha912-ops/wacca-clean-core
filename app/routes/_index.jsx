@@ -4,18 +4,14 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
-// index.jsx の修正版
 const getSupabase = () => {
-  // 環境変数がVercelのビルド時ではなく、実行時に読み込まれるようにする
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_KEY;
+  // Vercelに登録されている名前に合わせます
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    // ここで何が起きているかログを出す
-    console.error("DEBUG: URL:", url, "KEY:", key);
-    return null; 
+    throw new Error("Supabase environment variables are missing");
   }
-  
   return createClient(url, key);
 };
 
