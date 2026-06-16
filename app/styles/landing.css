@@ -79,16 +79,17 @@ body.state1 .node-item .line { width: var(--len); }
   .landing-footer {
     font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0;
   }
-  /* カウンター用スタイル */
-.stats-display {
+  /* カウンター用スタイル */.stats-display {
   position: fixed;
-  bottom: 18px;
-  right: 18px; /* 右下配置 */
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
+  bottom: 24px;
+  right: 24px;
+  font-family: 'Space Grotesk', monospace; /* お好みのフォントに変更してください */
+  font-size: 0.7rem;
   color: #333;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
   z-index: 100;
-  pointer-events: none; /* クリックを邪魔しないようにする */
+  pointer-events: none;
+  opacity: 0.6;
 }
 }
