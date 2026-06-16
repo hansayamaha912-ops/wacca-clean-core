@@ -63,8 +63,8 @@ body.state1 .node-item .line { width: var(--len); }
   .viewport { transform: scale(0.9); }
   .logo-container { width: 100px; height: 100px; }
 
-  .node-item { --len: 85px !important; }
-  .node-img { width: 28px !important; }
+  .node-item { --len: 100px }
+  .node-img { width: 28px ; }
 
   /* 角度を固定し、左右のグループを中央から上下に離して配置（重なり防止） */
   /* 左側のグループ（calc(var(--ang) + 起点)）: 上方向へ */
