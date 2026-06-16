@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
-// Supabase初期化関数
 const getSupabase = () => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -45,10 +44,8 @@ export default function Index() {
   const [isMobile, setIsMobile] = useState(false);
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
 
-  // 訪問カウントアップ & 位置情報取得
   useEffect(() => {
     fetcher.submit({ type: 'view' }, { method: "post" });
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         setLocation({ 
@@ -93,7 +90,6 @@ export default function Index() {
     setLeftNodes(getNodes());
     setRightNodes(getNodes());
   }, [isMobile]);
-  
 
   const handleLogoClick = () => {
     if (!isOpen) { 
@@ -110,27 +106,30 @@ export default function Index() {
   }, [isOpen]);
 
   return (
-    <main className="viewport">
+    <main>
       <div className="stats-display">
         {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
-        04%: {stats?.view_count} | 26Φ: {stats?.click_count}
+        %＊5: {stats?.view_count} | 2｜6Φ: {stats?.click_count}
       </div>
 
-      <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-        <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
-        <div className="nodes-layer">
-          {leftNodes.map((n, i) => (
-            <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-              <div className="line" /><Link to="/products"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
-            </div>
-          ))}
-          {rightNodes.map((n, i) => (
-            <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-              <div className="line" /><img src="/assets/dick.png" className="node-img" alt="Dick" />
-            </div>
-          ))}
+      <div className="viewport">
+        <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
+          <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
+          <div className="nodes-layer">
+            {leftNodes.map((n, i) => (
+              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+                <div className="line" /><Link to="/products"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
+              </div>
+            ))}
+            {rightNodes.map((n, i) => (
+              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+                <div className="line" /><img src="/assets/dick.png" className="node-img" alt="Dick" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
       <footer className="landing-footer">
         <Link to="/policies">特定商取引法に基づく表記</Link>
       </footer>

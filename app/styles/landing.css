@@ -4,7 +4,22 @@ html, body, #__remix {
   background-color: #ffffff !important; overflow: hidden;
 }
 
-.viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
+.viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
+
+/* 修正：stats-displayを viewport の外に固定 */
+.stats-display {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  color: #333;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.6;
+}
 
 .logo-container {
   position: relative; width: 200px; height: 200px;
@@ -58,38 +73,13 @@ body.state1 .node-item .line { width: var(--len); }
   text-transform: uppercase;
 }
 
-/* スマホ対応（600px以下） */
+/* スマホ対応 */
 @media (max-width: 600px) {
   .viewport { transform: scale(0.9); }
   .logo-container { width: 100px; height: 100px; }
-
   .node-item { --len: 100px }
   .node-img { width: 28px ; }
-
-  /* 角度を固定し、左右のグループを中央から上下に離して配置（重なり防止） */
-  /* 左側のグループ（calc(var(--ang) + 起点)）: 上方向へ */
   body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 180deg))!important; }
-  /* 右側のグループ（calc(var(--ang) + 起点)）: 下方向へ */
   body.state1 .node-item.right { transform: rotate(calc(var(--ang) - 0deg))!important; }
-
-  .node-img {
-    transition: none; /* スマホではアニメーションを簡略化して軽量化 */
-  }
-
-  .landing-footer {
-    font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0;
-  }
-  /* カウンター用スタイル */.stats-display {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  font-family: 'Space Grotesk', monospace; /* お好みのフォントに変更してください */
-  font-size: 0.7rem;
-  color: #333;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.6;
-}
+  .landing-footer { font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0; }
 }
