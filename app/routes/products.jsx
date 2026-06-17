@@ -7,17 +7,17 @@ export const links = () => [{ rel: 'stylesheet', href: stylesUrl }];
 export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [currency, setCurrency] = useState('JPY');
+  const [color, setColor] = useState('black'); // カラーの状態を保持
 
   // 為替レート設定 (35ドル基準の計算)
   const rates = {
-    JPY: 5500, // 表示用（選択時に4000に上書きされます）
+    JPY: 5500,
     USD: 35,
     EUR: 32,
     GBP: 28,
     AUD: 52
   };
 
-  // JPY選択時は固定値4000、それ以外はレートに基づく価格
   const displayPrice = currency === 'JPY' ? 4000 : rates[currency];
 
   return (
@@ -52,6 +52,17 @@ export default function ProductPage() {
               <option value="EUR">EUR (€)</option>
               <option value="GBP">GBP (£)</option>
               <option value="AUD">AUD (A$)</option>
+            </select>
+          </div>
+
+          {/* カラー選択カラム */}
+          <div className="color-selector" style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '8px', color: '#808080' }}>COLOR</label>
+            <select value={color} onChange={(e) => setColor(e.target.value)} style={{ width: '100%', padding: '10px', background: '#111', color: '#fff', border: '1px solid #333' }}>
+              <option value="black">Black</option>
+              <option value="pink">Pink</option>
+              <option value="darkgreen">Dark Green</option>
+              <option value="grey">Grey</option>
             </select>
           </div>
 
@@ -97,7 +108,16 @@ This Masterhand product is the concentrated form of our obsession and the infini
 
 When you wear this "hand," it becomes an extension of your own will. What will you reach for? What will you grasp? And what will you defend yourself against?
 
-The future traced by these fingertips is, entirely and ultimately, in your own hands.`}</p>
+The future traced by these fingertips is, entirely and ultimately, in your own hands.
+
+---
+Features:
+- Available in multiple colorways: Black, Pink, Dark Green, and Grey.
+- Includes a detachable carabiner for versatile attachment.
+
+Note:
+* Product color may slightly vary due to lighting. 
+* Ensure the carabiner is securely fastened before use.`}</p>
               
               <div className="divider" />
 
@@ -113,7 +133,7 @@ The future traced by these fingertips is, entirely and ultimately, in your own h
 
 この製品は、同じ感性を持つ人たちと出会うための
 「招待状」でもあります。
-ようこそ コミュニティへ`}</p>
+ようこそ 　コミュニティへ`}</p>
               
               <div className="footer-sign">「What`s ur Twenty？」---WACCA</div>
             </div>
