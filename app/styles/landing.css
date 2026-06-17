@@ -6,7 +6,6 @@ html, body, #__remix {
 
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
-/* 修正：stats-displayを viewport の外に固定 */
 .stats-display {
   position: fixed;
   bottom: 24px;
@@ -71,6 +70,7 @@ body.state1 .node-item .line { width: var(--len); }
   font-family: 'Space Grotesk', sans-serif;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  z-index: 100;
 }
 
 /* スマホ対応 */
@@ -79,7 +79,18 @@ body.state1 .node-item .line { width: var(--len); }
   .logo-container { width: 100px; height: 100px; }
   .node-item { --len: 100px }
   .node-img { width: 28px ; }
+  
+  /* モバイル版の微調整 */
+  .stats-display {
+    font-size: 0.5rem; /* 文字を少し小さくして重なりを防ぐ */
+    bottom: 20px;
+    right: 10px;
+  }
+  
   body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 180deg))!important; }
   body.state1 .node-item.right { transform: rotate(calc(var(--ang) - 0deg))!important; }
-  .landing-footer { font-size: 0.65rem; bottom: 20px; width: 100%; text-align: center; left: 0; }
+  
+  .landing-footer { 
+    font-size: 0.6rem; bottom: 20px; left: 10px; 
+  }
 }
