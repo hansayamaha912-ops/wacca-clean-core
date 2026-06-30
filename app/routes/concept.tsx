@@ -66,11 +66,12 @@ const containerStyle: React.CSSProperties = {
   
   backgroundImage: "url('/assets/真の左.jpg')", 
   
-  // 【修正ポイント1】100%（縦いっぱい）から 92%〜95% ほどに少し縮小する
-  backgroundSize: "auto 92vh", 
+  // 【調整】92vh から「85vh」に落とすことで、さらに一回り縮小させて右の円を左に引っ込めます
+  backgroundSize: "auto 85vh", 
   
-  // 【修正ポイント2】左端（0%）に固定してロゴが切れるのを防ぐ
-  backgroundPosition: "0% center", 
+  // 【調整】0% だと縮小したぶん画像の「上側」に隙間ができることがあるため、
+  // 左端に固定しつつ上下も中央に配置されるよう「left center」または「0% center」にします
+  backgroundPosition: "left center", 
   
   backgroundRepeat: "no-repeat",
   backgroundAttachment: "fixed",
