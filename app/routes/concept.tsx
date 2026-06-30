@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 export const meta = () => {
   return [
@@ -9,21 +10,67 @@ export const meta = () => {
 };
 
 export default function Concept() {
+  // 画面がスマホサイズ（768px未満）かどうかを判定するステート
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile(); // 初期実行
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // 画面サイズに応じて背景スタイルを動的に切り替える
+  const dynamicContainerStyle: React.CSSProperties = {
+    ...containerStyle,
+    backgroundImage: "url('/assets/真の左.jpg')",
+    // スマホの時は画像を少し小さく（70vh）するか、あるいは全体に合わせる
+    backgroundSize: isMobile ? "auto 45vh" : "auto 85vh",
+    // スマホの時は画像の上端を中央、横は左寄せ、または上部中央など
+    backgroundPosition: isMobile ? "center top 20px" : "left center",
+    backgroundAttachment: isMobile ? "scroll" : "fixed", // スマホはスクロール連動がスムーズ
+  };
+
+  // スマホの時は縦並び、PCの時は横並びにする
+  const dynamicWrapperStyle: React.CSSProperties = {
+    ...contentWrapperStyle,
+    flexDirection: isMobile ? "column" : "row",
+    paddingTop: isMobile ? "20px" : "60px",
+  };
+
+  // スマホの時は画像の高さ分のスペースを作り、PCの時は横幅50%を確保する
+  const dynamicLeftSpacerStyle: React.CSSProperties = {
+    ...leftSpacerStyle,
+    flex: isMobile ? "0 0 auto" : "1 1 50%",
+    height: isMobile ? "40vh" : "auto", // スマホ時に画像が表示されるエリアを確保
+    minWidth: isMobile ? "100%" : "320px",
+  };
+
+  // スマホ時とPC時でテキストの余白（逃げ幅）を最適化する
+  const dynamicRightSectionStyle: React.CSSProperties = {
+    ...rightSectionStyle,
+    flex: isMobile ? "0 0 auto" : "1 1 50%",
+    minWidth: isMobile ? "100%" : "320px",
+    // PC版で調整した「左余白 90px」を、スマホ版では「左右一律 24px」にして画面内に収める
+    padding: isMobile ? "20px 24px 80px 24px" : "80px 60px 60px 90px",
+    textAlign: isMobile ? "center" : "left", // スマホはお好みで中央揃えに
+  };
+
   return (
-    <div style={containerStyle}>
+    <div style={dynamicContainerStyle}>
       {/* 戻るボタン */}
-      <div style={navStyle}>
+      <div style={isMobile ? mobileNavStyle : navStyle}>
         <Link to="/" style={backLinkStyle}>← BACK</Link>
       </div>
 
-      <div style={contentWrapperStyle}>
-        {/* 左側：真の左.jpgのグラフィックをはっきりと見せるためのスペーサー領域（被り防止） */}
-        <div style={leftSpacerStyle} />
+      <div style={dynamicWrapperStyle}>
+        {/* 左側（スマホでは上側）：画像のためのスペーサー */}
+        <div style={dynamicLeftSpacerStyle} />
 
-        {/* 右側：コンセプトテキストのエリア（画像に一切干渉しない） */}
-        <div style={rightSectionStyle}>
+        {/* 右側（スマホでは下側）：テキストエリア */}
+        <div style={dynamicRightSectionStyle}>
           {/* 英語版テキスト */}
-          <section style={textBlockEnStyle}>
+          <section style={{ ...textBlockEnStyle, textAlign: isMobile ? 'center' : 'left' }}>
             <p>Culture is a living thing that is always developing and moving.</p>
             <p>Who is wearing which clothes, in which city, and breathing in what kind of music?</p>
             <p style={{ fontWeight: 'bold', margin: '1.5em 0' }}>People, objects, and places.</p>
@@ -38,7 +85,7 @@ export default function Concept() {
           </section>
 
           {/* 日本語版テキスト */}
-          <section style={textBlockJaStyle}>
+          <section style={{ ...textBlockJaStyle, textAlign: isMobile ? 'center' : 'left' }}>
             <p>文化は常に発展し、動き続ける生命体である。</p>
             <p>誰がどの服を着て、どの街の、どんな音楽の中で呼吸しているのか。</p>
             <p style={{ fontWeight: 'bold', margin: '1.5em 0' }}>人・モノ・場所。この3つの変数が重なる瞬間に、文化は生まれる。</p>
@@ -56,25 +103,13 @@ export default function Concept() {
 }
 
 // ==========================================
-// インラインスタイルの定義
+// インラインスタイルのベース定義
 // ==========================================
 
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   width: "100%",
   backgroundColor: "#f4f0ea",
-  
-  backgroundImage: "url('/assets/真の左.jpg')", 
-  
-  // 【調整】92vh から「84vh」に落とすことで、さらに一回り縮小させて右の円を左に引っ込めます
-  backgroundSize: "auto 84vh", 
-  
-  // 【調整】0% だと縮小したぶん画像の「上側」に隙間ができることがあるため、
-  // 左端に固定しつつ上下も中央に配置されるよう「left center」または「0% center」にします
-  backgroundPosition: "left center", 
-  
-  backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed",
   color: "#000000",
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
@@ -84,7 +119,15 @@ const containerStyle: React.CSSProperties = {
 const navStyle: React.CSSProperties = {
   position: "fixed",
   top: "30px",
-  right: "40px", // テキストのある右側にBACKボタンを配置
+  right: "40px", 
+  zIndex: 10,
+};
+
+// スマホ用の戻るボタン配置（上部に固定）
+const mobileNavStyle: React.CSSProperties = {
+  position: "absolute",
+  top: "20px",
+  left: "20px",
   zIndex: 10,
 };
 
@@ -92,10 +135,10 @@ const backLinkStyle: React.CSSProperties = {
   color: "#000000",
   textDecoration: "none",
   fontWeight: "bold",
-  fontSize: "14px",
+  fontSize: "12px",
   letterSpacing: "0.1em",
-  backgroundColor: "#f4f0ea", // オリジナルの背景色と合わせて綺麗に馴染ませる
-  padding: "8px 16px",
+  backgroundColor: "#f4f0ea",
+  padding: "6px 14px",
   border: "1px solid #000000",
   borderRadius: "20px",
 };
@@ -104,44 +147,33 @@ const contentWrapperStyle: React.CSSProperties = {
   display: "flex",
   width: "100%",
   minHeight: "100vh",
-  flexWrap: "wrap", // スマホ表示などのレスポンシブにも自動対応
 };
 
-// 左側の空白領域（真の左.jpg のデザインと絶対にテキストを重ねないためのガード）
 const leftSpacerStyle: React.CSSProperties = {
-  flex: "1 1 50%", // 画面の左半分（50%）を画像のために100%確保
-  minWidth: "320px",
   pointerEvents: "none",
 };
 
-// 右側のテキストエリア
 const rightSectionStyle: React.CSSProperties = {
-  flex: "1 1 50%", 
-  minWidth: "320px",
-  
-  // 【修正箇所】4つ目の値（左側の余白 padding-left）を 40px から「90px」に広げます
-  // これにより、右側のテキスト全体がさらに右側へ押し出され、画像との被りが完全に解消されます
-  padding: "80px 60px 60px 90px", 
-  
   display: "flex",
   flexDirection: "column",
-  gap: "50px",
+  gap: "40px",
   justifyContent: "center",
   boxSizing: "border-box",
 };
 
 const textBlockEnStyle: React.CSSProperties = {
-  fontSize: "15px",
-  lineHeight: "1.9",
-  textAlign: "left", // 左揃えにして読みやすく調整
+  fontSize: "14px",
+  lineHeight: "1.8",
   letterSpacing: "0.05em",
   maxWidth: "520px",
+  margin: "0 auto", // スマホ時の中央寄せ用
 };
 
 const textBlockJaStyle: React.CSSProperties = {
-  fontSize: "14px",
-  lineHeight: "2.1",
-  textAlign: "left",
+  fontSize: "13px",
+  lineHeight: "2.0",
   letterSpacing: "0.08em",
   maxWidth: "520px",
+  margin: "0 auto", // スマホ時の中央寄せ用
+  opacity: 0.9,
 };
