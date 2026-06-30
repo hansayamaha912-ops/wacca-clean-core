@@ -116,9 +116,13 @@ const leftSpacerStyle: React.CSSProperties = {
 
 // 右側のテキストエリア
 const rightSectionStyle: React.CSSProperties = {
-  flex: "1 1 50%", // 画面の右半分（50%）にテキストを配置
+  flex: "1 1 50%", 
   minWidth: "320px",
-  padding: "80px 60px 60px 40px", // 上下左右にバランスの良い余白を設定
+  
+  // 【修正箇所】4つ目の値（左側の余白 padding-left）を 40px から「90px」に広げます
+  // これにより、右側のテキスト全体がさらに右側へ押し出され、画像との被りが完全に解消されます
+  padding: "80px 60px 60px 90px", 
+  
   display: "flex",
   flexDirection: "column",
   gap: "50px",
