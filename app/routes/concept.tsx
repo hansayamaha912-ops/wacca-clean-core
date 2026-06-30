@@ -17,16 +17,10 @@ export default function Concept() {
       </div>
 
       <div style={contentWrapperStyle}>
-        {/* 左側：ロゴとメインコピーのエリア */}
-        <div style={leftSectionStyle}>
-          <div style={brandBlockStyle}>
-            <p style={subTitleStyle}>What's ur 20?</p>
-            <p style={subTitleStyle}>Connecting from here, You and I.</p>
-            <h1 style={logoTextStyle}>WACCA</h1>
-          </div>
-        </div>
+        {/* 左側：真の左.jpgのグラフィックをはっきりと見せるためのスペーサー領域（被り防止） */}
+        <div style={leftSpacerStyle} />
 
-        {/* 右側：コンセプトテキストのエリア */}
+        {/* 右側：コンセプトテキストのエリア（画像に一切干渉しない） */}
         <div style={rightSectionStyle}>
           {/* 英語版テキスト */}
           <section style={textBlockEnStyle}>
@@ -68,26 +62,25 @@ export default function Concept() {
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   width: "100%",
-  backgroundColor: "#f4f0ea", // 画像のトーンに合わせた薄いベージュ
+  backgroundColor: "#f4f0ea", // 画像のトーンに合わせたオリジナルの薄いベージュ
   
-  // 背景画像に「wacca背景.jpg」を指定し、最下層の中央に配置
-  backgroundImage: "linear-gradient(rgba(244, 240, 234, 0.4), rgba(244, 240, 234, 0.4)), url('/assets/wacca背景.jpg')", 
-  backgroundSize: "contain", // 画像全体が画面内に綺麗に収まるサイズに調整（お好みで cover に変更可）
-  backgroundPosition: "center center", // 中央に配置
+  // 背景画像を「真の左.jpg」に変更。半透明レイヤーをなくし、はっきりとオリジナルで表示
+  backgroundImage: "url('/assets/真の左.jpg')", 
+  backgroundSize: "contain", // 画像が歪まないよう全体を綺麗に収める
+  backgroundPosition: "left center", // 画面の左側にピタッと固定
   backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed", // スクロール時に背景の青いグラフィックを固定
+  backgroundAttachment: "fixed", // スクロールしても左の画像の位置を固定
   
   color: "#000000",
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
-  padding: "40px 20px",
   boxSizing: "border-box",
 };
 
 const navStyle: React.CSSProperties = {
-  position: "fixed", // スクロールしても追従するように fixed に変更
+  position: "fixed",
   top: "30px",
-  left: "30px",
+  right: "40px", // テキストのある右側にBACKボタンを配置
   zIndex: 10,
 };
 
@@ -97,73 +90,50 @@ const backLinkStyle: React.CSSProperties = {
   fontWeight: "bold",
   fontSize: "14px",
   letterSpacing: "0.1em",
-  backgroundColor: "rgba(244, 240, 234, 0.7)", // スクロール時に文字と被ってもボタンが見えるように
-  padding: "6px 12px",
-  borderRadius: "4px",
+  backgroundColor: "#f4f0ea", // オリジナルの背景色と合わせて綺麗に馴染ませる
+  padding: "8px 16px",
+  border: "1px solid #000000",
+  borderRadius: "20px",
 };
 
 const contentWrapperStyle: React.CSSProperties = {
   display: "flex",
-  flexWrap: "wrap",
-  maxWidth: "1200px",
-  margin: "0 auto",
-  paddingTop: "60px",
-  position: "relative",
-  zIndex: 2, // 背景画像より確実に上のレイヤーに配置
+  width: "100%",
+  minHeight: "100vh",
+  flexWrap: "wrap", // スマホ表示などのレスポンシブにも自動対応
 };
 
-const leftSectionStyle: React.CSSProperties = {
-  flex: "1 1 400px",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-end",
-  minHeight: "300px",
-  padding: "20px",
+// 左側の空白領域（真の左.jpg のデザインと絶対にテキストを重ねないためのガード）
+const leftSpacerStyle: React.CSSProperties = {
+  flex: "1 1 50%", // 画面の左半分（50%）を画像のために100%確保
+  minWidth: "320px",
+  pointerEvents: "none",
 };
 
-const brandBlockStyle: React.CSSProperties = {
-  textAlign: "left",
-};
-
-const subTitleStyle: React.CSSProperties = {
-  fontSize: "16px",
-  lineHeight: "1.4",
-  margin: "4px 0",
-  fontWeight: "500",
-  textShadow: "0 0 10px rgba(244, 240, 234, 0.8)", // 青い背景と被ったときの可読性向上
-};
-
-const logoTextStyle: React.CSSProperties = {
-  fontSize: "64px",
-  fontWeight: "900",
-  margin: "10px 0 0 0",
-  letterSpacing: "0.05em",
-  fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
-  textShadow: "0 0 10px rgba(244, 240, 234, 0.8)",
-};
-
+// 右側のテキストエリア
 const rightSectionStyle: React.CSSProperties = {
-  flex: "1 1 600px",
-  padding: "20px",
+  flex: "1 1 50%", // 画面の右半分（50%）にテキストを配置
+  minWidth: "320px",
+  padding: "80px 60px 60px 40px", // 上下左右にバランスの良い余白を設定
   display: "flex",
   flexDirection: "column",
-  gap: "40px",
+  gap: "50px",
+  justifyContent: "center",
+  boxSizing: "border-box",
 };
 
 const textBlockEnStyle: React.CSSProperties = {
-  fontSize: "14px",
-  lineHeight: "1.8",
-  textAlign: "right",
+  fontSize: "15px",
+  lineHeight: "1.9",
+  textAlign: "left", // 左揃えにして読みやすく調整
   letterSpacing: "0.05em",
-  // 青い太いグラフィックとテキストが重なった際、文字（黒）が読めるように薄くシャドウを追加
-  textShadow: "0 0 8px rgba(244, 240, 234, 0.9), 0 0 4px rgba(244, 240, 234, 0.9)", 
+  maxWidth: "520px",
 };
 
 const textBlockJaStyle: React.CSSProperties = {
-  fontSize: "13px",
-  lineHeight: "2.0",
-  textAlign: "right",
+  fontSize: "14px",
+  lineHeight: "2.1",
+  textAlign: "left",
   letterSpacing: "0.08em",
-  opacity: 0.9,
-  textShadow: "0 0 8px rgba(244, 240, 234, 0.9), 0 0 4px rgba(244, 240, 234, 0.9)",
+  maxWidth: "520px",
 };
