@@ -62,15 +62,18 @@ export default function Concept() {
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   width: "100%",
-  backgroundColor: "#f4f0ea", // 画像のトーンに合わせたオリジナルの薄いベージュ
+  backgroundColor: "#f4f0ea",
   
-  // 背景画像を「真の左.jpg」に変更。半透明レイヤーをなくし、はっきりとオリジナルで表示
   backgroundImage: "url('/assets/真の左.jpg')", 
-  backgroundSize: "contain", // 画像が歪まないよう全体を綺麗に収める
-  backgroundPosition: "-10% center", // 画面の左側にピタッと固定
-  backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed", // スクロールしても左の画像の位置を固定
   
+  // 【修正ポイント1】100%（縦いっぱい）から 92%〜95% ほどに少し縮小する
+  backgroundSize: "auto 92vh", 
+  
+  // 【修正ポイント2】左端（0%）に固定してロゴが切れるのを防ぐ
+  backgroundPosition: "0% center", 
+  
+  backgroundRepeat: "no-repeat",
+  backgroundAttachment: "fixed",
   color: "#000000",
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
