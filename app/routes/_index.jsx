@@ -118,17 +118,25 @@ export default function Index() {
           <div className="nodes-layer">
             {leftNodes.map((n, i) => (
               <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                <div className="line" /><Link to="/products"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
+                <div className="line" />
+                <Link to="/products">
+                  <img src="/assets/master.png" className="node-img" alt="Master" />
+                </Link>
               </div>
             ))}
+            
             {rightNodes.map((n, i) => (
               <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                <div className="line" /><img src="/assets/dick.png" className="node-img" alt="Dick" />
+                <div className="line" />
+                {/* 修正箇所: Linkで囲み、適切に閉じタグを処理 */}
+                <Link to="/concept">
+                  <img src="/assets/dick.png" className="node-img" alt="Dick" />
+                </Link>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
+          </div> {/* .nodes-layer の閉じタグを追加 */}
+        </div> {/* .logo-container の閉じタグを追加 */}
+      </div> {/* .viewport の閉じタグを追加 */}
 
       <footer className="landing-footer">
         <Link to="/policies">特定商取引法に基づく表記</Link>
