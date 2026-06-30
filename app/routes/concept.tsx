@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 export const meta = () => {
   return [
@@ -9,93 +10,72 @@ export const meta = () => {
 };
 
 export default function Concept() {
+  // 初期値を真（PC版）にして、ハイドレーション時の干渉を防ぐ
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // スマホサイズかつマウント完了後のみスマホ用スタイルを適用、それ以外は成功しているPC版を維持
+  const useMobileStyle = isMounted && isMobile;
+
+  // 1. 最外層コンテナ（背景画像の設定）
+  const dynamicContainerStyle: React.CSSProperties = {
+    ...containerStyle,
+    backgroundImage: "url('/assets/真の左.jpg')",
+    backgroundRepeat: "no-repeat",
+    // スマホ時は 45vh、PC時は大成功した「auto 85vh」で固定
+    backgroundSize: useMobileStyle ? "auto 45vh" : "auto 85vh",
+    // スマホ時は上部中央、PC時は左中央
+    backgroundPosition: useMobileStyle ? "center top 20px" : "left center",
+    // スマホ時は通常スクロール、PC時は固定（fixed）
+    backgroundAttachment: useMobileStyle ? "scroll" : "fixed",
+  };
+
+  // 2. レイアウトの囲み（横並び or 縦並び）
+  const dynamicWrapperStyle: React.CSSProperties = {
+    ...contentWrapperBaseStyle,
+    flexDirection: useMobileStyle ? "column" : "row",
+    paddingTop: useMobileStyle ? "20px" : "60px",
+  };
+
+  // 3. 左側のガードスペース（画像と被らないための余白エリア）
+  const dynamicLeftSpacerStyle: React.CSSProperties = {
+    ...leftSpacerBaseStyle,
+    flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
+    height: useMobileStyle ? "40vh" : "auto",
+    minWidth: useMobileStyle ? "100%" : "320px",
+  };
+
+  // 4. 右側のテキストエリア（PC時は左余白 90px で完全回避）
+  const dynamicRightSectionStyle: React.CSSProperties = {
+    ...rightSectionBaseStyle,
+    flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
+    minWidth: useMobileStyle ? "100%" : "320px",
+    padding: useMobileStyle ? "20px 24px 80px 24px" : "80px 60px 60px 90px",
+  };
+
   return (
-    <div style={containerStyle}>
-      {/* 
-        インラインスタイルだけでは実現できない「スマホ用CSS」を干渉しないようにここに記述します。
-        これにより、PCとスマホで完全に表示スタイルが分離されます。
-      */}
-      <style dangerouslySetInnerHTML={{__html: `
-        /* --- PC版の標準スタイル --- */
-        .concept-container {
-          background-image: url('/assets/真の左.jpg');
-          background-size: auto 85vh;
-          background-position: left center;
-          background-repeat: no-repeat;
-          background-attachment: fixed;
-        }
-        .content-wrapper {
-          display: flex;
-          flex-direction: row;
-          padding-top: 60px;
-        }
-        .left-spacer {
-          flex: 1 1 50%;
-          minWidth: 320px;
-        }
-        .right-section {
-          flex: 1 1 50%;
-          minWidth: 320px;
-          padding: 80px 60px 60px 90px;
-          text-align: left;
-        }
-        .text-block-en, .text-block-ja {
-          text-align: left;
-        }
-        .nav-block {
-          position: fixed;
-          top: 30px;
-          right: 40px;
-        }
-
-        /* --- スマホ版（画面幅 767px 以下）専用スタイル --- */
-        @media (max-width: 767px) {
-          .concept-container {
-            background-size: auto 45vh !important;
-            background-position: center top 20px !important;
-            background-attachment: scroll !important;
-          }
-          .content-wrapper {
-            flex-direction: column !important;
-            padding-top: 20px !important;
-          }
-          .left-spacer {
-            flex: 0 0 auto !important;
-            height: 40vh !important;
-            width: 100% !important;
-          }
-          .right-section {
-            flex: 0 0 auto !important;
-            width: 100% !important;
-            padding: 20px 24px 80px 24px !important;
-            text-align: center !important;
-          }
-          .text-block-en, .text-block-ja {
-            text-align: center !important;
-            margin: 0 auto !important;
-          }
-          .nav-block {
-            position: absolute !important;
-            top: 20px !important;
-            left: 20px !important;
-            right: auto !important;
-          }
-        }
-      `}} />
-
+    <div style={dynamicContainerStyle}>
       {/* 戻るボタン */}
-      <div className="nav-block">
+      <div style={useMobileStyle ? mobileNavStyle : navStyle}>
         <Link to="/" style={backLinkStyle}>← BACK</Link>
       </div>
 
-      <div className="content-wrapper" style={contentWrapperBaseStyle}>
-        {/* 左側：画像用のスペーサー空間 */}
-        <div className="left-spacer" style={leftSpacerBaseStyle} />
+      <div style={dynamicWrapperStyle}>
+        {/* 左側：画像用の空間 */}
+        <div style={dynamicLeftSpacerStyle} />
 
-        {/* 右側：テキストコンテンツエリア */}
-        <div className="right-section" style={rightSectionBaseStyle}>
+        {/* 右側：テキストエリア */}
+        <div style={dynamicRightSectionStyle}>
           {/* 英語版テキスト */}
-          <section className="text-block-en" style={textBlockEnStyle}>
+          <section style={{ ...textBlockEnStyle, textAlign: useMobileStyle ? 'center' : 'left' }}>
             <p>Culture is a living thing that is always developing and moving.</p>
             <p>Who is wearing which clothes, in which city, and breathing in what kind of music?</p>
             <p style={{ fontWeight: 'bold', margin: '1.5em 0' }}>People, objects, and places.</p>
@@ -110,7 +90,7 @@ export default function Concept() {
           </section>
 
           {/* 日本語版テキスト */}
-          <section className="text-block-ja" style={textBlockJaStyle}>
+          <section style={{ ...textBlockJaStyle, textAlign: useMobileStyle ? 'center' : 'left' }}>
             <p>文化は常に発展し、動き続ける生命体である。</p>
             <p>誰がどの服を着て、どの街の、どんな音楽の中で呼吸しているのか。</p>
             <p style={{ fontWeight: 'bold', margin: '1.5em 0' }}>人・モノ・場所。この3つの変数が重なる瞬間に、文化は生まれる。</p>
@@ -128,17 +108,31 @@ export default function Concept() {
 }
 
 // ==========================================
-// ベースとなる固定インラインスタイル
+// インラインスタイルのベース定義
 // ==========================================
 
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   width: "100%",
-  backgroundColor: "#f4f0ea", // オリジナルのベージュ
+  backgroundColor: "#f4f0ea",
   color: "#000000",
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
   boxSizing: "border-box",
+};
+
+const navStyle: React.CSSProperties = {
+  position: "fixed",
+  top: "30px",
+  right: "40px", 
+  zIndex: 10,
+};
+
+const mobileNavStyle: React.CSSProperties = {
+  position: "absolute",
+  top: "20px",
+  left: "20px",
+  zIndex: 10,
 };
 
 const backLinkStyle: React.CSSProperties = {
@@ -154,6 +148,7 @@ const backLinkStyle: React.CSSProperties = {
 };
 
 const contentWrapperBaseStyle: React.CSSProperties = {
+  display: "flex",
   width: "100%",
   minHeight: "100vh",
 };
@@ -175,6 +170,7 @@ const textBlockEnStyle: React.CSSProperties = {
   lineHeight: "1.8",
   letterSpacing: "0.05em",
   maxWidth: "520px",
+  margin: "0 auto",
 };
 
 const textBlockJaStyle: React.CSSProperties = {
@@ -182,5 +178,6 @@ const textBlockJaStyle: React.CSSProperties = {
   lineHeight: "2.0",
   letterSpacing: "0.08em",
   maxWidth: "520px",
+  margin: "0 auto",
   opacity: 0.9,
 };
