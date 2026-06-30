@@ -15,10 +15,14 @@ export default function Concept() {
 
   useEffect(() => {
     setIsMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const checkMobile = () => window.innerWidth < 768;
+    
+    // 初期チェックとリサイズイベント
+    const handleResize = () => setIsMobile(checkMobile());
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const useMobileStyle = isMounted && isMobile;
@@ -53,7 +57,8 @@ export default function Concept() {
     ...rightSectionBaseStyle,
     flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
     minWidth: useMobileStyle ? "100%" : "320px",
-    padding: useMobileStyle ? "0px 32px 100px 32px" : "80px 60px 60px 90px",
+    // 左右のpaddingを 20px にして iPhone 11 でも窮屈にならない有効幅をしっかり確保
+    padding: useMobileStyle ? "0px 20px 100px 20px" : "80px 60px 60px 90px",
   };
 
   return (
@@ -83,7 +88,6 @@ export default function Concept() {
             
             <p>At the moment these three variables overlap, culture is born.</p>
             
-            {/* 不自然な <br /> を排除し、長文はスマホの画面幅で自動で綺麗に折り返すように修正 */}
             <p>Using 3D technology, we grant mass and form to communities that are inherently invisible.</p>
             <p>We sculpt images on your mind and fragments of memory into a tangible "reality" possessed with true texture and presence.</p>
             <p>This product is the very shape of culture you can hold in your hands—a key to guiding you, a person of intent, toward new places and experiences.</p>
@@ -95,28 +99,42 @@ export default function Concept() {
             <p>Connecting from here, You and I.</p>
           </section>
 
-          {/* 日本語版テキスト */}
+          {/* 日本語版テキスト (文節ごとの自動折り返し調整版) */}
           <section style={{ 
             ...textBlockJaStyle, 
             textAlign: useMobileStyle ? 'center' : 'left',
             lineHeight: useMobileStyle ? '2.4' : '2.0'
           }}>
-            <p>文化は常に発展し、動き続ける生命体である。</p>
-            <p>誰がどの服を着て、どの街の、どんな音楽の中で呼吸しているのか。</p>
+            <p><span style={w}>文化は常に発展し、</span><span style={w}>動き続ける生命体である。</span></p>
+            <p><span style={w}>誰がどの服を着て、</span><span style={w}>どの街の、</span><span style={w}>どんな音楽の中で</span><span style={w}>呼吸しているのか。</span></p>
             
             <p style={{ fontWeight: 'bold', margin: '1.8em 0' }}>
-              人・モノ・場所。<br />
-              この3つの変数が重なる瞬間に、文化は生まれる。
+              <span style={w}>人・モノ・場所。</span><br />
+              <span style={w}>この3つの変数が</span><span style={w}>重なる瞬間に、</span><span style={w}>文化は生まれる。</span>
             </p>
             
-            <p>私たちは、3D技術を用いて、本来目に見えないコミュニティに質量と形態を授ける。</p>
-            <p>頭の中のイメージや記憶の断片を、確かな触感と存在感を持つ「実在」へと彫り込む。</p>
-            <p>このプロダクトは、あなたが手で掴める文化の形であり、意思を持つあなたを新しい場所や体験へと導くための鍵である。</p>
+            <p>
+              <span style={w}>私たちは、</span><span style={w}>3D技術を用いて、</span>
+              <span style={w}>本来目に見えないコミュニティに</span><span style={w}>質量と形態を授ける。</span>
+            </p>
+            <p>
+              <span style={w}>頭の中のイメージや</span><span style={w}>記憶の断片を、</span>
+              <span style={w}>確かな触感と存在感を持つ</span><span style={w}>「実在」へと彫り込む。</span>
+            </p>
+            <p>
+              <span style={w}>このプロダクトは、</span><span style={w}>あなたが手で掴める</span><span style={w}>文化の形であり、</span>
+              <span style={w}>意思を持つあなたを</span><span style={w}>新しい場所や体験へと</span><span style={w}>導くための鍵である。</span>
+            </p>
             
-            <p>WACCAは、その文化（culture）の中に輪っか（circle）を創出する。</p>
-            <p>東京のローカルな人の繋がりを起点に、それらをプロダクトで繋ぐ試みである。</p>
+            <p><span style={w}>WACCAは、</span><span style={w}>その文化（culture）の中に</span><span style={w}>輪っか（circle）を創出する。</span></p>
+            <p>
+              <span style={w}>東京のローカルな</span><span style={w}>人の繋がりを起点に、</span>
+              <span style={w}>それらをプロダクトで</span><span style={w}>繋ぐ試みである。</span>
+            </p>
             
-            <p style={{ marginTop: '1.8em' }}>「What's ur 20?」ここから繋がる、あなたとわたし。</p>
+            <p style={{ marginTop: '1.8em' }}>
+              <span style={w}>「What's ur 20?」</span><span style={w}>ここから繋がる、</span><span style={w}>あなたとわたし。</span>
+            </p>
           </section>
 
         </div>
@@ -128,6 +146,12 @@ export default function Concept() {
 // ==========================================
 // インラインスタイルのベース定義
 // ==========================================
+
+// 【新規追加】文節のぶつ切りを防止する魔法のスタイル（単語の塊ごとに折り返させる）
+const w: React.CSSProperties = {
+  display: "inline-block",
+  whiteSpace: "normal",
+};
 
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
@@ -178,7 +202,7 @@ const leftSpacerBaseStyle: React.CSSProperties = {
 const rightSectionBaseStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "45px", // 文と文（グループ）の間のゆとり
+  gap: "45px", 
   justifyContent: "center",
   boxSizing: "border-box",
 };
@@ -188,18 +212,14 @@ const textBlockEnStyle: React.CSSProperties = {
   letterSpacing: "0.05em",
   maxWidth: "520px",
   margin: "0 auto",
-  // 単語の途中で変に改行されず、意味のつながりで綺麗に折り返すCSS
   wordBreak: "keep-all",
   overflowWrap: "anywhere",
 };
 
 const textBlockJaStyle: React.CSSProperties = {
   fontSize: "13px",
-  letterSpacing: "0.08em",
+  letterSpacing: "0.06em", // iPhone11などの細い画面用に僅かに微調整
   maxWidth: "520px",
   margin: "0 auto",
   opacity: 0.9,
-  // 助詞や単語のぶつ切りを防ぎ、日本語として美しく自動改行させる設定
-  wordBreak: "keep-all",
-  overflowWrap: "anywhere",
 };
