@@ -17,7 +17,6 @@ export default function Concept() {
     setIsMounted(true);
     const checkMobile = () => window.innerWidth < 768;
     
-    // 初期チェックとリサイズイベント
     const handleResize = () => setIsMobile(checkMobile());
     handleResize();
     
@@ -57,7 +56,6 @@ export default function Concept() {
     ...rightSectionBaseStyle,
     flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
     minWidth: useMobileStyle ? "100%" : "320px",
-    // 左右のpaddingを 20px にして iPhone 11 でも窮屈にならない有効幅をしっかり確保
     padding: useMobileStyle ? "0px 20px 100px 20px" : "80px 60px 60px 90px",
   };
 
@@ -99,7 +97,7 @@ export default function Concept() {
             <p>Connecting from here, You and I.</p>
           </section>
 
-          {/* 日本語版テキスト (文節ごとの自動折り返し調整版) */}
+          {/* 日本語版テキスト */}
           <section style={{ 
             ...textBlockJaStyle, 
             textAlign: useMobileStyle ? 'center' : 'left',
@@ -132,8 +130,10 @@ export default function Concept() {
               <span style={w}>それらをプロダクトで</span><span style={w}>繋ぐ試みである。</span>
             </p>
             
+            {/* 修正箇所: 「What's ur 20?」の後に明示的な <br /> を配置し、次の文を一文の美しい塊に修正 */}
             <p style={{ marginTop: '1.8em' }}>
-              <span style={w}>「What's ur 20?」</span><span style={w}>ここから繋がる、</span><span style={w}>あなたとわたし。</span>
+              <span style={w}>「What's ur 20?」</span><br />
+              <span style={w}>ここから繋がる、あなたとわたし。</span>
             </p>
           </section>
 
@@ -147,7 +147,6 @@ export default function Concept() {
 // インラインスタイルのベース定義
 // ==========================================
 
-// 【新規追加】文節のぶつ切りを防止する魔法のスタイル（単語の塊ごとに折り返させる）
 const w: React.CSSProperties = {
   display: "inline-block",
   whiteSpace: "normal",
@@ -218,7 +217,7 @@ const textBlockEnStyle: React.CSSProperties = {
 
 const textBlockJaStyle: React.CSSProperties = {
   fontSize: "13px",
-  letterSpacing: "0.06em", // iPhone11などの細い画面用に僅かに微調整
+  letterSpacing: "0.06em", 
   maxWidth: "520px",
   margin: "0 auto",
   opacity: 0.9,
