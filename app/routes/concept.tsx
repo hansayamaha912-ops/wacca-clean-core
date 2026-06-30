@@ -67,7 +67,7 @@ const containerStyle: React.CSSProperties = {
   // 背景画像を「真の左.jpg」に変更。半透明レイヤーをなくし、はっきりとオリジナルで表示
   backgroundImage: "url('/assets/真の左.jpg')", 
   backgroundSize: "contain", // 画像が歪まないよう全体を綺麗に収める
-  backgroundPosition: "left center", // 画面の左側にピタッと固定
+  backgroundPosition: "-15% center", // 画面の左側にピタッと固定
   backgroundRepeat: "no-repeat",
   backgroundAttachment: "fixed", // スクロールしても左の画像の位置を固定
   
