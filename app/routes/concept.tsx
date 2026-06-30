@@ -17,11 +17,17 @@ export default function Concept() {
       </div>
 
       <div style={contentWrapperStyle}>
-        {/* 左側：背景画像（wacca左.jpg）のグラフィック要素を活かすための空のブロック */}
-        <div style={leftSpacerStyle} />
+        {/* 左側：ロゴとメインコピーのエリア */}
+        <div style={leftSectionStyle}>
+          <div style={brandBlockStyle}>
+            <p style={subTitleStyle}>What's ur 20?</p>
+            <p style={subTitleStyle}>Connecting from here, You and I.</p>
+            <h1 style={logoTextStyle}>WACCA</h1>
+          </div>
+        </div>
 
-        {/* 右側：テキストコンテンツエリア（画像と絶対に被らない領域） */}
-        <div style={rightContentStyle}>
+        {/* 右側：コンセプトテキストのエリア */}
+        <div style={rightSectionStyle}>
           {/* 英語版テキスト */}
           <section style={textBlockEnStyle}>
             <p>Culture is a living thing that is always developing and moving.</p>
@@ -56,31 +62,32 @@ export default function Concept() {
 }
 
 // ==========================================
-// スタイルの定義（テキストが被らない仕組み）
+// インラインスタイルの定義
 // ==========================================
 
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   width: "100%",
-  backgroundColor: "#f4f0ea", // 画像の背景色のトーンに合わせた薄いベージュ
+  backgroundColor: "#f4f0ea", // 画像のトーンに合わせた薄いベージュ
   
-  // 背景画像を「左側」に固定し、スクロールしても動かないように設定
-  backgroundImage: "url('/assets/wacca左.jpg')", 
-  backgroundSize: "contain", // 画像が切れないように全体を収める（またはお好みで cover）
-  backgroundPosition: "left center", // 常に左側に配置
+  // 背景画像に「wacca背景.jpg」を指定し、最下層の中央に配置
+  backgroundImage: "linear-gradient(rgba(244, 240, 234, 0.4), rgba(244, 240, 234, 0.4)), url('/assets/wacca背景.jpg')", 
+  backgroundSize: "contain", // 画像全体が画面内に綺麗に収まるサイズに調整（お好みで cover に変更可）
+  backgroundPosition: "center center", // 中央に配置
   backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed", // スクロール時に背景を固定してテキストだけを流す
+  backgroundAttachment: "fixed", // スクロール時に背景の青いグラフィックを固定
   
   color: "#000000",
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
+  padding: "40px 20px",
   boxSizing: "border-box",
 };
 
 const navStyle: React.CSSProperties = {
-  position: "fixed",
+  position: "fixed", // スクロールしても追従するように fixed に変更
   top: "30px",
-  right: "40px", // テキスト側の右上に配置して、左の画像と干渉を防ぐ
+  left: "30px",
   zIndex: 10,
 };
 
@@ -90,50 +97,73 @@ const backLinkStyle: React.CSSProperties = {
   fontWeight: "bold",
   fontSize: "14px",
   letterSpacing: "0.1em",
-  backgroundColor: "rgba(244, 240, 234, 0.8)", // スクロール時に文字と被っても見えるように
-  padding: "8px 16px",
-  borderRadius: "20px",
+  backgroundColor: "rgba(244, 240, 234, 0.7)", // スクロール時に文字と被ってもボタンが見えるように
+  padding: "6px 12px",
+  borderRadius: "4px",
 };
 
 const contentWrapperStyle: React.CSSProperties = {
   display: "flex",
-  width: "100%",
-  minHeight: "100vh",
-  flexWrap: "wrap", // スマホ表示時は縦並びになるよう対応
+  flexWrap: "wrap",
+  maxWidth: "1200px",
+  margin: "0 auto",
+  paddingTop: "60px",
+  position: "relative",
+  zIndex: 2, // 背景画像より確実に上のレイヤーに配置
 };
 
-// 左側のスペース（wacca左.jpg グラフィックが綺麗に見える領域を確保）
-const leftSpacerStyle: React.CSSProperties = {
-  flex: "1 1 50%", // 画面の左半分（あるいは画像サイズに合わせた比率）を確保
-  minWidth: "320px",
-  pointerEvents: "none", // 背後のリンク等を邪魔しない
-};
-
-// 右側のコンテンツ領域（テキストが配置される安全地帯）
-const rightContentStyle: React.CSSProperties = {
-  flex: "1 1 50%",
-  minWidth: "320px",
-  padding: "80px 40px 60px 20px", // 上下左右の余白調整
+const leftSectionStyle: React.CSSProperties = {
+  flex: "1 1 400px",
   display: "flex",
   flexDirection: "column",
-  gap: "60px",
-  justifyContent: "center",
-  boxSizing: "border-box",
+  justifyContent: "flex-end",
+  minHeight: "300px",
+  padding: "20px",
+};
+
+const brandBlockStyle: React.CSSProperties = {
+  textAlign: "left",
+};
+
+const subTitleStyle: React.CSSProperties = {
+  fontSize: "16px",
+  lineHeight: "1.4",
+  margin: "4px 0",
+  fontWeight: "500",
+  textShadow: "0 0 10px rgba(244, 240, 234, 0.8)", // 青い背景と被ったときの可読性向上
+};
+
+const logoTextStyle: React.CSSProperties = {
+  fontSize: "64px",
+  fontWeight: "900",
+  margin: "10px 0 0 0",
+  letterSpacing: "0.05em",
+  fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+  textShadow: "0 0 10px rgba(244, 240, 234, 0.8)",
+};
+
+const rightSectionStyle: React.CSSProperties = {
+  flex: "1 1 600px",
+  padding: "20px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "40px",
 };
 
 const textBlockEnStyle: React.CSSProperties = {
-  fontSize: "15px",
-  lineHeight: "1.9",
-  textAlign: "left", 
+  fontSize: "14px",
+  lineHeight: "1.8",
+  textAlign: "right",
   letterSpacing: "0.05em",
-  maxWidth: "540px",
+  // 青い太いグラフィックとテキストが重なった際、文字（黒）が読めるように薄くシャドウを追加
+  textShadow: "0 0 8px rgba(244, 240, 234, 0.9), 0 0 4px rgba(244, 240, 234, 0.9)", 
 };
 
 const textBlockJaStyle: React.CSSProperties = {
-  fontSize: "14px",
-  lineHeight: "2.1",
-  textAlign: "left",
+  fontSize: "13px",
+  lineHeight: "2.0",
+  textAlign: "right",
   letterSpacing: "0.08em",
   opacity: 0.9,
-  maxWidth: "540px",
+  textShadow: "0 0 8px rgba(244, 240, 234, 0.9), 0 0 4px rgba(244, 240, 234, 0.9)",
 };
