@@ -26,7 +26,6 @@ export default function Concept() {
 
   const useMobileStyle = isMounted && isMobile;
 
-  // 1. 最外層コンテナ
   const dynamicContainerStyle: React.CSSProperties = {
     ...containerStyle,
     backgroundImage: "url('/assets/真の左.jpg')",
@@ -34,16 +33,17 @@ export default function Concept() {
     backgroundSize: useMobileStyle ? "auto 42vh" : "auto 85vh",
     backgroundPosition: useMobileStyle ? "center top 20px" : "left center",
     backgroundAttachment: useMobileStyle ? "scroll" : "fixed",
+    
+    // 【動的演出】画像がパッと表示されず、0.8秒かけて滑らかに浮かび上がります
+    animation: "fadeInEffect 0.8s ease-out forwards",
   };
 
-  // 2. レイアウトの囲み
   const dynamicWrapperStyle: React.CSSProperties = {
     ...contentWrapperBaseStyle,
     flexDirection: useMobileStyle ? "column" : "row",
     paddingTop: useMobileStyle ? "10px" : "60px",
   };
 
-  // 3. 左側（上側）：画像用空間スペーサー
   const dynamicLeftSpacerStyle: React.CSSProperties = {
     ...leftSpacerBaseStyle,
     flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
@@ -51,7 +51,6 @@ export default function Concept() {
     minWidth: useMobileStyle ? "100%" : "320px",
   };
 
-  // 4. 右側（下側）：テキストエリア
   const dynamicRightSectionStyle: React.CSSProperties = {
     ...rightSectionBaseStyle,
     flex: useMobileStyle ? "0 0 auto" : "1 1 50%",
@@ -61,6 +60,26 @@ export default function Concept() {
 
   return (
     <div style={dynamicContainerStyle}>
+      {/* インラインスタイルだけでは動かせない「アニメーションのキーフレーム」を
+        他のコードを汚さずにここに注入します
+      */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeInEffect {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInUpEffect {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}} />
+
       {/* 戻るボタン */}
       <div style={useMobileStyle ? mobileNavStyle : navStyle}>
         <Link to="/" style={backLinkStyle}>← BACK</Link>
@@ -77,7 +96,9 @@ export default function Concept() {
           <section style={{ 
             ...textBlockEnStyle, 
             textAlign: useMobileStyle ? 'center' : 'left',
-            lineHeight: useMobileStyle ? '2.1' : '1.8' 
+            lineHeight: useMobileStyle ? '2.1' : '1.8',
+            // 【動的演出】下から上へふわっと登場（0.8秒）
+            animation: "fadeInUpEffect 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards"
           }}>
             <p>Culture is a living thing that is always developing and moving.</p>
             <p>Who is wearing which clothes, in which city, and breathing in what kind of music?</p>
@@ -101,7 +122,9 @@ export default function Concept() {
           <section style={{ 
             ...textBlockJaStyle, 
             textAlign: useMobileStyle ? 'center' : 'left',
-            lineHeight: useMobileStyle ? '2.4' : '2.0'
+            lineHeight: useMobileStyle ? '2.4' : '2.0',
+            // 【動的演出】少し遅れて（0.3秒ディレイ）下から上へふわっと登場
+            animation: "fadeInUpEffect 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards"
           }}>
             <p><span style={w}>文化は常に発展し、</span><span style={w}>動き続ける生命体である。</span></p>
             <p><span style={w}>誰がどの服を着て、</span><span style={w}>どの街の、</span><span style={w}>どんな音楽の中で</span><span style={w}>呼吸しているのか。</span></p>
@@ -130,7 +153,6 @@ export default function Concept() {
               <span style={w}>それらをプロダクトで</span><span style={w}>繋ぐ試みである。</span>
             </p>
             
-            {/* 修正箇所: 「What's ur 20?」の後に明示的な <br /> を配置し、次の文を一文の美しい塊に修正 */}
             <p style={{ marginTop: '1.8em' }}>
               <span style={w}>「What's ur 20?」</span><br />
               <span style={w}>ここから繋がる、あなたとわたし。</span>
@@ -160,6 +182,7 @@ const containerStyle: React.CSSProperties = {
   fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif",
   position: "relative",
   boxSizing: "border-box",
+  opacity: 0, // アニメーション開始前は透明にしておく
 };
 
 const navStyle: React.CSSProperties = {
@@ -213,6 +236,7 @@ const textBlockEnStyle: React.CSSProperties = {
   margin: "0 auto",
   wordBreak: "keep-all",
   overflowWrap: "anywhere",
+  opacity: 0, // アニメーション前は透明
 };
 
 const textBlockJaStyle: React.CSSProperties = {
@@ -220,5 +244,5 @@ const textBlockJaStyle: React.CSSProperties = {
   letterSpacing: "0.06em", 
   maxWidth: "520px",
   margin: "0 auto",
-  opacity: 0.9,
+  opacity: 0, // アニメーション前は透明
 };
