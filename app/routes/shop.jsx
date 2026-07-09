@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@remix-run/react";
 
 // ==========================================
-// 商品マスタデータ（アセットパスを修正、descriptionを削除）
+// 商品マスタデータ（拡張子をすべて .png に修正）
 // ==========================================
 const PRODUCT_DATA = [
   {
@@ -11,8 +11,8 @@ const PRODUCT_DATA = [
     price: "¥4,000",
     status: "Available",
     images: [
-      "/assets/ピンク正面.jpg", // 通常時（正面）
-      "/assets/ピンク横.jpg"    // ホバー時（横）
+      "/assets/ピンク正面.png", // 通常時（正面）
+      "/assets/ピンク横.png"    // ホバー時（横）
     ],
     sizes: ["ONE SIZE"]
   },
@@ -22,7 +22,7 @@ const PRODUCT_DATA = [
     price: "¥3,500",
     status: "Available",
     images: [
-      "/assets/Dick正面.jpg",
+      "/assets/Dick正面.png",
       "/assets/Dick横.png"
     ],
     sizes: ["ONE SIZE"]
@@ -33,21 +33,19 @@ const PRODUCT_DATA = [
     price: "¥3,500",
     status: "Available",
     images: [
-      "/assets/angr正面.jpg",
-      "/assets/angr横.jpg"
+      "/assets/angr正面.png",
+      "/assets/angr横.png"
     ],
     sizes: ["ONE SIZE"]
   }
 ];
 
 export default function Shop() {
-  // 詳細ドロワーの表示管理
   const [selectedProduct, setSelectedProduct] = useState(null);
-  // マウスオーバー時の画像切り替え管理
   const [hoveredProductId, setHoveredProductId] = useState(null);
 
   return (
-    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "120px" }}>
+    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
       
       {/* ヘッダーナビゲーション */}
       <header style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -93,9 +91,7 @@ export default function Shop() {
         </div>
       </main>
 
-      {/* ===================================================
-           【固定フッター】
-           =================================================== */}
+      {/* 固定フッター */}
       <footer style={{
         position: "fixed",
         bottom: "1.5rem",
@@ -107,7 +103,7 @@ export default function Shop() {
         pointerEvents: "none",
         zIndex: 40
       }}>
-        {/* 最左下：IN.pngロゴ（サイズを2.5倍の高さ80pxに拡大） */}
+        {/* 最左下：IN.pngロゴ */}
         <div style={{ pointerEvents: "auto" }}>
           <Link to="/">
             <img src="/assets/IN.png" alt="WACCA LOGO" style={{ height: "80px", width: "auto", objectFit: "contain" }} />
@@ -122,9 +118,7 @@ export default function Shop() {
         </div>
       </footer>
 
-      {/* ===================================================
-           【詳細ドロワー】画面遷移なしで右からスライドイン
-           =================================================== */}
+      {/* 詳細ドロワー */}
       <div style={{
         position: "fixed",
         inset: 0,
@@ -132,7 +126,6 @@ export default function Shop() {
         pointerEvents: selectedProduct ? "auto" : "none",
         overflow: "hidden"
       }}>
-        {/* 背景の薄いオーバーレイ */}
         <div 
           onClick={() => setSelectedProduct(null)}
           style={{
@@ -144,7 +137,6 @@ export default function Shop() {
           }}
         />
         
-        {/* 詳細パネル本体 */}
         <div style={{
           position: "absolute",
           right: 0,
@@ -173,7 +165,6 @@ export default function Shop() {
                 </button>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                  {/* 詳細表示内のアングル違い2枚並び */}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                     {selectedProduct.images.map((imgSrc, index) => (
                       <img key={index} src={imgSrc} alt="" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", backgroundColor: "#f9f9f9" }} />
@@ -187,7 +178,6 @@ export default function Shop() {
 
                   <hr style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }} />
 
-                  {/* Descriptionカラムを削除し、Sizeのみを配置 */}
                   <div>
                     <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#aaa" }}>Size</h4>
                     <div style={{ display: "flex", gap: "8px" }}>
