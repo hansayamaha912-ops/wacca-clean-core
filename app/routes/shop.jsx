@@ -2,59 +2,70 @@ import { useState } from "react";
 import { Link } from "@remix-run/react";
 
 // ==========================================
-// 商品マスタデータ（新商品はここに追加するだけ）
+// 商品マスタデータ（指定の3アイテムを反映、初期：正面 ⇄ ホバー：横）
 // ==========================================
 const PRODUCT_DATA = [
   {
-    id: "sunfaded-logo-t",
-    name: "Sunfaded logo T-shirt",
-    price: "¥7,000",
-    status: "Out of Stock",
-    description: "しっかりとした肉厚のコットン生地に、ヴィンテージライクなサンフェード加工を施したオリジナルTシャツ。袖口のアイレットディテールが特徴です。",
+    id: "master-hand",
+    name: "Master Hand",
+    price: "¥4,000", // 価格は仮置きです。必要に応じて変更してください
+    status: "Available",
+    
     images: [
-      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500", // 1枚目メイン
-      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500"  // 2枚目ホバー用
+      "/uploaded/ピンク正面.jpg", // 通常時（正面）
+      "/uploaded/ピンク横.jpg"    // ホバー時（横）
     ],
-    sizes: ["S", "M", "L"]
+    sizes: ["ONE SIZE"]
   },
   {
-    id: "cross-t",
-    name: "Cross T-shirt",
-    price: "#7,000",
+    id: "dick-man-key-charm",
+    name: "Dick man key-charm",
+    price: "¥3,500",
     status: "Available",
-    description: "フロントにオリジナルのグラフィックを施した、WaccaのシグネチャーとなるクロスTシャツ。",
+    
     images: [
-      "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500",
-      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500"
+      "/uploaded/Dick正面.jpg",
+      "/uploaded/Dick横.png"
     ],
-    sizes: ["M", "L", "XL"]
+    sizes: ["ONE SIZE"]
+  },
+  {
+    id: "angr-kun-key-holder",
+    name: "Angr-Kun key-holder",
+    price: "¥3,500",
+    status: "Available",
+    
+    images: [
+      "/uploaded/angr正面.jpg",
+      "/uploaded/angr横.jpg"
+    ],
+    sizes: ["ONE SIZE"]
   }
 ];
 
 export default function Shop() {
-  // 詳細表示する選択中の商品状態管理
+  // 詳細ドロワーの表示管理
   const [selectedProduct, setSelectedProduct] = useState(null);
-  // 各商品のホバー状態を管理するためのID
+  // マウスオーバー時の画像切り替え管理
   const [hoveredProductId, setHoveredProductId] = useState(null);
 
   return (
-    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif" }}>
+    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "100px" }}>
       
-      {/* ヘッダーナビゲーション */}
-      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", display: "flex", justifyContent: "between", alignItems: "center", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-        <div style={{ fontWeight: "bold", fontSize: "16px" }}>Wacca</div>
-        <nav style={{ display: "flex", gap: "2rem", marginLeft: "auto", marginRight: "auto" }}>
+      {/* ヘッダーナビゲーション（左上のWACCA文字を削除） */}
+      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        <nav style={{ display: "flex", gap: "2rem" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
         </nav>
-        <div>Cart (0)</div>
+        <div style={{ marginLeft: "auto" }}>Cart (0)</div>
       </header>
 
-      {/* 商品一覧グリッドエリア */}
+      {/* 商品一覧エリア（横1列に4つのグリッド、線なし・綺麗に整列） */}
       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr))", // 横1列に4つ固定
           columnGap: "1.5rem",
           rowGap: "3rem"
         }}>
@@ -66,10 +77,10 @@ export default function Shop() {
               onMouseLeave={() => setHoveredProductId(null)}
               style={{ cursor: "pointer" }}
             >
-              {/* 画像コンテナ (ホバーで別アングルに切り替え) */}
+              {/* 画像コンテナ */}
               <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", marginBottom: "1rem", overflow: "hidden", position: "relative" }}>
                 <img 
-                  src={hoveredProductId === product.id && product.images[1] ? product.images[1] : product.images[0]} 
+                  src={hoveredProductId === product.id ? product.images[1] : product.images[0]} 
                   alt={product.name} 
                   style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.3s ease" }}
                 />
@@ -78,9 +89,7 @@ export default function Shop() {
               {/* 商品テキスト */}
               <div style={{ fontSize: "13px", display: "flex", flexDirection: "column", gap: "4px" }}>
                 <h3 style={{ margin: 0, fontWeight: "500", letterSpacing: "-0.01em" }}>{product.name}</h3>
-                <p style={{ margin: 0, color: product.status === "Out of Stock" ? "#999" : "#000" }}>
-                  {product.status === "Out of Stock" ? "Out of Stock" : product.price}
-                </p>
+                <p style={{ margin: 0, color: "#000" }}>{product.price}</p>
               </div>
             </div>
           ))}
@@ -88,7 +97,36 @@ export default function Shop() {
       </main>
 
       {/* ===================================================
-           【詳細ドロワー】画面遷移なしで右側からスライドイン
+           【最左下・最右下固定フッター】
+           =================================================== */}
+      <footer style={{
+        position: "fixed",
+        bottom: "1.5rem",
+        left: "1.5rem",
+        right: "1.5rem",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        pointerEvents: "none", // 背後のクリックを邪魔しない
+        zIndex: 40
+      }}>
+        {/* 最左下：現在使用中のIN.pngロゴ */}
+        <div style={{ pointerEvents: "auto" }}>
+          <Link to="/">
+            <img src="/assets/IN.png" alt="WACCA LOGO" style={{ height: "32px", width: "auto", objectFit: "contain" }} />
+          </Link>
+        </div>
+
+        {/* 最右下：特定商取引法に基づく表記 */}
+        <div style={{ pointerEvents: "auto", fontSize: "11px", letterSpacing: "0.05em" }}>
+          <Link to="/policies" style={{ color: "#000", textDecoration: "none", opacity: 0.6 }}>
+            特定商取引法に基づく表記
+          </Link>
+        </div>
+      </footer>
+
+      {/* ===================================================
+           【詳細ドロワー】画面遷移なしで右からスライドイン
            =================================================== */}
       <div style={{
         position: "fixed",
@@ -130,7 +168,6 @@ export default function Shop() {
           {selectedProduct && (
             <>
               <div>
-                {/* 閉じるボタン */}
                 <button 
                   onClick={() => setSelectedProduct(null)}
                   style={{ background: "none", border: "none", padding: 0, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginBottom: "3rem" }}
@@ -162,14 +199,13 @@ export default function Shop() {
                     <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#aaa" }}>Size</h4>
                     <div style={{ display: "flex", gap: "8px" }}>
                       {selectedProduct.sizes.map((size) => (
-                        <span key={size} style={{ padding: "6px 12px", border: "1px solid #eee", fontSize: "11px", cursor: "pointer" }}>{size}</span>
+                        <span key={size} style={{ padding: "6px 12px", border: "1px solid #eee", fontSize: "11px" }}>{size}</span>
                       ))}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* カートに入れるボタン */}
               <button style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginTop: "2rem" }}>
                 Add to Cart
               </button>
