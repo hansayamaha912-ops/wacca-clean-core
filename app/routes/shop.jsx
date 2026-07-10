@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "@remix-run/react";
 
 // ==========================================
-// 商品マスタデータ（Stripeの決済リンクを追加）
+// 商品マスタデータ
 // ==========================================
 const PRODUCT_DATA = [
   {
@@ -15,7 +15,7 @@ const PRODUCT_DATA = [
       "/assets/ピンク横.png"
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: null // Master Handは別ページ（products.jsx）に遷移するため不要
+    stripeUrl: null
   },
   {
     id: "dick-man-key-charm",
@@ -27,7 +27,7 @@ const PRODUCT_DATA = [
       "/assets/Dick横.png"
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: "https://buy.stripe.com/9B67sL4Q773tg2Q6Qc3wQ04" // Dickman決済リンク
+    stripeUrl: "https://buy.stripe.com/9B67sL4Q773tg2Q6Qc3wQ04"
   },
   {
     id: "angr-kun-key-holder",
@@ -39,7 +39,7 @@ const PRODUCT_DATA = [
       "/assets/angr横.png"
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05" // angr-kun決済リンク
+    stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05"
   }
 ];
 
@@ -47,6 +47,18 @@ export default function Shop() {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [hoveredProductId, setHoveredProductId] = useState(null);
+  
+  // レスポンシブ判定用の画面幅ステート
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize(); // 初回確認
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleProductClick = (product) => {
     if (product.id === "master-hand") {
@@ -56,18 +68,34 @@ export default function Shop() {
     }
   };
 
-  // 【追加】購入ボタンをクリックしたときの処理
   const handlePurchaseClick = (url) => {
     if (url) {
-      window.location.href = url; // Stripeの決済画面に直接ジャンプ
+      window.location.href = url;
     }
   };
 
   return (
-    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
+    <div style={{ 
+      backgroundColor: "#fff", 
+      minHeight: "100vh", 
+      color: "#000", 
+      fontFamily: "sans-serif", 
+      position: "relative", 
+      paddingBottom: isMobile ? "180px" : "140px" // スマホ時はフッターが被らないよう余白を広めに
+    }}>
       
       {/* ヘッダーナビゲーション */}
-      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+      <header style={{ 
+        maxWidth: "1200px", 
+        margin: "0 auto", 
+        padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", 
+        display: "flex", 
+        justifyContent: "space-between", 
+        alignItems: "center", 
+        fontSize: "12px", 
+        letterSpacing: "0.1em", 
+        textTransform: "uppercase" 
+      }}>
         <nav style={{ display: "flex", gap: "2rem" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
@@ -76,12 +104,17 @@ export default function Shop() {
       </header>
 
       {/* 商品一覧エリア */}
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+      <main style={{ 
+        maxWidth: "1200px", 
+        margin: "0 auto", 
+        padding: isMobile ? "1rem 1rem 3rem 1rem" : "3rem 1.5rem" 
+      }}>
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-          columnGap: "1.5rem",
-          rowGap: "3rem"
+          // スマホ時は2列（画像サイズ最大化＆ゆとり重視）、PC時は4列
+          gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
+          columnGap: isMobile ? "1rem" : "1.5rem",
+          rowGap: isMobile ? "2.5rem" : "3rem"
         }}>
           {PRODUCT_DATA.map((product) => (
             <div 
@@ -91,47 +124,75 @@ export default function Shop() {
               onMouseLeave={() => setHoveredProductId(null)}
               style={{ cursor: "pointer" }}
             >
-              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", marginBottom: "1rem", overflow: "hidden", position: "relative" }}>
+              {/* 画像コンテナ */}
+              <div style={{ 
+                width: "100%", 
+                aspectRatio: "3/4", 
+                backgroundColor: "#f9f9f9", 
+                marginBottom: "0.8rem", 
+                overflow: "hidden", 
+                position: "relative" 
+              }}>
                 <img 
                   src={hoveredProductId === product.id ? product.images[1] : product.images[0]} 
                   alt={product.name} 
                   style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.3s ease" }}
                 />
               </div>
-              <div style={{ fontSize: "13px", display: "flex", flexDirection: "column", gap: "4px" }}>
-                <h3 style={{ margin: 0, fontWeight: "500", letterSpacing: "-0.01em" }}>{product.name}</h3>
-                <p style={{ margin: 0, color: "#000" }}>{product.price}</p>
+              
+              {/* 商品テキスト */}
+              <div style={{ fontSize: isMobile ? "12px" : "13px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                <h3 style={{ margin: 0, fontWeight: "500", letterSpacing: "-0.01em", lineHeight: "1.3" }}>{product.name}</h3>
+                <p style={{ margin: 0, color: "#000", opacity: 0.6 }}>{product.price}</p>
               </div>
             </div>
           ))}
         </div>
       </main>
 
-      {/* 固定フッター */}
+      {/* 固定フッター（レスポンシブ対応） */}
       <footer style={{
         position: "fixed",
-        bottom: "1.5rem",
-        left: "1.5rem",
-        right: "1.5rem",
+        bottom: isMobile ? "1rem" : "1.5rem",
+        left: isMobile ? "1rem" : "1.5rem",
+        right: isMobile ? "1rem" : "1.5rem",
         display: "flex",
+        flexDirection: isMobile ? "column" : "row", // スマホ時は縦に並べて重なりを防ぐ
         justifyContent: "space-between",
-        alignItems: "flex-end",
+        alignItems: isMobile ? "flex-start" : "flex-end",
+        gap: isMobile ? "1.5rem" : "0",
         pointerEvents: "none",
         zIndex: 40
       }}>
+        {/* 最左下：IN.pngロゴ */}
         <div style={{ pointerEvents: "auto" }}>
           <Link to="/">
-            <img src="/assets/IN.png" alt="WACCA LOGO" style={{ height: "80px", width: "auto", objectFit: "contain" }} />
+            <img 
+              src="/assets/IN.png" 
+              alt="WACCA LOGO" 
+              style={{ 
+                height: isMobile ? "55px" : "80px", // スマホ時も小さすぎないよう55pxに調整
+                width: "auto", 
+                objectFit: "contain" 
+              }} 
+            />
           </Link>
         </div>
-        <div style={{ pointerEvents: "auto", fontSize: "11px", letterSpacing: "0.05em" }}>
+
+        {/* 最右下：特定商取引法に基づく表記 */}
+        <div style={{ 
+          pointerEvents: "auto", 
+          fontSize: "11px", 
+          letterSpacing: "0.05em",
+          alignSelf: isMobile ? "flex-end" : "auto" // スマホ時も右下に寄せる
+        }}>
           <Link to="/policies" style={{ color: "#000", textDecoration: "none", opacity: 0.6 }}>
             特定商取引法に基づく表記
           </Link>
         </div>
       </footer>
 
-      {/* 詳細ドロワー */}
+      {/* 詳細ドロワー（モバイル時は全画面、PC時は右側部分表示に可変） */}
       <div style={{
         position: "fixed",
         inset: 0,
@@ -156,12 +217,12 @@ export default function Shop() {
           top: 0,
           bottom: 0,
           width: "100%",
-          maxWidth: "440px",
+          maxWidth: isMobile ? "100%" : "440px", // スマホ時はフルスクリーン、PCは440px
           backgroundColor: "#fff",
           boxShadow: "-10px 0 30px rgba(0,0,0,0.05)",
           transform: selectedProduct ? "translateX(0)" : "translateX(100%)",
           transition: "transform 0.3s ease-out",
-          padding: "2.5rem",
+          padding: isMobile ? "1.5rem" : "2.5rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -169,10 +230,10 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              <div>
+              <div style={{ overflowY: "auto", maxHeight: "calc(100vh - 120px)" }}>
                 <button 
                   onClick={() => setSelectedProduct(null)}
-                  style={{ background: "none", border: "none", padding: 0, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginBottom: "3rem" }}
+                  style={{ background: "none", border: "none", padding: 0, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginBottom: "2rem" }}
                 >
                   ← Close
                 </button>
@@ -202,10 +263,9 @@ export default function Shop() {
                 </div>
               </div>
 
-              {/* 【変更箇所】ボタンの文言を「BUY NOW」にし、クリックでStripeへ遷移 */}
               <button 
                 onClick={() => handlePurchaseClick(selectedProduct.stripeUrl)}
-                style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginTop: "2rem" }}
+                style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginTop: "1.5rem" }}
               >
                 Buy Now
               </button>
