@@ -6,11 +6,13 @@ html, body, #__remix {
 
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
+/* 統計情報：デジタルフォント指定 */
 .stats-display {
   position: fixed; bottom: 24px; right: 24px;
-  font-family: 'Space Grotesk', monospace; font-size: 0.7rem; color: #333;
-  letter-spacing: 0.15em; text-transform: uppercase; z-index: 100;
-  pointer-events: none; opacity: 0.6;
+  font-family: 'Courier New', Courier, monospace; 
+  font-size: 0.75rem; color: #333;
+  letter-spacing: 0.2em; z-index: 100;
+  pointer-events: none; opacity: 0.7;
 }
 
 .logo-container {
@@ -19,14 +21,15 @@ html, body, #__remix {
   cursor: pointer; z-index: 10;
 }
 
-/* ENTERガイド */
+/* ENTERガイド：よりデジタルで硬質な表示 */
 .enter-guide {
-  position: absolute; bottom: -40px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem;
-  letter-spacing: 0.2em; color: #333; opacity: 0.8;
-  animation: pulse 2s infinite; pointer-events: none;
+  position: absolute; bottom: -60px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem; font-weight: bold;
+  letter-spacing: 0.5em; color: #000;
+  animation: flicker 1.5s infinite;
 }
-@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 .main-logo { 
   width: 100%; height: auto; position: relative; z-index: 2; display: block;
@@ -43,52 +46,44 @@ html, body, #__remix {
   transform-origin: left center; pointer-events: auto;
 }
 
-/* ラベル表示 */
+/* ラベル独立配置：画像に重ならず、ノードの先端に表示 */
 .node-item::after {
   content: attr(data-name);
-  position: absolute; top: -25px; left: 50%;
-  transform: translateX(-50%);
+  position: absolute;
+  top: -35px; /* 上方に離す */
+  left: 100%; /* ノードの先端に配置 */
+  white-space: nowrap;
   opacity: 0; transition: opacity 0.3s ease;
-  color: #333; font-family: 'Optima', 'Space Grotesk', sans-serif;
-  font-size: 0.8rem; letter-spacing: 0.1em; pointer-events: none;
+  color: #000; font-family: 'Courier New', monospace;
+  font-size: 0.9rem; font-weight: bold;
+  letter-spacing: 0.1em; pointer-events: none;
 }
 body.state1 .node-item { opacity: 1; }
-body.state1 .node-item::after { opacity: 0.6; }
-.node-item:hover::after { opacity: 1; font-weight: bold; }
+body.state1 .node-item::after { opacity: 0.8; }
+.node-item:hover::after { color: #555; }
 
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right { transform: rotate(var(--ang)); }
 
 .node-item .line {
   position: absolute; top: 50%; left: 0;
-  width: 0; height: 0.5px;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s), background 0.3s, box-shadow 0.3s;
+  width: 0; height: 1px;
+  background: #ccc;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s);
 }
 body.state1 .node-item .line { width: var(--len); }
 
-.node-item:hover .line { background: #333 !important; box-shadow: 0 0 8px rgba(0,0,0,0.3); }
-.node-item.left .line { background: #808080; }
-.node-item.right .line { background: rgba(135, 206, 235, 0.6); }
-
 .node-img {
   position: absolute; top: 50%; left: var(--len);
-  width: 40px; display: block; transition: transform 0.3s ease;
+  width: 40px; display: block;
 }
-.node-item:hover .node-img { transform: translate(-50%, -50%) scale(1.2); }
+
+/* 角度補正でアイコンを常に正立させる */
 .node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
 .node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
 .landing-footer { 
-  position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; 
-  font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.1em;
-  text-transform: uppercase; z-index: 100;
-}
-
-@media (max-width: 600px) {
-  .viewport { transform: scale(0.9); }
-  .logo-container { width: 100px; height: 100px; }
-  .node-item { --len: 100px }
-  .node-img { width: 28px ; }
-  .stats-display { font-size: 0.5rem; bottom: 20px; right: 10px; }
-  .landing-footer { font-size: 0.6rem; bottom: 20px; left: 10px; }
+  position: fixed; bottom: 18px; left: 18px; 
+  font-family: 'Courier New', monospace; font-size: 0.8rem; 
+  letter-spacing: 0.1em; z-index: 100;
 }

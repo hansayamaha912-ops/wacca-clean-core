@@ -107,14 +107,14 @@ export default function Index() {
 
   return (
     <main>
-      <div className="stats-display">
+    <div className="stats-display">
         {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
-        %＊5: {stats?.view_count} | 2｜6Φ: {stats?.click_count}
+        Σ-VIEW: {stats?.view_count} | Ω-CLICK: {stats?.click_count}
       </div>
 
       <div className="viewport">
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-          {!isOpen && <div className="enter-guide">ENTER</div>}
+         {!isOpen && <div className="enter-guide">［ ＥＮＴＥＲ ］</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
             
