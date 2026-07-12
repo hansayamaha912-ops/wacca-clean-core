@@ -114,13 +114,13 @@ export default function Index() {
 
       <div className="viewport">
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
+          {!isOpen && <div className="enter-guide">ENTER</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
             
             {leftNodes.map((n, i) => (
-              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`l${i}`} className="node-item left" data-name="SHOP" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                 <div className="line" />
-                {/* 【変更箇所】マスターハンドクリック時の遷移先を /shop へ変更 */}
                 <Link to="/shop">
                   <img src="/assets/master.png" className="node-img" alt="Master" />
                 </Link>
@@ -128,14 +128,13 @@ export default function Index() {
             ))}
             
             {rightNodes.map((n, i) => (
-              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`r${i}`} className="node-item right" data-name="CONCEPT" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                 <div className="line" />
                 <Link to="/concept">
                   <img src="/assets/dick.png" className="node-img" alt="Dick" />
                 </Link>
               </div>
             ))}
-
           </div>
         </div>
       </div>
