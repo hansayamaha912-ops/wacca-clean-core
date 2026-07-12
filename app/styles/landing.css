@@ -6,13 +6,18 @@ html, body, #__remix {
 
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
-/* 右下に固定されたstats-display */
 .stats-display {
-  position: fixed; bottom: 24px; right: 24px;
-  font-family: 'Optima', sans-serif;
-  font-size: 0.7rem; color: #333;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  z-index: 100; pointer-events: none; opacity: 0.6;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  color: #333;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .logo-container {
@@ -26,40 +31,81 @@ html, body, #__remix {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.enter-guide {
-  position: absolute; bottom: -40px; font-family: 'Optima', sans-serif;
-  font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.5;
-  transition: opacity 0.3s;
-}
+.logo-container.is-active .main-logo { transform: scale(0.66); opacity: 0.5; }
 
-.logo-container.is-active .enter-guide { opacity: 0; }
-.logo-container.is-active .main-logo { transform: scale(0.5); }
-
-/* ノード層：展開時に表示 */
-.nodes-layer { position: absolute; inset: 0; transition: opacity 0.5s; opacity: 0; pointer-events: none; }
-.logo-container.is-active .nodes-layer { opacity: 1; pointer-events: auto; }
+.nodes-layer { position: absolute; inset: 0; pointer-events: none; }
 
 .node-item {
   position: absolute; top: 50%; left: 50%;
-  transform-origin: left center; pointer-events: auto;
+  opacity: 0; 
+  transition: opacity 0.4s ease var(--delay);
+  transform-origin: left center;
+  pointer-events: auto;
 }
+
+/* ホバーエフェクトの追加 */
+.node-item::after {
+  content: attr(data-name);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #333;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+.node-item:hover::after { opacity: 1; }
+
+body.state1 .node-item { opacity: 1; }
+
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right { transform: rotate(var(--ang)); }
 
-.line { position: absolute; top: 50%; left: 0; width: var(--len); height: 0.5px; background: #ccc; }
-.node-img { 
-  position: absolute; top: 50%; left: var(--len); width: 40px; 
-  transform: translate(-50%, -50%); /* 回転の影響を受けないように個別に制御 */
+.node-item .line {
+  position: absolute; top: 50%; left: 0;
+  width: 0; height: 0.5px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s), background 0.3s, box-shadow 0.3s;
+}
+body.state1 .node-item .line { width: var(--len); }
+
+/* ホバー時にラインを光らせる */
+.node-item:hover .line {
+  background: #333 !important;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
-/* L字ラインとラベルスタイル */
-.l-line-container { position: absolute; pointer-events: none; z-index: 20; }
-.l-shape { position: absolute; width: 30px; height: 30px; }
-.digital-label {
-  font-family: 'Optima', sans-serif;
-  font-size: 1.2rem; color: #000;
-  background: white; padding: 2px 5px;
-  position: absolute; white-space: nowrap;
+.node-item.left .line { background: #808080; }
+.node-item.right .line { background: rgba(135, 206, 235, 0.6); }
+
+.node-img {
+  position: absolute; top: 50%; left: var(--len);
+  width: 40px; display: block;
+  transition: transform 0.3s ease;
+}
+.node-item:hover .node-img { transform: translate(-50%, -50%) scale(1.2); }
+
+.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
+.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
+
+.landing-footer { 
+  position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; 
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 100;
 }
 
-.landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; font-family: 'Optima', sans-serif; z-index: 100; }
+@media (max-width: 600px) {
+  .viewport { transform: scale(0.9); }
+  .logo-container { width: 100px; height: 100px; }
+  .node-item { --len: 100px }
+  .node-img { width: 28px ; }
+  .stats-display { font-size: 0.5rem; bottom: 20px; right: 10px; }
+  body.state1 .node-item.left { transform: rotate(calc(var(--ang) + 180deg))!important; }
+  body.state1 .node-item.right { transform: rotate(calc(var(--ang) - 0deg))!important; }
+  .landing-footer { font-size: 0.6rem; bottom: 20px; left: 10px; }
+}
