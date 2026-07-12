@@ -6,63 +6,80 @@ html, body, #__remix {
 
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
-/* 起動時のフェードインアニメーション */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.stats-display {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  color: #333;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 .logo-container {
   position: relative; width: 200px; height: 200px;
   display: flex; justify-content: center; align-items: center;
-  animation: fadeIn 1.5s ease-out forwards;
+  cursor: pointer; z-index: 10;
 }
 
-.main-logo { width: 100%; height: auto; position: relative; z-index: 2; display: block; }
+.main-logo { 
+  width: 100%; height: auto; position: relative; z-index: 2; display: block;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* 常時表示のナビゲーションメニュー */
+.logo-container.is-active .main-logo { transform: scale(0.5); }
+
+/* メニューのレイアウト */
 .menu-layer {
   position: absolute; display: flex; flex-direction: column;
-  gap: 120px; /* 画像ノードと重ならないよう上下に配置 */
-  align-items: center;
-  z-index: 5;
+  gap: 20px; align-items: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
 }
+.logo-container.is-active .menu-layer { opacity: 1; pointer-events: auto; }
 
 .menu-item {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #000;
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px 20px;
-  border: 1px solid #000;
   transition: transform 0.2s;
 }
-.menu-item:hover { transform: scale(1.1); }
 
-/* ノード（画像）レイヤー */
-.nodes-layer { position: absolute; inset: 0; pointer-events: none; }
+.nodes-layer { position: absolute; inset: 0; pointer-events: none; transition: opacity 0.3s; }
+.logo-container.is-active .nodes-layer { opacity: 0; }
 
 .node-item {
   position: absolute; top: 50%; left: 50%;
-  opacity: 1; /* 常に表示 */
-  transform-origin: left center;
-  pointer-events: auto;
+  opacity: 0; transition: opacity 0.4s ease var(--delay);
+  transform-origin: left center; pointer-events: auto;
 }
-
+body.state1 .node-item { opacity: 1; }
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right { transform: rotate(var(--ang)); }
 
 .node-item .line { position: absolute; top: 50%; left: 0; width: var(--len); height: 0.5px; background: #ccc; }
-.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; transform: translate(-50%, -50%); }
-
+.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; }
 .node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
 .node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
+
+/* L字ラインとラベルスタイル */
+.l-line-container { position: absolute; pointer-events: none; z-index: 5; }
+.l-shape { position: absolute; width: 20px; height: 20px; }
+.digital-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.8rem; color: #000;
+  background: white; padding: 2px 5px;
+  border: 1px solid #000; position: absolute;
+}
 
 .landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; z-index: 100; }
 
 @media (max-width: 600px) {
-  .logo-container { width: 120px; height: 120px; }
-  .menu-item { font-size: 1.2rem; gap: 80px; }
-  .node-item { --len: 90px !important; }
+  .logo-container { width: 150px; height: 150px; }
+  .menu-item { font-size: 1.5rem; }
 }
