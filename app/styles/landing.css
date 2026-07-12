@@ -7,17 +7,10 @@ html, body, #__remix {
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
 .stats-display {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  font-family: 'Space Grotesk', monospace;
-  font-size: 0.7rem;
-  color: #333;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.6;
+  position: fixed; bottom: 24px; right: 24px;
+  font-family: 'Space Grotesk', monospace; font-size: 0.7rem;
+  color: #333; letter-spacing: 0.15em; text-transform: uppercase;
+  z-index: 100; pointer-events: none; opacity: 0.6;
 }
 
 .logo-container {
@@ -30,42 +23,43 @@ html, body, #__remix {
   width: 100%; height: auto; position: relative; z-index: 2; display: block;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .logo-container.is-active .main-logo { transform: scale(0.5); }
 
-/* メニューのレイアウト */
+/* ノード層：常に表示（アクティブ時に広がる） */
+.nodes-layer { 
+  position: absolute; inset: 0; pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.logo-container.is-active .nodes-layer { transform: scale(1.2); }
+
+.node-item {
+  position: absolute; top: 50%; left: 50%;
+  opacity: 1; /* 常に表示 */
+  transform-origin: left center; pointer-events: auto;
+}
+.node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
+.node-item.right { transform: rotate(var(--ang)); }
+
+.node-item .line { position: absolute; top: 50%; left: 0; width: var(--len); height: 0.5px; background: #ccc; }
+.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; transform: translate(-50%, -50%); }
+.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
+.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
+
+/* メニュー層：アクティブ時に表示 */
 .menu-layer {
   position: absolute; display: flex; flex-direction: column;
-  gap: 20px; align-items: center;
+  gap: 10px; align-items: center;
   opacity: 0; pointer-events: none;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
+  z-index: 5;
 }
 .logo-container.is-active .menu-layer { opacity: 1; pointer-events: auto; }
 
 .menu-item {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.8rem;
-  color: #000;
+  font-size: 1.8rem; color: #000;
   text-decoration: none;
-  transition: transform 0.2s;
 }
-
-.nodes-layer { position: absolute; inset: 0; pointer-events: none; transition: opacity 0.3s; }
-.logo-container.is-active .nodes-layer { opacity: 0; }
-
-.node-item {
-  position: absolute; top: 50%; left: 50%;
-  opacity: 0; transition: opacity 0.4s ease var(--delay);
-  transform-origin: left center; pointer-events: auto;
-}
-body.state1 .node-item { opacity: 1; }
-.node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
-.node-item.right { transform: rotate(var(--ang)); }
-
-.node-item .line { position: absolute; top: 50%; left: 0; width: var(--len); height: 0.5px; background: #ccc; }
-.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; }
-.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
-.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
 /* L字ラインとラベルスタイル */
 .l-line-container { position: absolute; pointer-events: none; z-index: 5; }
@@ -83,22 +77,3 @@ body.state1 .node-item { opacity: 1; }
   .logo-container { width: 150px; height: 150px; }
   .menu-item { font-size: 1.5rem; }
 }
-
-/* メニューレイアウトをロゴの周囲に配置 */
-.menu-layer {
-  position: absolute; 
-  display: flex; flex-direction: column;
-  gap: 10px; align-items: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 5;
-}
-.logo-container.is-active .menu-layer { opacity: 1; pointer-events: auto; }
-
-/* ノードを消さないように修正 */
-.nodes-layer { 
-  position: absolute; inset: 0; 
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-/* アクティブ時にノードを少し外側に広げるアニメーション */
-.logo-container.is-active .nodes-layer { transform: scale(1.2); }
