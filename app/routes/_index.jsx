@@ -68,18 +68,12 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobileNow) {
-      return Array.from({ length: 10 }).map((_, i) => ({
-        length: 200,
-        angle: (i % 2 === 0) ? (i * 5) : -(i * 5),
-        delay: i * 0.1
-      }));
-    }
-    const baseLen = 300;
-    return Array.from({ length: 21 }).map((_, i) => ({
-      length: baseLen + Math.random() * 300,
-      angle: (i - 10) * 3 + (Math.random() * 4 - 2),
-      delay: Math.random() * 0.8
+    const count = isMobileNow ? 10 : 21;
+    const baseLen = isMobileNow ? 150 : 300;
+    return Array.from({ length: count }).map((_, i) => ({
+      length: baseLen + Math.random() * 100,
+      angle: (i - count / 2) * (isMobileNow ? 15 : 3),
+      delay: Math.random() * 0.5
     }));
   };
 
@@ -101,10 +95,6 @@ export default function Index() {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    document.body.classList.toggle('state1', isOpen);
-  }, [isOpen]);
-
   return (
     <main>
       <div className="stats-display">
@@ -116,44 +106,40 @@ export default function Index() {
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           
-          {/* ノード層（画像は常に表示） */}
+          {/* 初期状態のガイドテキスト */}
+          {!isOpen && <span className="enter-guide">ENTER</span>}
+          
+          {/* 展開時に出現するノードとラベル */}
           <div className="nodes-layer">
             {leftNodes.map((n, i) => (
-              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg` }}>
                 <div className="line" />
                 <Link to="/shop">
                   <img src="/assets/master.png" className="node-img" alt="Master" />
-                  {i === 0 && (
-                    <div className="l-line-container" style={{top: '-40px', left: '20px'}}>
+                  {i === Math.floor(leftNodes.length / 2) && (
+                    <div className="l-line-container" style={{top: '-60px', left: '100px'}}>
                       <div className="l-shape" style={{borderLeft: '1px solid #000', borderBottom: '1px solid #000'}} />
-                      <span className="digital-label" style={{left: '25px', top: '10px'}}>SHOP</span>
+                      <span className="digital-label" style={{left: '35px', top: '15px'}}>SHOP</span>
                     </div>
                   )}
                 </Link>
               </div>
             ))}
             {rightNodes.map((n, i) => (
-              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg` }}>
                 <div className="line" />
                 <Link to="/concept">
                   <img src="/assets/dick.png" className="node-img" alt="Dick" />
-                  {i === rightNodes.length - 1 && (
-                    <div className="l-line-container" style={{top: '40px', left: '20px'}}>
+                  {i === Math.floor(rightNodes.length / 2) && (
+                    <div className="l-line-container" style={{top: '60px', left: '100px'}}>
                       <div className="l-shape" style={{borderLeft: '1px solid #000', borderTop: '1px solid #000'}} />
-                      <span className="digital-label" style={{left: '25px', top: '-15px'}}>CONCEPT</span>
+                      <span className="digital-label" style={{left: '35px', top: '-25px'}}>CONCEPT</span>
                     </div>
                   )}
                 </Link>
               </div>
             ))}
           </div>
-
-          {/* メニュー層（ロゴ展開時に表示） */}
-          <nav className="menu-layer">
-            <Link to="/shop" className="menu-item">SHOP</Link>
-            <Link to="/concept" className="menu-item">CONCEPT</Link>
-            <Link to="/contact" className="menu-item">CONTACT</Link>
-          </nav>
         </div>
       </div>
 
