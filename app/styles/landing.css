@@ -2,44 +2,42 @@ html, body, #__remix { margin: 0; padding: 0; height: 100vh; width: 100vw; backg
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
 .stats-display {
-  position: fixed; bottom: 24px; right: 24px;
-  font-family: 'Space Grotesk', monospace; font-size: 0.7rem; color: #333;
-  letter-spacing: 0.15em; text-transform: uppercase; z-index: 100;
-  pointer-events: none; opacity: 0.6;
+  position: fixed; bottom: 10px; right: 10px;
+  font-family: 'Space Grotesk', monospace; font-size: 0.6rem; color: #333;
+  letter-spacing: 0.1em; z-index: 100; pointer-events: none; opacity: 0.5;
 }
 
 .enter-guide {
-  position: absolute; top: 120%; font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.8rem; letter-spacing: 0.3em; color: #333;
-  animation: blink 1.5s infinite; cursor: default;
+  position: absolute; top: 130%; font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.2em; color: #333;
+  animation: blink 1.5s infinite;
 }
 @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
 
 .fixed-label {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem;
-  letter-spacing: 0.3em; color: #333; opacity: 0;
-  transition: opacity 1.5s ease; pointer-events: none; z-index: 5;
+  position: absolute; top: 20%; font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem; color: #333; opacity: 0; transition: opacity 1s ease;
 }
 body.state1 .fixed-label { opacity: 0.4; }
-.shop-label { left: 15%; }
-.concept-label { right: 15%; }
+.shop-label { left: 10%; }
+.concept-label { right: 10%; }
 
-.logo-container { position: relative; width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; }
-.main-logo { width: 100%; height: auto; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-.logo-container.is-active .main-logo { transform: scale(0.66); opacity: 0.5; }
+.logo-container { position: relative; width: 150px; height: 150px; cursor: pointer; }
+.main-logo { width: 100%; transition: all 0.5s ease; }
+.logo-container.is-active .main-logo { transform: scale(0.5); }
 
 .nodes-layer { position: absolute; inset: 0; pointer-events: none; }
 .node-item { position: absolute; top: 50%; left: 50%; opacity: 0; transition: opacity 0.4s ease var(--delay); transform-origin: left center; pointer-events: auto; }
 body.state1 .node-item { opacity: 1; }
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right { transform: rotate(var(--ang)); }
-.node-item .line { position: absolute; top: 50%; left: 0; width: 0; height: 0.5px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s); }
+.node-item .line { position: absolute; top: 50%; left: 0; width: 0; height: 0.5px; transition: width 0.6s ease; }
 body.state1 .node-item .line { width: var(--len); }
-.node-item.left .line { background: #808080; }
-.node-item.right .line { background: rgba(135, 206, 235, 0.6); }
-.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; }
-.node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
-.node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
+.node-img { position: absolute; top: 50%; left: var(--len); width: 30px; }
 
-.landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.8rem; font-family: 'Space Grotesk', sans-serif; opacity: 0.5; }
+/* スマホ特化調整 */
+@media (max-width: 768px) {
+  .fixed-label { top: 15%; font-size: 0.8rem; }
+  .logo-container { width: 100px; height: 100px; }
+  .node-img { width: 20px; }
+}

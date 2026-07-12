@@ -22,15 +22,10 @@ export const action = async ({ request }) => {
   const supabase = getSupabase();
   const formData = await request.formData();
   const type = formData.get("type");
-  
   const { data } = await supabase.from('analytics').select('*').eq('id', 1);
   const current = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
-  
   const updateKey = type === 'click' ? 'click_count' : 'view_count';
-  await supabase.from('analytics')
-    .update({ [updateKey]: (current[updateKey] || 0) + 1 })
-    .eq('id', 1);
-  
+  await supabase.from('analytics').update({ [updateKey]: (current[updateKey] || 0) + 1 }).eq('id', 1);
   return json({ success: true });
 };
 
@@ -58,20 +53,17 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const [fireSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Fire.mp3') : null);
-  const [goSound] = useState(() => typeof window !== 'undefined' ? new Audio('/assets/Sm.m4a') : null);
-
   const getNodes = () => {
-    const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    return Array.from({ length: isMobileNow ? 10 : 21 }).map((_, i) => ({
-      length: isMobileNow ? 200 : 300 + Math.random() * 300,
-      angle: (i - 10) * (isMobileNow ? 5 : 3) + (Math.random() * 4 - 2),
+    const isMobileNow = window.innerWidth < 768;
+    return Array.from({ length: isMobileNow ? 6 : 21 }).map((_, i) => ({
+      length: isMobileNow ? 120 : 300 + Math.random() * 300,
+      angle: (i - (isMobileNow ? 3 : 10)) * (isMobileNow ? 12 : 3) + (Math.random() * 4 - 2),
       delay: Math.random() * 0.8
     }));
   };
@@ -84,13 +76,7 @@ export default function Index() {
     setRightNodes(getNodes());
   }, [isMobile]);
 
-  const handleLogoClick = () => {
-    if (!isOpen) { fireSound?.play(); fetcher.submit({ type: 'click' }, { method: "post" }); } 
-    else { goSound?.play(); }
-    setIsOpen(!isOpen);
-  };
-
-  useEffect(() => { document.body.classList.toggle('state1', isOpen); }, [isOpen]);
+  const handleLogoClick = () => { setIsOpen(!isOpen); };
 
   return (
     <main>
@@ -107,7 +93,7 @@ export default function Index() {
           </>
         )}
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-          {!isOpen && <div className="enter-guide">［ENTER］</div>}
+          {!isOpen && <div className="enter-guide">ENTER</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
             {leftNodes.map((n, i) => (
