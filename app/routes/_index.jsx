@@ -4,7 +4,38 @@ import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
-// ... (getSupabase, loader, action は変更なし)
+const getSupabase = () => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) throw new Error("Supabase env vars missing");
+  return createClient(url, key);
+};
+
+export const loader = async () => {
+  const supabase = getSupabase();
+  const { data } = await supabase.from('analytics').select('*').eq('id', 1);
+  const stats = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
+  return json({ stats });
+};
+
+export const action = async ({ request }) => {
+  const supabase = getSupabase();
+  const formData = await request.formData();
+  const type = formData.get("type");
+  
+  const { data } = await supabase.from('analytics').select('*').eq('id', 1);
+  const current = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
+  
+  const updateKey = type === 'click' ? 'click_count' : 'view_count';
+  await supabase.from('analytics')
+    .update({ [updateKey]: (current[updateKey] || 0) + 1 })
+    .eq('id', 1);
+  
+  return json({ success: true });
+};
+
+export const links = () => [{ rel: 'stylesheet', href: stylesUrl }];
+export const meta = () => [{ title: 'WACCA - Your City. Your Culture.' }];
 
 export default function Index() {
   const { stats } = useLoaderData();
@@ -17,7 +48,10 @@ export default function Index() {
     fetcher.submit({ type: 'view' }, { method: "post" });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        setLocation({ lat: pos.coords.latitude.toFixed(2), lng: pos.coords.longitude.toFixed(2) });
+        setLocation({ 
+          lat: pos.coords.latitude.toFixed(2), 
+          lng: pos.coords.longitude.toFixed(2) 
+        });
       });
     }
   }, []);
@@ -34,20 +68,36 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    const baseLen = isMobileNow ? 150 : 300;
-    const count = isMobileNow ? 10 : 21;
-    return Array.from({ length: count }).map((_, i) => ({
-      length: baseLen + Math.random() * 100,
-      angle: (i - count / 2) * (isMobileNow ? 15 : 3),
-      delay: Math.random() * 0.5
+    if (isMobileNow) {
+      return Array.from({ length: 10 }).map((_, i) => ({
+        length: 200,
+        angle: (i % 2 === 0) ? (i * 5) : -(i * 5),
+        delay: i * 0.1
+      }));
+    }
+    const baseLen = 300;
+    return Array.from({ length: 21 }).map((_, i) => ({
+      length: baseLen + Math.random() * 300,
+      angle: (i - 10) * 3 + (Math.random() * 4 - 2),
+      delay: Math.random() * 0.8
     }));
   };
 
-  const [leftNodes] = useState(getNodes());
-  const [rightNodes] = useState(getNodes());
+  const [leftNodes, setLeftNodes] = useState([]);
+  const [rightNodes, setRightNodes] = useState([]);
+
+  useEffect(() => {
+    setLeftNodes(getNodes());
+    setRightNodes(getNodes());
+  }, [isMobile]);
 
   const handleLogoClick = () => {
-    !isOpen ? fireSound?.play() : goSound?.play();
+    if (!isOpen) { 
+      fireSound?.play(); 
+      fetcher.submit({ type: 'click' }, { method: "post" });
+    } else { 
+      goSound?.play(); 
+    }
     setIsOpen(!isOpen);
   };
 
@@ -57,47 +107,63 @@ export default function Index() {
 
   return (
     <main>
+      <div className="stats-display">
+        {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
+        %＊5: {stats?.view_count} | 2｜6Φ: {stats?.click_count}
+      </div>
+
       <div className="viewport">
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           
+          {/* 閉じた状態ならアイコンを表示 */}
           {!isOpen && (
             <div className="nodes-layer">
               {leftNodes.map((n, i) => (
                 <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                   <div className="line" />
-                  <Link to="/shop"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
-                  {i === 0 && (
-                    <div className="l-line-container" style={{top: '-40px', left: '20px'}}>
-                      <div className="l-shape" style={{borderLeft: '1px solid #000', borderBottom: '1px solid #000'}} />
-                      <span className="digital-label" style={{left: '25px', top: '10px'}}>SHOP</span>
-                    </div>
-                  )}
+                  <Link to="/shop">
+                    <img src="/assets/master.png" className="node-img" alt="Master" />
+                    {i === 0 && (
+                      <div className="l-line-container" style={{top: '-40px', left: '20px'}}>
+                        <div className="l-shape" style={{borderLeft: '1px solid #000', borderBottom: '1px solid #000'}} />
+                        <span className="digital-label" style={{left: '25px', top: '10px'}}>SHOP</span>
+                      </div>
+                    )}
+                  </Link>
                 </div>
               ))}
               {rightNodes.map((n, i) => (
                 <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                   <div className="line" />
-                  <Link to="/concept"><img src="/assets/dick.png" className="node-img" alt="Dick" /></Link>
-                  {i === rightNodes.length - 1 && (
-                    <div className="l-line-container" style={{top: '40px', left: '20px'}}>
-                      <div className="l-shape" style={{borderLeft: '1px solid #000', borderTop: '1px solid #000'}} />
-                      <span className="digital-label" style={{left: '25px', top: '-15px'}}>CONCEPT</span>
-                    </div>
-                  )}
+                  <Link to="/concept">
+                    <img src="/assets/dick.png" className="node-img" alt="Dick" />
+                    {i === rightNodes.length - 1 && (
+                      <div className="l-line-container" style={{top: '40px', left: '20px'}}>
+                        <div className="l-shape" style={{borderLeft: '1px solid #000', borderTop: '1px solid #000'}} />
+                        <span className="digital-label" style={{left: '25px', top: '-15px'}}>CONCEPT</span>
+                      </div>
+                    )}
+                  </Link>
                 </div>
               ))}
             </div>
           )}
 
+          {/* 開いた状態ならメニューを展開 */}
           {isOpen && (
             <nav className="menu-layer">
               <Link to="/shop" className="menu-item">SHOP</Link>
               <Link to="/concept" className="menu-item">CONCEPT</Link>
+              <Link to="/contact" className="menu-item">CONTACT</Link>
             </nav>
           )}
         </div>
       </div>
+
+      <footer className="landing-footer">
+        <Link to="/policies">特定商取引法に基づく表記</Link>
+      </footer>
     </main>
   );
 }
