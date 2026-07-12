@@ -43,15 +43,16 @@ export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [labels] = useState(() => ({
+    view: ['Σ', 'Ψ', 'Φ', 'Δ', 'Ω', 'Ξ'][Math.floor(Math.random() * 6)],
+    click: ['α', 'β', 'γ', 'δ', 'ε', 'ζ'][Math.floor(Math.random() * 6)]
+  }));
 
   useEffect(() => {
     fetcher.submit({ type: 'view' }, { method: "post" });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        setLocation({ 
-          lat: pos.coords.latitude.toFixed(2), 
-          lng: pos.coords.longitude.toFixed(2) 
-        });
+        setLocation({ lat: pos.coords.latitude.toFixed(2), lng: pos.coords.longitude.toFixed(2) });
       });
     }
   }, []);
@@ -68,17 +69,9 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (isMobileNow) {
-      return Array.from({ length: 10 }).map((_, i) => ({
-        length: 200,
-        angle: (i % 2 === 0) ? (i * 5) : -(i * 5),
-        delay: i * 0.1
-      }));
-    }
-    const baseLen = 300;
-    return Array.from({ length: 21 }).map((_, i) => ({
-      length: baseLen + Math.random() * 300,
-      angle: (i - 10) * 3 + (Math.random() * 4 - 2),
+    return Array.from({ length: isMobileNow ? 10 : 21 }).map((_, i) => ({
+      length: isMobileNow ? 200 : 300 + Math.random() * 300,
+      angle: (i - 10) * (isMobileNow ? 5 : 3) + (Math.random() * 4 - 2),
       delay: Math.random() * 0.8
     }));
   };
@@ -92,62 +85,45 @@ export default function Index() {
   }, [isMobile]);
 
   const handleLogoClick = () => {
-    if (!isOpen) { 
-      fireSound?.play(); 
-      fetcher.submit({ type: 'click' }, { method: "post" });
-    } else { 
-      goSound?.play(); 
-    }
+    if (!isOpen) { fireSound?.play(); fetcher.submit({ type: 'click' }, { method: "post" }); } 
+    else { goSound?.play(); }
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    document.body.classList.toggle('state1', isOpen);
-  }, [isOpen]);
+  useEffect(() => { document.body.classList.toggle('state1', isOpen); }, [isOpen]);
 
   return (
     <main>
-    <div className="stats-display">
+      <div className="stats-display">
         {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
-        Σ-VIEW: {stats?.view_count} | Ω-CLICK: {stats?.click_count}
+        %{labels.view}＊5: {stats?.view_count} | 2｜6{labels.click}: {stats?.click_count}
       </div>
 
       <div className="viewport">
-        {/* ラベルを node-item から独立させて個別に配置 */}
         {isOpen && (
           <>
             <div className="fixed-label shop-label">SHOP</div>
             <div className="fixed-label concept-label">CONCEPT</div>
           </>
         )}
-
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
           {!isOpen && <div className="enter-guide">ENTER</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
             {leftNodes.map((n, i) => (
               <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                <div className="line" />
-                <Link to="/shop">
-                  <img src="/assets/master.png" className="node-img" alt="Master" />
-                </Link>
+                <div className="line" /><Link to="/shop"><img src="/assets/master.png" className="node-img" alt="Master" /></Link>
               </div>
             ))}
             {rightNodes.map((n, i) => (
               <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                <div className="line" />
-                <Link to="/concept">
-                  <img src="/assets/dick.png" className="node-img" alt="Dick" />
-                </Link>
+                <div className="line" /><Link to="/concept"><img src="/assets/dick.png" className="node-img" alt="Dick" /></Link>
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      <footer className="landing-footer">
-        <Link to="/policies">特定商取引法に基づく表記</Link>
-      </footer>
+      <footer className="landing-footer"><Link to="/policies">特定商取引法に基づく表記</Link></footer>
     </main>
   );
 }

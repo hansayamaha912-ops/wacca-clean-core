@@ -1,116 +1,45 @@
-/* ベーススタイル */
-html, body, #__remix {
-  margin: 0; padding: 0; height: 100vh; width: 100vw;
-  background-color: #ffffff !important; overflow: hidden;
-}
-
+html, body, #__remix { margin: 0; padding: 0; height: 100vh; width: 100vw; background-color: #ffffff !important; overflow: hidden; }
 .viewport { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; position: relative; }
 
-/* 統計情報（記号表記） */
 .stats-display {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  font-family: 'Space Grotesk', monospace;
-  font-size: 0.7rem;
-  color: #333;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.6;
+  position: fixed; bottom: 24px; right: 24px;
+  font-family: 'Space Grotesk', monospace; font-size: 0.7rem; color: #333;
+  letter-spacing: 0.15em; text-transform: uppercase; z-index: 100;
+  pointer-events: none; opacity: 0.6;
 }
 
-/* 独立配置されたラベル */
+.enter-guide {
+  position: absolute; top: 120%; font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem; letter-spacing: 0.3em; color: #333;
+  animation: blink 1.5s infinite; cursor: default;
+}
+@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
 .fixed-label {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  letter-spacing: 0.2em;
-  color: #333;
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-  z-index: 5;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem;
+  letter-spacing: 0.3em; color: #333; opacity: 0;
+  transition: opacity 1.5s ease; pointer-events: none; z-index: 5;
 }
+body.state1 .fixed-label { opacity: 0.4; }
+.shop-label { left: 15%; }
+.concept-label { right: 15%; }
 
-body.state1 .fixed-label { opacity: 0.3; }
-.shop-label { left: 10%; }
-.concept-label { right: 10%; }
-
-/* ロゴエリア */
-.logo-container {
-  position: relative; width: 200px; height: 200px;
-  display: flex; justify-content: center; align-items: center;
-  cursor: pointer; z-index: 10;
-}
-
-.main-logo { 
-  width: 100%; height: auto; position: relative; z-index: 2; display: block;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
+.logo-container { position: relative; width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10; }
+.main-logo { width: 100%; height: auto; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 .logo-container.is-active .main-logo { transform: scale(0.66); opacity: 0.5; }
 
 .nodes-layer { position: absolute; inset: 0; pointer-events: none; }
-
-/* ノードアイテム */
-.node-item {
-  position: absolute; top: 50%; left: 50%;
-  opacity: 0; 
-  transition: opacity 0.4s ease var(--delay);
-  transform-origin: left center;
-  pointer-events: auto;
-}
-
+.node-item { position: absolute; top: 50%; left: 50%; opacity: 0; transition: opacity 0.4s ease var(--delay); transform-origin: left center; pointer-events: auto; }
 body.state1 .node-item { opacity: 1; }
-
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right { transform: rotate(var(--ang)); }
-
-.node-item .line {
-  position: absolute; top: 50%; left: 0;
-  width: 0; height: 0.5px;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s), background 0.3s, box-shadow 0.3s;
-}
+.node-item .line { position: absolute; top: 50%; left: 0; width: 0; height: 0.5px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + 0.2s); }
 body.state1 .node-item .line { width: var(--len); }
-
-.node-item:hover .line {
-  background: #333 !important;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-}
-
 .node-item.left .line { background: #808080; }
 .node-item.right .line { background: rgba(135, 206, 235, 0.6); }
-
-.node-img {
-  position: absolute; top: 50%; left: var(--len);
-  width: 40px; display: block;
-  transition: transform 0.3s ease;
-}
-.node-item:hover .node-img { transform: translate(-50%, -50%) scale(1.2); }
-
+.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; }
 .node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
 .node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
-/* フッター */
-.landing-footer { 
-  position: fixed; bottom: 18px; left: 18px; font-size: 0.85rem; 
-  font-family: 'Space Grotesk', sans-serif;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  z-index: 100;
-}
-
-/* モバイル対応 */
-@media (max-width: 600px) {
-  .viewport { transform: scale(0.9); }
-  .logo-container { width: 100px; height: 100px; }
-  .node-item { --len: 100px }
-  .node-img { width: 28px ; }
-  .stats-display { font-size: 0.5rem; bottom: 20px; right: 10px; }
-  .fixed-label { font-size: 1rem; }
-  .landing-footer { font-size: 0.6rem; bottom: 20px; left: 10px; }
-}
+.landing-footer { position: fixed; bottom: 18px; left: 18px; font-size: 0.8rem; font-family: 'Space Grotesk', sans-serif; opacity: 0.5; }
