@@ -116,48 +116,44 @@ export default function Index() {
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           
-          {/* 閉じた状態ならアイコンを表示 */}
-          {!isOpen && (
-            <div className="nodes-layer">
-              {leftNodes.map((n, i) => (
-                <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                  <div className="line" />
-                  <Link to="/shop">
-                    <img src="/assets/master.png" className="node-img" alt="Master" />
-                    {i === 0 && (
-                      <div className="l-line-container" style={{top: '-40px', left: '20px'}}>
-                        <div className="l-shape" style={{borderLeft: '1px solid #000', borderBottom: '1px solid #000'}} />
-                        <span className="digital-label" style={{left: '25px', top: '10px'}}>SHOP</span>
-                      </div>
-                    )}
-                  </Link>
-                </div>
-              ))}
-              {rightNodes.map((n, i) => (
-                <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
-                  <div className="line" />
-                  <Link to="/concept">
-                    <img src="/assets/dick.png" className="node-img" alt="Dick" />
-                    {i === rightNodes.length - 1 && (
-                      <div className="l-line-container" style={{top: '40px', left: '20px'}}>
-                        <div className="l-shape" style={{borderLeft: '1px solid #000', borderTop: '1px solid #000'}} />
-                        <span className="digital-label" style={{left: '25px', top: '-15px'}}>CONCEPT</span>
-                      </div>
-                    )}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* ノード層（画像は常に表示） */}
+          <div className="nodes-layer">
+            {leftNodes.map((n, i) => (
+              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+                <div className="line" />
+                <Link to="/shop">
+                  <img src="/assets/master.png" className="node-img" alt="Master" />
+                  {i === 0 && (
+                    <div className="l-line-container" style={{top: '-40px', left: '20px'}}>
+                      <div className="l-shape" style={{borderLeft: '1px solid #000', borderBottom: '1px solid #000'}} />
+                      <span className="digital-label" style={{left: '25px', top: '10px'}}>SHOP</span>
+                    </div>
+                  )}
+                </Link>
+              </div>
+            ))}
+            {rightNodes.map((n, i) => (
+              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+                <div className="line" />
+                <Link to="/concept">
+                  <img src="/assets/dick.png" className="node-img" alt="Dick" />
+                  {i === rightNodes.length - 1 && (
+                    <div className="l-line-container" style={{top: '40px', left: '20px'}}>
+                      <div className="l-shape" style={{borderLeft: '1px solid #000', borderTop: '1px solid #000'}} />
+                      <span className="digital-label" style={{left: '25px', top: '-15px'}}>CONCEPT</span>
+                    </div>
+                  )}
+                </Link>
+              </div>
+            ))}
+          </div>
 
-          {/* 開いた状態ならメニューを展開 */}
-          {isOpen && (
-            <nav className="menu-layer">
-              <Link to="/shop" className="menu-item">SHOP</Link>
-              <Link to="/concept" className="menu-item">CONCEPT</Link>
-              <Link to="/contact" className="menu-item">CONTACT</Link>
-            </nav>
-          )}
+          {/* メニュー層（ロゴ展開時に表示） */}
+          <nav className="menu-layer">
+            <Link to="/shop" className="menu-item">SHOP</Link>
+            <Link to="/concept" className="menu-item">CONCEPT</Link>
+            <Link to="/contact" className="menu-item">CONTACT</Link>
+          </nav>
         </div>
       </div>
 
