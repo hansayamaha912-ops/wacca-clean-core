@@ -113,22 +113,28 @@ export default function Index() {
       </div>
 
       <div className="viewport">
+        {/* ラベルを node-item から独立させて個別に配置 */}
+        {isOpen && (
+          <>
+            <div className="fixed-label shop-label">SHOP</div>
+            <div className="fixed-label concept-label">CONCEPT</div>
+          </>
+        )}
+
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-         {!isOpen && <div className="enter-guide">［ ＥＮＴＥＲ ］</div>}
+          {!isOpen && <div className="enter-guide">ENTER</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
-            
             {leftNodes.map((n, i) => (
-              <div key={`l${i}`} className="node-item left" data-name="SHOP" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`l${i}`} className="node-item left" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                 <div className="line" />
                 <Link to="/shop">
                   <img src="/assets/master.png" className="node-img" alt="Master" />
                 </Link>
               </div>
             ))}
-            
             {rightNodes.map((n, i) => (
-              <div key={`r${i}`} className="node-item right" data-name="CONCEPT" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
+              <div key={`r${i}`} className="node-item right" style={{ '--len': `${n.length}px`, '--ang': `${n.angle}deg`, '--delay': `${n.delay}s` }}>
                 <div className="line" />
                 <Link to="/concept">
                   <img src="/assets/dick.png" className="node-img" alt="Dick" />
