@@ -107,7 +107,7 @@ export default function Index() {
           </>
         )}
         <div className={`logo-container ${isOpen ? 'is-active' : ''}`} onClick={handleLogoClick}>
-          {!isOpen && <div className="enter-guide">ENTER</div>}
+          {!isOpen && <div className="enter-guide">［ENTER］</div>}
           <img src="/assets/IN.png" className="main-logo" alt="WACCA" />
           <div className="nodes-layer">
             {leftNodes.map((n, i) => (
