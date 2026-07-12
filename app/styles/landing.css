@@ -43,23 +43,33 @@ html, body, #__remix {
   pointer-events: auto;
 }
 
-/* ホバーエフェクトの追加 */
+/* ホバーエフェクトの改善 */
 .node-item::after {
   content: attr(data-name);
   position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -40px; /* 位置を少し上に調整 */
+  left: 0;
+  width: 100px; /* 横幅を確保 */
+  text-align: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  color: #333;
+  color: #000;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.8rem;
+  font-size: 1.2rem; /* 文字サイズを大きく */
+  font-weight: bold;
   letter-spacing: 0.1em;
   pointer-events: none;
+  
+  /* 重要：親要素の回転を打ち消して水平にする */
+  transform: rotate(calc(-1 * (var(--ang) + 180deg))); 
 }
-.node-item:hover::after { opacity: 1; }
 
+/* 右側（CONCEPT）用は回転が異なるので調整 */
+.node-item.right::after {
+  transform: rotate(calc(-1 * var(--ang)));
+}
+
+.node-item:hover::after { opacity: 1; }
 body.state1 .node-item { opacity: 1; }
 
 .node-item.left { transform: rotate(calc(var(--ang) + 180deg)); }
