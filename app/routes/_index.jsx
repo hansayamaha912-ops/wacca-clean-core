@@ -7,12 +7,16 @@ import stylesUrl from "../styles/landing.css?url";
 const getSupabase = () => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) throw new Error("Supabase env vars missing");
+  // ★ここを修正：envがなくてもエラーで落とさず null を返す
+  if (!url || !key) return null;
   return createClient(url, key);
 };
 
 export const loader = async () => {
   const supabase = getSupabase();
+  // ★ここを修正：supabaseがなければ空のstatsを返す
+  if (!supabase) return json({ stats: { view_count: 0, click_count: 0 } });
+  
   const { data } = await supabase.from('analytics').select('*').eq('id', 1);
   const stats = (data && data.length > 0) ? data[0] : { view_count: 0, click_count: 0 };
   return json({ stats });
