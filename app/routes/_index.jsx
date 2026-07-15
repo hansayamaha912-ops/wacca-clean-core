@@ -24,6 +24,12 @@ export const loader = async () => {
 
 export const action = async ({ request }) => {
   const supabase = getSupabase();
+  
+  // ★ここを修正：supabaseがnullの場合はエラーを避け、適当なレスポンスを返す
+  if (!supabase) {
+    return json({ success: false, message: "Supabase not configured" });
+  }
+
   const formData = await request.formData();
   const type = formData.get("type");
   
