@@ -61,8 +61,9 @@ export default function Shop() {
   }, []);
 
   const handleProductClick = (product) => {
+    // 修正：Master Handクリック時に商品IDをクエリで渡して遷移
     if (product.id === "master-hand") {
-      navigate("/products");
+      navigate(`/products?id=${product.id}`);
     } else {
       setSelectedProduct(product);
     }
