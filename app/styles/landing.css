@@ -8,11 +8,9 @@ html, body, #__remix { margin: 0; padding: 0; height: 100vh; width: 100vw; backg
   pointer-events: none; opacity: 0.6;
 }
 
-/* ENTERガイド: サイズを2.5倍に拡大 */
 .enter-guide {
   position: absolute; top: 120%; font-family: 'Space Grotesk', sans-serif;
-  font-size: 2rem; /* 0.8rem * 2.5 */
-  letter-spacing: 0.3em; color: #333;
+  font-size: 2rem; letter-spacing: 0.3em; color: #333;
   animation: blink 1.5s infinite; cursor: default;
 }
 @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
@@ -40,7 +38,11 @@ body.state1 .node-item { opacity: 1; }
 body.state1 .node-item .line { width: var(--len); }
 .node-item.left .line { background: #808080; }
 .node-item.right .line { background: rgba(135, 206, 235, 0.6); }
-.node-img { position: absolute; top: 50%; left: var(--len); width: 40px; }
+
+.node-img { 
+  position: absolute; top: 50%; left: var(--len); width: 40px; 
+  transition: transform 0.3s ease;
+}
 .node-item.right .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * var(--ang))); }
 .node-item.left .node-img { transform: translate(-50%, -50%) rotate(calc(-1 * (var(--ang) + 180deg))); }
 
@@ -52,4 +54,7 @@ body.state1 .node-item .line { width: var(--len); }
   .shop-label { left: 5%; }
   .concept-label { right: 5%; }
   .stats-display { font-size: 0.5rem; bottom: 10px; right: 10px; }
+  
+  /* モバイル用：画像を小さくし、重なりにくくする */
+  .node-img { width: 30px; }
 }

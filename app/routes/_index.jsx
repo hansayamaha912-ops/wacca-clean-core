@@ -69,9 +69,11 @@ export default function Index() {
 
   const getNodes = () => {
     const isMobileNow = typeof window !== 'undefined' && window.innerWidth < 768;
-    return Array.from({ length: isMobileNow ? 10 : 21 }).map((_, i) => ({
-      length: isMobileNow ? 120 : 300 + Math.random() * 300,
-      angle: (i - (isMobileNow ? 5 : 10)) * (isMobileNow ? 12 : 3) + (Math.random() * 4 - 2),
+    // モバイル時は要素数を減らし、角度の間隔を広げる
+    const count = isMobileNow ? 6 : 21;
+    return Array.from({ length: count }).map((_, i) => ({
+      length: isMobileNow ? 100 + Math.random() * 40 : 300 + Math.random() * 300,
+      angle: (i - (count / 2)) * (isMobileNow ? 30 : 3) + (Math.random() * 4 - 2),
       delay: Math.random() * 0.8
     }));
   };
