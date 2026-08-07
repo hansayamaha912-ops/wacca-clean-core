@@ -16,12 +16,10 @@ const PRODUCT_DATA = [
       "/assets/c1.jpg",
       "/assets/c2.jpg",
       "/assets/c3.jpg",
-      "/assets/c4.jpg",
       "/assets/c5.jpg",
       "/assets/c6.jpg",
       "/assets/c7.jpg",
-      "/assets/c8.jpg",
-      "/assets/c9.jpg"
+      "/assets/c8.jpg", 
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: null
@@ -48,6 +46,7 @@ const PRODUCT_DATA = [
       "/assets/angr横.png",
       "/assets/アングル1.jpg",
       "/assets/アングル2.jpg",
+      "/assets/アングル10.jpg",
       "/assets/アングル3.jpg",
       "/assets/アングル4.jpg",
       "/assets/アングル5.jpg",
