@@ -47,6 +47,7 @@ const PRODUCT_DATA = [
       "/assets/アングル1.jpg",
       "/assets/アングル2.jpg",
       "/assets/アングル10.jpg",
+      "/assets/アングルM1.mp4",
       "/assets/アングル3.jpg",
       "/assets/アングル4.jpg",
       "/assets/アングル5.jpg",
