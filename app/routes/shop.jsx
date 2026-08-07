@@ -48,7 +48,6 @@ const PRODUCT_DATA = [
       "/assets/angr横.png",
       "/assets/アングル1.jpg",
       "/assets/アングル2.jpg",
-      "/assets/100.png",
       "/assets/アングルM1.mp4",
       "/assets/アングル3.jpg",
       "/assets/アングル4.jpg",
@@ -277,7 +276,7 @@ export default function Shop() {
                 </button>
               </div>
 
-              {/* スクロール可能なコンテンツエリア（画像・動画の比率を崩さず綺麗に表示） */}
+              {/* スクロール可能なコンテンツエリア */}
               <div style={{ 
                 overflowY: "auto", 
                 padding: "1.25rem", 
@@ -305,8 +304,11 @@ export default function Shop() {
                           {isVideo ? (
                             <video 
                               src={src} 
-                              controls 
+                              autoPlay 
+                              muted 
+                              loop 
                               playsInline 
+                              controls 
                               style={{ width: "100%", height: "auto", display: "block" }} 
                             />
                           ) : (
