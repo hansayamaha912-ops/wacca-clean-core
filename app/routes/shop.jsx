@@ -43,8 +43,8 @@ const PRODUCT_DATA = [
     status: "Available",
     images: [
       "/assets/angr正面.png",
-      "/assets/angr横.png",
       "/assets/アングル1.jpg",
+      "/assets/angr横.png",
       "/assets/アングル2.jpg",
       "/assets/アングル3.jpg",
       "/assets/アングル4.jpg",
