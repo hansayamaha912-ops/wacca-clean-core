@@ -268,32 +268,32 @@ export default function Shop() {
                 </button>
               </div>
 
-              {/* メインのメディアギャラリー（画像と動画を縦に並べる） */}
+              {/* メインのメディアギャラリー（画像比率を保持してしっかり表示） */}
               <div style={{ 
                 overflowY: "auto", 
                 padding: "1.25rem", 
                 display: "flex", 
                 flexDirection: "column", 
-                gap: "12px",
+                gap: "16px",
                 WebkitOverflowScrolling: "touch"
               }}>
                 {selectedProduct.images.map((src, index) => {
                   const isVideo = src.endsWith(".mp4");
 
                   return (
-                    <div key={index} style={{ width: "100%", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
+                    <div key={index} style={{ width: "100%", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden", display: "flex", justifyContent: "center" }}>
                       {isVideo ? (
                         <video 
                           src={src} 
                           controls 
                           playsInline 
-                          style={{ width: "100%", height: "auto", aspectRatio: "3/4", objectFit: "cover", display: "block" }} 
+                          style={{ width: "100%", height: "auto", maxHeight: "600px", objectFit: "contain", display: "block" }} 
                         />
                       ) : (
                         <img 
                           src={src} 
                           alt={`${selectedProduct.name} ${index + 1}`} 
-                          style={{ width: "100%", height: "auto", aspectRatio: "3/4", objectFit: "cover", display: "block" }} 
+                          style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }} 
                         />
                       )}
                     </div>
