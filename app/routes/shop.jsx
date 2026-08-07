@@ -12,7 +12,16 @@ const PRODUCT_DATA = [
     status: "Available",
     images: [
       "/assets/ピンク正面.png",
-      "/assets/ピンク横.png"
+      "/assets/ピンク横.png",
+      "/assets/c1.jpg",
+      "/assets/c2.jpg",
+      "/assets/c3.jpg",
+      "/assets/c4.jpg",
+      "/assets/c5.jpg",
+      "/assets/c6.jpg",
+      "/assets/c7.jpg",
+      "/assets/c8.jpg",
+      "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: null
@@ -36,7 +45,14 @@ const PRODUCT_DATA = [
     status: "Available",
     images: [
       "/assets/angr正面.png",
-      "/assets/angr横.png"
+      "/assets/angr横.png",
+      "/assets/アングル1.jpg",
+      "/assets/アングル2.jpg",
+      "/assets/アングル3.jpg",
+      "/assets/アングル4.jpg",
+      "/assets/アングル5.jpg",
+      "/assets/アングル6.jpg",
+      "/assets/アングル7.jpg"
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05"
@@ -60,7 +76,6 @@ export default function Shop() {
   }, []);
 
   const handleProductClick = (product) => {
-    // 全ての商品でモーダル（ポップアップ）を開き、複数画像をその場で閲覧できるようにする
     setSelectedProduct(product);
   };
 
@@ -77,7 +92,7 @@ export default function Shop() {
       color: "#000", 
       fontFamily: "sans-serif", 
       position: "relative", 
-      paddingBottom: isMobile ? "180px" : "140px" // スマホ時はフッターが被らないよう余白を確保
+      paddingBottom: isMobile ? "180px" : "140px" 
     }}>
       
       {/* ヘッダーナビゲーション */}
@@ -107,7 +122,6 @@ export default function Shop() {
       }}>
         <div style={{
           display: "grid",
-          // スマホ時は2列、PC時は4列
           gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
           columnGap: isMobile ? "1rem" : "1.5rem",
           rowGap: isMobile ? "2.5rem" : "3rem"
@@ -146,7 +160,7 @@ export default function Shop() {
         </div>
       </main>
 
-      {/* 固定フッター（レスポンシブ対応） */}
+      {/* 固定フッター */}
       <footer style={{
         position: "fixed",
         bottom: isMobile ? "1rem" : "1.5rem",
@@ -160,7 +174,6 @@ export default function Shop() {
         pointerEvents: "none",
         zIndex: 40
       }}>
-        {/* 最左下：IN.pngロゴ */}
         <div style={{ pointerEvents: "auto" }}>
           <Link to="/">
             <img 
@@ -175,7 +188,6 @@ export default function Shop() {
           </Link>
         </div>
 
-        {/* 最右下：特定商取引法に基づく表記 */}
         <div style={{ 
           pointerEvents: "auto", 
           fontSize: "11px", 
@@ -198,12 +210,11 @@ export default function Shop() {
         visibility: selectedProduct ? "visible" : "hidden",
         transition: "opacity 0.25s ease, visibility 0.25s ease",
         display: "flex",
-        alignItems: isMobile ? "flex-end" : "center", // スマホは下部固定、PCは中央配置
+        alignItems: isMobile ? "flex-end" : "center",
         justifyContent: "center",
         backgroundColor: "rgba(0,0,0,0.4)",
         backdropFilter: "blur(4px)"
       }}>
-        {/* 背景クリックで閉じる */}
         <div 
           onClick={() => setSelectedProduct(null)}
           style={{
@@ -212,7 +223,6 @@ export default function Shop() {
           }}
         />
         
-        {/* モーダル本体 */}
         <div style={{
           position: "relative",
           width: "100%",
@@ -274,7 +284,6 @@ export default function Shop() {
                 gap: "1.5rem",
                 WebkitOverflowScrolling: "touch"
               }}>
-                {/* 商品タイトル & 価格 */}
                 <div>
                   <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "500", letterSpacing: "-0.01em" }}>{selectedProduct.name}</h2>
                   <p style={{ margin: "6px 0 0 0", fontSize: "15px", color: "#333", fontWeight: "500" }}>{selectedProduct.price}</p>
@@ -300,7 +309,6 @@ export default function Shop() {
 
                 <hr style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }} />
 
-                {/* サイズ情報 */}
                 <div>
                   <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#888" }}>Size</h4>
                   <div style={{ display: "flex", gap: "8px" }}>
@@ -311,7 +319,7 @@ export default function Shop() {
                 </div>
               </div>
 
-              {/* モーダルフッター（購入アクション） */}
+              {/* モーダルフッター */}
               <div style={{ 
                 padding: "1rem 1.25rem", 
                 borderTop: "1px solid #eee", 
