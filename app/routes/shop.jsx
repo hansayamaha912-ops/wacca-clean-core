@@ -211,31 +211,31 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.25rem", borderBottom: "1px solid #eee" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.25rem", borderBottom: "1px solid #eee", backgroundColor: "#fff", position: "sticky", top: 0, zIndex: 10 }}>
                 <span style={{ fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#888" }}>Product Gallery</span>
-                <button onClick={() => setSelectedProduct(null)} style={{ background: "none", border: "none", fontSize: "13px", cursor: "pointer" }}>✕ Close</button>
+                <button onClick={() => setSelectedProduct(null)} style={{ background: "none", border: "none", fontSize: "13px", cursor: "pointer", fontWeight: "500" }}>✕ Close</button>
               </div>
 
               <div style={{ overflowY: "auto", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "12px", WebkitOverflowScrolling: "touch" }}>
                 {selectedProduct.images.map((src, index) => {
                   const isVideo = src.toLowerCase().endsWith(".mp4");
                   return (
-                    <div key={index} style={{ width: "100%", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
+                    <div key={index} style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
                       {isVideo ? (
-                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "auto", display: "block" }} />
+                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                       ) : (
-                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "auto", display: "block" }} />
+                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid #eee", backgroundColor: "#fff", position: "sticky", bottom: 0 }}>
+              <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid #eee", backgroundColor: "#fff", position: "sticky", bottom: 0, zIndex: 10 }}>
                 {selectedProduct.stripeUrl ? (
-                  <button onClick={() => handlePurchaseClick(selectedProduct.stripeUrl)} style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", cursor: "pointer" }}>Buy Now</button>
+                  <button onClick={() => handlePurchaseClick(selectedProduct.stripeUrl)} style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", borderRadius: "2px", fontWeight: "500" }}>Buy Now</button>
                 ) : (
-                  <div style={{ width: "100%", backgroundColor: "#f5f5f5", color: "#888", textAlign: "center", padding: "1rem", fontSize: "12px" }}>Coming Soon</div>
+                  <div style={{ width: "100%", backgroundColor: "#f5f5f5", color: "#888", textAlign: "center", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", borderRadius: "2px" }}>Coming Soon</div>
                 )}
               </div>
             </>
