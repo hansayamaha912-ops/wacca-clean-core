@@ -16,10 +16,12 @@ const PRODUCT_DATA = [
       "/assets/c1.jpg",
       "/assets/c2.jpg",
       "/assets/c3.jpg",
+      "/assets/c4.jpg",
       "/assets/c5.jpg",
       "/assets/c6.jpg",
       "/assets/c7.jpg",
-      "/assets/c8.jpg", 
+      "/assets/c8.jpg",
+      "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: null
@@ -62,13 +64,15 @@ const PRODUCT_DATA = [
 export default function Shop() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [hoveredProductId, setHoveredProductId] = useState(null);
+  
+  // レスポンシブ判定用の画面幅ステート
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    handleResize();
+    handleResize(); // 初回確認
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -132,6 +136,7 @@ export default function Shop() {
               onMouseLeave={() => setHoveredProductId(null)}
               style={{ cursor: "pointer" }}
             >
+              {/* 画像コンテナ */}
               <div style={{ 
                 width: "100%", 
                 aspectRatio: "3/4", 
@@ -147,6 +152,7 @@ export default function Shop() {
                 />
               </div>
               
+              {/* 商品テキスト */}
               <div style={{ fontSize: isMobile ? "12px" : "13px", display: "flex", flexDirection: "column", gap: "2px" }}>
                 <h3 style={{ margin: 0, fontWeight: "500", letterSpacing: "-0.01em", lineHeight: "1.3" }}>{product.name}</h3>
                 <p style={{ margin: 0, color: "#000", opacity: 0.6 }}>{product.price}</p>
@@ -213,7 +219,10 @@ export default function Shop() {
       }}>
         <div 
           onClick={() => setSelectedProduct(null)}
-          style={{ position: "absolute", inset: 0 }}
+          style={{
+            position: "absolute",
+            inset: 0,
+          }}
         />
         
         <div style={{
@@ -249,7 +258,7 @@ export default function Shop() {
                 zIndex: 10
               }}>
                 <span style={{ fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#888" }}>
-                  {selectedProduct.name}
+                  Product Gallery
                 </span>
                 <button 
                   onClick={() => setSelectedProduct(null)}
@@ -268,40 +277,64 @@ export default function Shop() {
                 </button>
               </div>
 
-              {/* メインのメディアギャラリー（綺麗に見えていた3/4比率の大きめ表示に戻しました） */}
+              {/* スクロール可能なコンテンツエリア（画像・動画の比率を崩さず綺麗に表示） */}
               <div style={{ 
                 overflowY: "auto", 
                 padding: "1.25rem", 
                 display: "flex", 
                 flexDirection: "column", 
-                gap: "12px",
+                gap: "1.5rem",
                 WebkitOverflowScrolling: "touch"
               }}>
-                {selectedProduct.images.map((src, index) => {
-                  const isVideo = src.endsWith(".mp4");
+                <div>
+                  <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "500", letterSpacing: "-0.01em" }}>{selectedProduct.name}</h2>
+                  <p style={{ margin: "6px 0 0 0", fontSize: "15px", color: "#333", fontWeight: "500" }}>{selectedProduct.price}</p>
+                </div>
 
-                  return (
-                    <div key={index} style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
-                      {isVideo ? (
-                        <video 
-                          src={src} 
-                          controls 
-                          playsInline 
-                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
-                        />
-                      ) : (
-                        <img 
-                          src={src} 
-                          alt={`${selectedProduct.name} ${index + 1}`} 
-                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
-                        />
-                      )}
-                    </div>
-                  );
-                })}
+                {/* 複数画像のギャラリー表示 */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <p style={{ margin: 0, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#888" }}>
+                    Photos ({selectedProduct.images.length})
+                  </p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
+                    {selectedProduct.images.map((src, index) => {
+                      const isVideo = src.endsWith(".mp4");
+
+                      return (
+                        <div key={index} style={{ width: "100%", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
+                          {isVideo ? (
+                            <video 
+                              src={src} 
+                              controls 
+                              playsInline 
+                              style={{ width: "100%", height: "auto", display: "block" }} 
+                            />
+                          ) : (
+                            <img 
+                              src={src} 
+                              alt={`${selectedProduct.name} view ${index + 1}`} 
+                              style={{ width: "100%", height: "auto", display: "block" }} 
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <hr style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }} />
+
+                <div>
+                  <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#888" }}>Size</h4>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {selectedProduct.sizes.map((size) => (
+                      <span key={size} style={{ padding: "6px 14px", border: "1px solid #ddd", fontSize: "11px", borderRadius: "2px" }}>{size}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              {/* モーダルフッター（購入ボタンのみ） */}
+              {/* モーダルフッター */}
               <div style={{ 
                 padding: "1rem 1.25rem", 
                 borderTop: "1px solid #eee", 
