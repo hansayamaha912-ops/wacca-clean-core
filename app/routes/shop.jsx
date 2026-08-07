@@ -11,9 +11,9 @@ const PRODUCT_DATA = [
     price: "¥4,000",
     status: "Available",
     images: [
-     "/assets/c2.jpg",
-     "/assets/c6.jpg",
-    　"/assets/ピンク正面.png",
+      "/assets/ピンク正面.png",
+      "/assets/c2.jpg",
+      "/assets/c6.jpg",
       "/assets/ピンク横.png",
       "/assets/c1.jpg",
       "/assets/c3.jpg",
