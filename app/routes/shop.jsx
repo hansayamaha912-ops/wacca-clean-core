@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 
 // ==========================================
 // 商品マスタデータ
@@ -44,7 +44,6 @@ const PRODUCT_DATA = [
 ];
 
 export default function Shop() {
-  const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [hoveredProductId, setHoveredProductId] = useState(null);
   
@@ -61,12 +60,8 @@ export default function Shop() {
   }, []);
 
   const handleProductClick = (product) => {
-    // 修正：Master Handクリック時に商品IDをクエリで渡して遷移
-    if (product.id === "master-hand") {
-      navigate(`/products?id=${product.id}`);
-    } else {
-      setSelectedProduct(product);
-    }
+    // 全ての商品でモーダル（ポップアップ）を開き、複数画像をその場で閲覧できるようにする
+    setSelectedProduct(product);
   };
 
   const handlePurchaseClick = (url) => {
@@ -82,7 +77,7 @@ export default function Shop() {
       color: "#000", 
       fontFamily: "sans-serif", 
       position: "relative", 
-      paddingBottom: isMobile ? "180px" : "140px" // スマホ時はフッターが被らないよう余白を広めに
+      paddingBottom: isMobile ? "180px" : "140px" // スマホ時はフッターが被らないよう余白を確保
     }}>
       
       {/* ヘッダーナビゲーション */}
@@ -112,7 +107,7 @@ export default function Shop() {
       }}>
         <div style={{
           display: "grid",
-          // スマホ時は2列（画像サイズ最大化＆ゆとり重視）、PC時は4列
+          // スマホ時は2列、PC時は4列
           gridTemplateColumns: isMobile ? "repeat(2, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
           columnGap: isMobile ? "1rem" : "1.5rem",
           rowGap: isMobile ? "2.5rem" : "3rem"
@@ -158,7 +153,7 @@ export default function Shop() {
         left: isMobile ? "1rem" : "1.5rem",
         right: isMobile ? "1rem" : "1.5rem",
         display: "flex",
-        flexDirection: isMobile ? "column" : "row", // スマホ時は縦に並べて重なりを防ぐ
+        flexDirection: isMobile ? "column" : "row",
         justifyContent: "space-between",
         alignItems: isMobile ? "flex-start" : "flex-end",
         gap: isMobile ? "1.5rem" : "0",
@@ -172,7 +167,7 @@ export default function Shop() {
               src="/assets/IN.png" 
               alt="WACCA LOGO" 
               style={{ 
-                height: isMobile ? "55px" : "80px", // スマホ時も小さすぎないよう55pxに調整
+                height: isMobile ? "55px" : "80px", 
                 width: "auto", 
                 objectFit: "contain" 
               }} 
@@ -185,7 +180,7 @@ export default function Shop() {
           pointerEvents: "auto", 
           fontSize: "11px", 
           letterSpacing: "0.05em",
-          alignSelf: isMobile ? "flex-end" : "auto" // スマホ時も右下に寄せる
+          alignSelf: isMobile ? "flex-end" : "auto"
         }}>
           <Link to="/policies" style={{ color: "#000", textDecoration: "none", opacity: 0.6 }}>
             特定商取引法に基づく表記
@@ -193,83 +188,173 @@ export default function Shop() {
         </div>
       </footer>
 
-      {/* 詳細ドロワー（モバイル時は全画面、PC時は右側部分表示に可変） */}
+      {/* 商品ギャラリー・ポップアップモーダル */}
       <div style={{
         position: "fixed",
         inset: 0,
         zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
-        overflow: "hidden"
+        opacity: selectedProduct ? 1 : 0,
+        visibility: selectedProduct ? "visible" : "hidden",
+        transition: "opacity 0.25s ease, visibility 0.25s ease",
+        display: "flex",
+        alignItems: isMobile ? "flex-end" : "center", // スマホは下部固定、PCは中央配置
+        justifyContent: "center",
+        backgroundColor: "rgba(0,0,0,0.4)",
+        backdropFilter: "blur(4px)"
       }}>
+        {/* 背景クリックで閉じる */}
         <div 
           onClick={() => setSelectedProduct(null)}
           style={{
             position: "absolute",
             inset: 0,
-            backgroundColor: "rgba(0,0,0,0.08)",
-            opacity: selectedProduct ? 1 : 0,
-            transition: "opacity 0.3s ease-out"
           }}
         />
         
+        {/* モーダル本体 */}
         <div style={{
-          position: "absolute",
-          right: 0,
-          top: 0,
-          bottom: 0,
+          position: "relative",
           width: "100%",
-          maxWidth: isMobile ? "100%" : "440px", // スマホ時はフルスクリーン、PCは440px
+          maxWidth: isMobile ? "100%" : "520px",
+          maxHeight: isMobile ? "88vh" : "85vh",
           backgroundColor: "#fff",
-          boxShadow: "-10px 0 30px rgba(0,0,0,0.05)",
-          transform: selectedProduct ? "translateX(0)" : "translateX(100%)",
-          transition: "transform 0.3s ease-out",
-          padding: isMobile ? "1.5rem" : "2.5rem",
+          borderTopLeftRadius: isMobile ? "16px" : "0",
+          borderTopRightRadius: isMobile ? "16px" : "0",
+          borderRadius: isMobile ? "16px 16px 0 0" : "8px",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+          transform: selectedProduct ? "translateY(0)" : "translateY(20px)",
+          transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          boxSizing: "border-box"
+          boxSizing: "border-box",
+          overflow: "hidden",
+          zIndex: 51
         }}>
           {selectedProduct && (
             <>
-              <div style={{ overflowY: "auto", maxHeight: "calc(100vh - 120px)" }}>
+              {/* モーダルヘッダー */}
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "1rem 1.25rem",
+                borderBottom: "1px solid #eee",
+                backgroundColor: "#fff",
+                position: "sticky",
+                top: 0,
+                zIndex: 10
+              }}>
+                <span style={{ fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#888" }}>
+                  Product Gallery
+                </span>
                 <button 
                   onClick={() => setSelectedProduct(null)}
-                  style={{ background: "none", border: "none", padding: 0, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginBottom: "2rem" }}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    fontSize: "13px", 
+                    letterSpacing: "0.1em", 
+                    textTransform: "uppercase", 
+                    cursor: "pointer", 
+                    padding: "4px 8px",
+                    fontWeight: "500"
+                  }}
                 >
-                  ← Close
+                  ✕ Close
                 </button>
+              </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+              {/* スクロール可能なコンテンツエリア */}
+              <div style={{ 
+                overflowY: "auto", 
+                padding: "1.25rem", 
+                display: "flex", 
+                flexDirection: "column", 
+                gap: "1.5rem",
+                WebkitOverflowScrolling: "touch"
+              }}>
+                {/* 商品タイトル & 価格 */}
+                <div>
+                  <h2 style={{ margin: 0, fontSize: "20px", fontWeight: "500", letterSpacing: "-0.01em" }}>{selectedProduct.name}</h2>
+                  <p style={{ margin: "6px 0 0 0", fontSize: "15px", color: "#333", fontWeight: "500" }}>{selectedProduct.price}</p>
+                </div>
+
+                {/* 複数画像のギャラリー表示 */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <p style={{ margin: 0, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#888" }}>
+                    Photos ({selectedProduct.images.length})
+                  </p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
                     {selectedProduct.images.map((imgSrc, index) => (
-                      <img key={index} src={imgSrc} alt="" style={{ width: "100%", aspectRatio: "3/4", objectFit: "cover", backgroundColor: "#f9f9f9" }} />
+                      <div key={index} style={{ width: "100%", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
+                        <img 
+                          src={imgSrc} 
+                          alt={`${selectedProduct.name} view ${index + 1}`} 
+                          style={{ width: "100%", height: "auto", aspectRatio: "3/4", objectFit: "cover", display: "block" }} 
+                        />
+                      </div>
                     ))}
                   </div>
+                </div>
 
-                  <div>
-                    <h2 style={{ margin: 0, fontSize: "18px", fontWeight: "500", letterSpacing: "-0.01em" }}>{selectedProduct.name}</h2>
-                    <p style={{ margin: "4px 0 0 0", fontSize: "14px", color: "#666" }}>{selectedProduct.price}</p>
-                  </div>
+                <hr style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }} />
 
-                  <hr style={{ border: "none", borderTop: "1px solid #eee", margin: 0 }} />
-
-                  <div>
-                    <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#aaa" }}>Size</h4>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      {selectedProduct.sizes.map((size) => (
-                        <span key={size} style={{ padding: "6px 12px", border: "1px solid #eee", fontSize: "11px" }}>{size}</span>
-                      ))}
-                    </div>
+                {/* サイズ情報 */}
+                <div>
+                  <h4 style={{ margin: "0 0 8px 0", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#888" }}>Size</h4>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {selectedProduct.sizes.map((size) => (
+                      <span key={size} style={{ padding: "6px 14px", border: "1px solid #ddd", fontSize: "11px", borderRadius: "2px" }}>{size}</span>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              <button 
-                onClick={() => handlePurchaseClick(selectedProduct.stripeUrl)}
-                style={{ width: "100%", backgroundColor: "#000", color: "#fff", border: "none", padding: "1rem", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", marginTop: "1.5rem" }}
-              >
-                Buy Now
-              </button>
+              {/* モーダルフッター（購入アクション） */}
+              <div style={{ 
+                padding: "1rem 1.25rem", 
+                borderTop: "1px solid #eee", 
+                backgroundColor: "#fff",
+                position: "sticky",
+                bottom: 0,
+                zIndex: 10
+              }}>
+                {selectedProduct.stripeUrl ? (
+                  <button 
+                    onClick={() => handlePurchaseClick(selectedProduct.stripeUrl)}
+                    style={{ 
+                      width: "100%", 
+                      backgroundColor: "#000", 
+                      color: "#fff", 
+                      border: "none", 
+                      padding: "1rem", 
+                      fontSize: "12px", 
+                      letterSpacing: "0.1em", 
+                      textTransform: "uppercase", 
+                      cursor: "pointer", 
+                      borderRadius: "2px",
+                      fontWeight: "500"
+                    }}
+                  >
+                    Buy Now
+                  </button>
+                ) : (
+                  <div style={{ 
+                    width: "100%", 
+                    backgroundColor: "#f5f5f5", 
+                    color: "#888", 
+                    textAlign: "center", 
+                    padding: "1rem", 
+                    fontSize: "12px", 
+                    letterSpacing: "0.1em", 
+                    textTransform: "uppercase",
+                    borderRadius: "2px"
+                  }}>
+                    Coming Soon
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>
