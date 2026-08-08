@@ -30,10 +30,10 @@ const PRODUCT_DATA = [
     id: "angr-kun-key-holder",
     name: "Angr-Kun key-holder",
     price: "¥3,500",
-    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず",
+    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
       "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png", "/assets/アングル2.jpg",
-      "/assets/アングルM1.mp4", "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
+      "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
       "/assets/アングル6.jpg", "/assets/アングル7.jpg"
     ],
     sizes: ["ONE SIZE"],
@@ -111,7 +111,7 @@ export default function Shop() {
         </div>
       </footer>
 
-      {/* ポップアップモーダル（画像が崩れない最初の設計に復元） */}
+      {/* ポップアップモーダル（画像が崩れない最初の安全な構成に完全復元） */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
@@ -152,7 +152,7 @@ export default function Shop() {
                 ✕ CLOSE
               </button>
 
-              {/* 左側：画像・動画エリア（ aspectRatio: "3/4" を復活させて崩れを完全に防止） */}
+              {/* 左側：画像・動画エリア（高さ固定の変な比率指定を外し、完全な自動高さ・比率維持で絶対に潰れないように修正） */}
               <div style={{ 
                 flex: isMobile ? "1" : "1.3", 
                 overflowY: "auto", 
@@ -167,11 +167,11 @@ export default function Shop() {
                 {selectedProduct.images.map((src, index) => {
                   const isVideo = src.toLowerCase().endsWith(".mp4");
                   return (
-                    <div key={index} style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
+                    <div key={index} style={{ width: "100%", backgroundColor: "#fff", borderRadius: "4px", overflow: "hidden", border: "1px solid #eee" }}>
                       {isVideo ? (
-                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "auto", display: "block" }} />
                       ) : (
-                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "auto", display: "block" }} />
                       )}
                     </div>
                   );
