@@ -15,7 +15,8 @@ const PRODUCT_DATA = [
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: <product className="jsx"><StripeCheckoutButton product={PRODUCT_DATA[0]} /></product>
+    // ★ここを商品詳細ページのパスに変更しました
+    purchasePath: "/master-hand" 
   },
   {
     id: "dick-man-key-charm",
@@ -53,6 +54,17 @@ export default function Shop() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 購入処理の分岐用関数
+  const handlePurchase = (product) => {
+    if (product.purchasePath) {
+      // マスターハンドの場合：特定のページへ遷移
+      window.location.href = product.purchasePath;
+    } else if (product.stripeUrl) {
+      // その他：Stripe決済へ
+      window.location.href = product.stripeUrl;
+    }
+  };
+
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
       
@@ -64,7 +76,7 @@ export default function Shop() {
         </nav>
       </header>
 
-      {/* 商品一覧（ホバー設定を追加） */}
+      {/* 商品一覧 */}
       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "1.5rem" }}>
           {PRODUCT_DATA.map((product) => (
@@ -106,7 +118,7 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              {/* 左：画像・動画リスト */}
+              {/* 左：ギャラリー */}
               <div style={{ flex: 1, overflowY: "auto", padding: "20px", backgroundColor: "#f0f0f0" }}>
                 {selectedProduct.images.map((src, index) => (
                   <div key={index} style={{ width: "100%", marginBottom: "15px" }}>
@@ -127,11 +139,10 @@ export default function Shop() {
                 <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#444" }}>{selectedProduct.description}</p>
                 
                 <div style={{ marginTop: "auto" }}>
-                  {selectedProduct.stripeUrl ? (
-                    <button onClick={() => window.location.href = selectedProduct.stripeUrl} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}>BUY NOW</button>
-                  ) : (
-                    <div style={{ width: "100%", padding: "15px", background: "#f5f5f5", color: "#888", textAlign: "center", fontSize: "12px", letterSpacing: "0.1em" }}>COMING SOON</div>
-                  )}
+                  {/* ★分岐させた購入処理を呼び出し */}
+                  <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}>
+                    {selectedProduct.purchasePath ? "GO TO PRODUCT PAGE" : "BUY NOW"}
+                  </button>
                 </div>
               </div>
             </>
