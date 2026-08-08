@@ -11,11 +11,11 @@ const PRODUCT_DATA = [
     price: "¥4,000",
     description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたアイコン的グッズです。",
     images: [
-      "/assets/ピンク正面.png", "/assets/c2.jpg", "/assets/c6.jpg", "/assets/ピンク横.png",
+      "/assets/ピンク正面.png", "/assets/ピンク横.png", "/assets/c2.jpg", "/assets/c6.jpg",
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: null
+    stripeUrl: <product className="jsx"><StripeCheckoutButton product={PRODUCT_DATA[0]} /></product>
   },
   {
     id: "dick-man-key-charm",
@@ -30,10 +30,10 @@ const PRODUCT_DATA = [
     id: "angr-kun-key-holder",
     name: "Angr-Kun key-holder",
     price: "¥3,500",
-    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず",
+    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png", "/assets/アングル2.jpg",
-      , "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
+      "/assets/angr正面.png", "/assets/angr横.png", "/assets/アングル1.jpg", "/assets/アングル2.jpg",
+       "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
       "/assets/アングル6.jpg", "/assets/アングル7.jpg"
     ],
     sizes: ["ONE SIZE"],
@@ -56,25 +56,40 @@ export default function Shop() {
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
       
-      {/* ヘッダー・メイン（変更なし） */}
+      {/* ヘッダー */}
       <header style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", display: "flex", justifyContent: "space-between" }}>
-        <nav style={{ display: "flex", gap: "2rem" }}><Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link><Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link></nav>
+        <nav style={{ display: "flex", gap: "2rem" }}>
+          <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
+          <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
+        </nav>
       </header>
 
+      {/* 商品一覧（ホバー設定を追加） */}
       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "1.5rem" }}>
           {PRODUCT_DATA.map((product) => (
-            <div key={product.id} onClick={() => setSelectedProduct(product)} style={{ cursor: "pointer" }}>
-              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden" }}>
-                <img src={product.images[0]} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <div 
+              key={product.id} 
+              onClick={() => setSelectedProduct(product)}
+              onMouseEnter={() => setHoveredProductId(product.id)}
+              onMouseLeave={() => setHoveredProductId(null)}
+              style={{ cursor: "pointer" }}
+            >
+              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem", position: "relative" }}>
+                <img 
+                  src={hoveredProductId === product.id ? product.images[1] : product.images[0]} 
+                  alt={product.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.3s ease" }} 
+                />
               </div>
-              <h3>{product.name}</h3><p>{product.price}</p>
+              <h3 style={{ margin: 0, fontSize: "13px", fontWeight: "500" }}>{product.name}</h3>
+              <p style={{ margin: 0, opacity: 0.6, fontSize: "13px" }}>{product.price}</p>
             </div>
           ))}
         </div>
       </main>
 
-      {/* ポップアップモーダル（修正箇所：画像のコンテナを完全に独立） */}
+      {/* ポップアップモーダル */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
@@ -84,7 +99,6 @@ export default function Shop() {
       }}>
         <div onClick={() => setSelectedProduct(null)} style={{ position: "absolute", inset: 0 }} />
         
-        {/* モーダル枠 */}
         <div style={{
           width: "90%", maxWidth: "800px", height: "80vh", backgroundColor: "#fff",
           display: "flex", flexDirection: isMobile ? "column" : "row",
@@ -92,12 +106,12 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              {/* 左：画像・動画リスト（縦に自然に並ぶ） */}
+              {/* 左：画像・動画リスト */}
               <div style={{ flex: 1, overflowY: "auto", padding: "20px", backgroundColor: "#f0f0f0" }}>
                 {selectedProduct.images.map((src, index) => (
                   <div key={index} style={{ width: "100%", marginBottom: "15px" }}>
                     {src.toLowerCase().endsWith(".mp4") ? (
-                      <video src={src} controls style={{ width: "100%", display: "block" }} />
+                      <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", display: "block" }} />
                     ) : (
                       <img src={src} style={{ width: "100%", display: "block" }} />
                     )}
@@ -107,13 +121,17 @@ export default function Shop() {
 
               {/* 右：ストーリーとボタン */}
               <div style={{ flex: 0.8, padding: "30px", display: "flex", flexDirection: "column" }}>
-                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer" }}>CLOSE</button>
-                <h2>{selectedProduct.name}</h2>
-                <p>{selectedProduct.description}</p>
+                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontSize: "12px", letterSpacing: "0.1em" }}>✕ CLOSE</button>
+                <h2 style={{ fontSize: "20px", marginTop: "10px" }}>{selectedProduct.name}</h2>
+                <p style={{ fontSize: "15px", fontWeight: "600", margin: "5px 0 15px 0" }}>{selectedProduct.price}</p>
+                <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#444" }}>{selectedProduct.description}</p>
+                
                 <div style={{ marginTop: "auto" }}>
                   {selectedProduct.stripeUrl ? (
-                    <button onClick={() => window.location.href = selectedProduct.stripeUrl} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff" }}>BUY NOW</button>
-                  ) : <p>COMING SOON</p>}
+                    <button onClick={() => window.location.href = selectedProduct.stripeUrl} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}>BUY NOW</button>
+                  ) : (
+                    <div style={{ width: "100%", padding: "15px", background: "#f5f5f5", color: "#888", textAlign: "center", fontSize: "12px", letterSpacing: "0.1em" }}>COMING SOON</div>
+                  )}
                 </div>
               </div>
             </>
