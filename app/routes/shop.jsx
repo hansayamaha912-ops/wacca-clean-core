@@ -16,7 +16,7 @@ const PRODUCT_DATA = [
     ],
     sizes: ["ONE SIZE"],
     // ★ここを商品詳細ページのパスに変更しました
-    purchasePath: "/master-hand" 
+    purchasePath: "/products"
   },
   {
     id: "dick-man-key-charm",
