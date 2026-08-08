@@ -11,7 +11,7 @@ const PRODUCT_DATA = [
     price: "¥4,000",
     description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたシグネチャー的グッズです。",
     images: [
-      "/assets/ピンク正面.png", "/assets/ピンク横.png", "/assets/c2.jpg", "/assets/c6.jpg",
+      "/assets/ピンク正面.png","/assets/c2.jpg","/assets/ピンク横.png","/assets/c6.jpg",
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
@@ -33,7 +33,7 @@ const PRODUCT_DATA = [
     price: "¥3,500",
     description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-      "/assets/angr正面.png", "/assets/angr横.png", "/assets/アングル1.jpg", "/assets/アングル2.jpg",
+      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png", "/assets/アングル2.jpg",
        "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
       "/assets/アングル6.jpg", "/assets/アングル7.jpg"
     ],
