@@ -9,7 +9,7 @@ const PRODUCT_DATA = [
     id: "master-hand",
     name: "Master Hand",
     price: "¥4,000",
-    description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたアイコン的グッズです。",
+    description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたシグネチャーグッズです。",
     images: [
       "/assets/ピンク正面.png", "/assets/c2.jpg", "/assets/c6.jpg", "/assets/ピンク横.png",
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
@@ -21,7 +21,7 @@ const PRODUCT_DATA = [
     id: "dick-man-key-charm",
     name: "Dick man key-charm",
     price: "¥3,500",
-    description: "ドイツ留学時に触れた「性の寛容さ」に感銘を受け、日本ではタブー視されがちは性をどこまでポップに表現できるか挑戦したキャラクター。日常にユーモアと解放を。",
+    description: "ドイツ留学時に触れた「性の寛容さ」に感銘を受け、日本ではタブー視されがちな性をどこまでポップに表現できるか挑戦したキャラクター。日常にユーモアと解放を。",
     images: ["/assets/Dick正面.png", "/assets/Dick横.png"],
     sizes: ["ONE SIZE"],
     stripeUrl: "https://buy.stripe.com/9B67sL4Q773tg2Q6Qc3wQ04"
@@ -30,7 +30,7 @@ const PRODUCT_DATA = [
     id: "angr-kun-key-holder",
     name: "Angr-Kun key-holder",
     price: "¥3,500",
-    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるかも？",
+    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず",
     images: [
       "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png", "/assets/アングル2.jpg",
       "/assets/アングルM1.mp4", "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
@@ -54,27 +54,10 @@ export default function Shop() {
   }, []);
 
   return (
-    <div style={{ 
-      backgroundColor: "#fff", 
-      minHeight: "100vh", 
-      color: "#000", 
-      fontFamily: "sans-serif", 
-      position: "relative", 
-      paddingBottom: isMobile ? "180px" : "140px" 
-    }}>
+    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: isMobile ? "180px" : "140px" }}>
       
       {/* ヘッダー */}
-      <header style={{ 
-        maxWidth: "1200px", 
-        margin: "0 auto", 
-        padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center", 
-        fontSize: "12px", 
-        letterSpacing: "0.1em", 
-        textTransform: "uppercase" 
-      }}>
+      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
         <nav style={{ display: "flex", gap: "2rem" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
@@ -128,7 +111,7 @@ export default function Shop() {
         </div>
       </footer>
 
-      {/* ポップアップモーダル（スムーズスクロール対応） */}
+      {/* ポップアップモーダル（画像が崩れない最初の設計に復元） */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
@@ -157,7 +140,7 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              {/* 閉じるボタン（スマホ・PC共通で右上付近に常駐） */}
+              {/* 閉じるボタン */}
               <button 
                 onClick={() => setSelectedProduct(null)}
                 style={{ 
@@ -169,7 +152,7 @@ export default function Shop() {
                 ✕ CLOSE
               </button>
 
-              {/* 左側：画像・動画エリア（ここが独立してスワイプ・スクロール可能） */}
+              {/* 左側：画像・動画エリア（ aspectRatio: "3/4" を復活させて崩れを完全に防止） */}
               <div style={{ 
                 flex: isMobile ? "1" : "1.3", 
                 overflowY: "auto", 
@@ -184,18 +167,18 @@ export default function Shop() {
                 {selectedProduct.images.map((src, index) => {
                   const isVideo = src.toLowerCase().endsWith(".mp4");
                   return (
-                    <div key={index} style={{ width: "100%", backgroundColor: "#fff", borderRadius: "4px", overflow: "hidden", border: "1px solid #eee" }}>
+                    <div key={index} style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", borderRadius: "4px", overflow: "hidden" }}>
                       {isVideo ? (
-                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "auto", display: "block" }} />
+                        <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                       ) : (
-                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "auto", display: "block" }} />
+                        <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              {/* 右側：商品名・ストーリー小話・購入ボタン（PC時は固定、スマホ時は下に続く） */}
+              {/* 右側：商品名・ストーリー小話・購入ボタン */}
               <div style={{ 
                 flex: "1", 
                 padding: isMobile ? "1.5rem" : "2.5rem 2rem", 
