@@ -77,7 +77,7 @@ export default function Shop() {
       }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#000" }}>
           <img src="/assets/IN.png" alt="Logo" style={{ height: "30px", width: "auto" }} />
-          <span style={{ fontSize: "24px", fontWeight: "900", letterSpacing: "-0.03em", textTransform: "lowercase" }}>wacca</span>
+          <span style={{ fontSize: "30px", fontWeight: "900", letterSpacing: "-0.01em", textTransform: "lowercase" }}>wacca</span>
         </Link>
         <nav style={{ display: "flex", gap: "2rem", fontWeight: "900", fontSize: "14px", letterSpacing: "0.05em", textTransform: "uppercase" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
