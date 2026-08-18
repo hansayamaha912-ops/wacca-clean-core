@@ -48,7 +48,7 @@ const PRODUCT_DATA = [
     id: "pest-mask",
     name: "Pests Mask",
     price: "¥3,500",
-    description: "極度の潔癖症である男が、自らの手で作り上げた特製ガスマスク。",
+    description: "極度の潔癖症である男が、自らの手で作り上げた特製ガスマスク。マスクを通してしか心地良さを感じられない彼のアイテム",
     images: [
       "/assets/Gam1.PNG",
       "/assets/Gam2.PNG"
@@ -60,10 +60,10 @@ const PRODUCT_DATA = [
     id: "joe-blad-commander",
     name: "JOE BLAD Commander",
     price: "¥4,500",
-    description: "北欧の軍人で軍人気質。口数が少ないからこそ、周囲から圧倒的に恐れられる存在。",
+    description: "北欧の軍人で軍人気質。口数が少ないが、何を考えているのかは分かりやすい。",
     images: [
+     　"/assets/Joe2.PNG",
       "/assets/Joe1.PNG",
-      "/assets/Joe2.PNG",
       "/assets/Joe3.PNG",
       "/assets/Joe4.PNG"
     ],
