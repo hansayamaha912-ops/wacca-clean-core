@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 
-// Google Fontsを読み込むためのリンクを追加
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "true" },
@@ -39,7 +38,7 @@ const PRODUCT_DATA = [
     price: "¥2,500",
     description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png",
+      "/assets/angr正面.png", "/assets/angr横.png", "/assets/アングル1.jpg", "/assets/アングル2.jpg",
        "/assets/アングル3.jpg", "/assets/アングル5.jpg",
     ],
     sizes: ["ONE SIZE"],
@@ -70,24 +69,29 @@ export default function Shop() {
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "'Montserrat', sans-serif", paddingBottom: "140px" }}>
       
-      {/* ヘッダー：参考サイト風のフォント設定を適用 */}
+      {/* ヘッダー：ロゴよりも「wacca」の文字を大きくし、スマホでも左上に綺麗に収まる設計 */}
       <header style={{ 
-        maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", 
+        maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.2rem 1rem" : "2rem 1.5rem", 
         display: "flex", justifyContent: "space-between", alignItems: "center" 
       }}>
-        <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#000" }}>
-          <img src="/assets/IN.png" alt="Logo" style={{ height: "30px", width: "auto" }} />
-          <span style={{ fontSize: "30px", fontWeight: "900", letterSpacing: "-0.01em", textTransform: "lowercase" }}>wacca</span>
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px", textDecoration: "none", color: "#000" }}>
+          {/* 小さめの円形/アイコン風におさまるロゴ */}
+          <img src="/assets/IN.png" alt="Logo" style={{ height: isMobile ? "22px" : "30px", width: "auto", objectFit: "contain" }} />
+          {/* テキストをロゴよりも大きく・太く設定 */}
+          <span style={{ fontSize: isMobile ? "24px" : "36px", fontWeight: "900", letterSpacing: "-0.04em", textTransform: "lowercase", lineHeight: "1" }}>
+            wacca
+          </span>
         </Link>
-        <nav style={{ display: "flex", gap: "2rem", fontWeight: "900", fontSize: "14px", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+
+        <nav style={{ display: "flex", gap: isMobile ? "1.2rem" : "2rem", fontWeight: "900", fontSize: isMobile ? "12px" : "14px", letterSpacing: "0.05em", textTransform: "uppercase" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "2px solid #000" }}>Shop</Link>
         </nav>
       </header>
 
       {/* 商品一覧 */}
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "1.5rem" }}>
+      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "3rem 1.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? "1rem" : "1.5rem" }}>
           {PRODUCT_DATA.map((product) => (
             <div key={product.id} onClick={() => setSelectedProduct(product)} style={{ cursor: "pointer" }}>
               <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem" }}>
