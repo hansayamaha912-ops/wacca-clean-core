@@ -15,7 +15,6 @@ const PRODUCT_DATA = [
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
-    // ★ここを商品詳細ページのパスに変更しました
     purchasePath: "/products"
   },
   {
@@ -53,13 +52,10 @@ export default function Shop() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 購入処理の分岐用関数
   const handlePurchase = (product) => {
     if (product.purchasePath) {
-      // マスターハンドの場合：特定のページへ遷移
       window.location.href = product.purchasePath;
     } else if (product.stripeUrl) {
-      // その他：Stripe決済へ
       window.location.href = product.stripeUrl;
     }
   };
@@ -67,8 +63,12 @@ export default function Shop() {
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
       
-      {/* ヘッダー */}
-      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", display: "flex", justifyContent: "space-between" }}>
+      {/* 修正：ロゴ＋WACCAを左上に配置したヘッダー */}
+      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#000" }}>
+          <img src="/assets/IN.png" alt="Logo" style={{ height: "30px", width: "auto" }} />
+          <span style={{ fontSize: "20px", fontWeight: "700", letterSpacing: "0.1em" }}>WACCA</span>
+        </Link>
         <nav style={{ display: "flex", gap: "2rem" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
@@ -117,7 +117,6 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              {/* 左：ギャラリー */}
               <div style={{ flex: 1, overflowY: "auto", padding: "20px", backgroundColor: "#f0f0f0" }}>
                 {selectedProduct.images.map((src, index) => (
                   <div key={index} style={{ width: "100%", marginBottom: "15px" }}>
@@ -130,7 +129,6 @@ export default function Shop() {
                 ))}
               </div>
 
-              {/* 右：ストーリーとボタン */}
               <div style={{ flex: 0.8, padding: "30px", display: "flex", flexDirection: "column" }}>
                 <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontSize: "12px", letterSpacing: "0.1em" }}>✕ CLOSE</button>
                 <h2 style={{ fontSize: "20px", marginTop: "10px" }}>{selectedProduct.name}</h2>
@@ -138,7 +136,6 @@ export default function Shop() {
                 <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#444" }}>{selectedProduct.description}</p>
                 
                 <div style={{ marginTop: "auto" }}>
-                  {/* ★分岐させた購入処理を呼び出し */}
                   <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}>
                     {selectedProduct.purchasePath ? "GO TO PRODUCT PAGE" : "BUY NOW"}
                   </button>
