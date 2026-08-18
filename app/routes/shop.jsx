@@ -50,8 +50,8 @@ const PRODUCT_DATA = [
     price: "¥3,500",
     description: "極度の潔癖症である男が、自らの手で作り上げた特製ガスマスク。マスクを通してしか心地良さを感じられない彼のアイテム",
     images: [
-      "/assets/Gam1.PNG",
-      "/assets/Gam2.PNG"
+      "/assets/Gam2.PNG",
+      "/assets/Gam1.PNG"
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: null
