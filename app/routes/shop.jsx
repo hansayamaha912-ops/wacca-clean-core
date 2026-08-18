@@ -8,7 +8,7 @@ export const links = () => [
 ];
 
 // ==========================================
-// 商品マスタデータ（新規アイテムを追加）
+// 商品マスタデータ（拡張子を実際の .PNG に合わせました）
 // ==========================================
 const PRODUCT_DATA = [
   {
@@ -38,7 +38,7 @@ const PRODUCT_DATA = [
     price: "¥2,500",
     description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-      "/assets/angr正面.png", "/assets/angr横.png", "/assets/アングル1.jpg", "/assets/アングル2.jpg",
+      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png",
        "/assets/アングル3.jpg", "/assets/アングル5.jpg",
     ],
     sizes: ["ONE SIZE"],
@@ -125,7 +125,7 @@ export default function Shop() {
         </nav>
       </header>
 
-      {/* 商品一覧（ホバー設定付きグリッド） */}
+      {/* 商品一覧 */}
       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "3rem 1.5rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? "1rem" : "1.5rem" }}>
           {PRODUCT_DATA.map((product) => (
@@ -150,44 +150,61 @@ export default function Shop() {
         </div>
       </main>
 
-      {/* ポップアップモーダル */}
+      {/* ポップアップモーダル（スマホ・PC両対応の完全スクロール設計） */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
         opacity: selectedProduct ? 1 : 0,
         backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex", alignItems: "center", justifyContent: "center"
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: isMobile ? "10px" : "20px",
+        transition: "opacity 0.25s ease"
       }}>
         <div onClick={() => setSelectedProduct(null)} style={{ position: "absolute", inset: 0 }} />
         
         <div style={{
-          width: "90%", maxWidth: "800px", height: "80vh", backgroundColor: "#fff",
+          width: "100%", maxWidth: "800px", height: isMobile ? "92vh" : "82vh", backgroundColor: "#fff",
           display: "flex", flexDirection: isMobile ? "column" : "row",
-          overflow: "hidden", position: "relative", zIndex: 51, borderRadius: "8px"
+          overflow: "hidden", position: "relative", zIndex: 51, borderRadius: "8px",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
         }}>
           {selectedProduct && (
             <>
-              {/* 左：ギャラリー */}
-              <div style={{ flex: 1, overflowY: "auto", padding: "20px", backgroundColor: "#f0f0f0" }}>
+              {/* 左側：ギャラリー（独立スクロール） */}
+              <div style={{ 
+                flex: isMobile ? "1.2" : "1", 
+                overflowY: "auto", 
+                padding: "20px", 
+                backgroundColor: "#f0f0f0",
+                WebkitOverflowScrolling: "touch" 
+              }}>
                 {selectedProduct.images.map((src, index) => (
-                  <div key={index} style={{ width: "100%", marginBottom: "15px" }}>
+                  <div key={index} style={{ width: "100%", marginBottom: "15px", backgroundColor: "#fff", borderRadius: "4px", overflow: "hidden" }}>
                     {src.toLowerCase().endsWith(".mp4") ? (
                       <video src={src} controls playsInline loop muted autoPlay style={{ width: "100%", display: "block" }} />
                     ) : (
-                      <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", display: "block" }} />
+                      <img src={src} alt={`${selectedProduct.name} ${index + 1}`} style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }} />
                     )}
                   </div>
                 ))}
               </div>
 
-              {/* 右：ストーリーとボタン */}
-              <div style={{ flex: 0.8, padding: "30px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
-                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontWeight: "900" }}>✕ CLOSE</button>
-                <h2 style={{ fontSize: "24px", marginTop: "10px", fontWeight: "900" }}>{selectedProduct.name}</h2>
+              {/* 右側：詳細情報・購入ボタン（独立スクロール） */}
+              <div style={{ 
+                flex: "1", 
+                padding: isMobile ? "20px" : "30px", 
+                display: "flex", 
+                flexDirection: "column", 
+                overflowY: "auto",
+                backgroundColor: "#fff",
+                WebkitOverflowScrolling: "touch" 
+              }}>
+                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontWeight: "900", fontSize: "14px", padding: "5px" }}>✕ CLOSE</button>
+                <h2 style={{ fontSize: isMobile ? "20px" : "24px", marginTop: "5px", fontWeight: "900" }}>{selectedProduct.name}</h2>
                 <p style={{ fontSize: "16px", fontWeight: "900", margin: "5px 0 15px 0" }}>{selectedProduct.price}</p>
                 <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#444" }}>{selectedProduct.description}</p>
                 
-                <div style={{ marginTop: "auto", paddingTop: "20px" }}>
+                <div style={{ marginTop: "auto", paddingTop: "25px" }}>
                   {selectedProduct.stripeUrl || selectedProduct.purchasePath ? (
                     <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontWeight: "900", textTransform: "uppercase" }}>
                       {selectedProduct.purchasePath ? "GO TO PRODUCT PAGE" : "BUY NOW"}
