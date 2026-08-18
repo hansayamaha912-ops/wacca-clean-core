@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "@remix-run/react";
 
+// Google Fontsを読み込むためのリンクを追加
+export const links = () => [
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "true" },
+  { href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap", rel: "stylesheet" }
+];
+
 // ==========================================
 // 商品マスタデータ
 // ==========================================
@@ -11,7 +18,7 @@ const PRODUCT_DATA = [
     price: "¥4,000",
     description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたシグネチャー的グッズです。",
     images: [
-      "/assets/ピンク正面.png","/assets/c2.jpg","/assets/ピンク横.png","/assets/c6.jpg",
+      "/assets/ピンク正面.png", "/assets/ピンク横.png", "/assets/c2.jpg", "/assets/c6.jpg",
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
     ],
     sizes: ["ONE SIZE"],
@@ -61,17 +68,20 @@ export default function Shop() {
   };
 
   return (
-    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "sans-serif", position: "relative", paddingBottom: "140px" }}>
+    <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "'Montserrat', sans-serif", paddingBottom: "140px" }}>
       
-      {/* 修正：ロゴ＋WACCAを左上に配置したヘッダー */}
-      <header style={{ maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      {/* ヘッダー：参考サイト風のフォント設定を適用 */}
+      <header style={{ 
+        maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.5rem 1rem" : "2rem 1.5rem", 
+        display: "flex", justifyContent: "space-between", alignItems: "center" 
+      }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", color: "#000" }}>
           <img src="/assets/IN.png" alt="Logo" style={{ height: "30px", width: "auto" }} />
-          <span style={{ fontSize: "20px", fontWeight: "700", letterSpacing: "0.1em" }}>WACCA</span>
+          <span style={{ fontSize: "24px", fontWeight: "900", letterSpacing: "-0.03em", textTransform: "lowercase" }}>wacca</span>
         </Link>
-        <nav style={{ display: "flex", gap: "2rem" }}>
+        <nav style={{ display: "flex", gap: "2rem", fontWeight: "900", fontSize: "14px", letterSpacing: "0.05em", textTransform: "uppercase" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
-          <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "1px solid #000" }}>Shop</Link>
+          <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "2px solid #000" }}>Shop</Link>
         </nav>
       </header>
 
@@ -79,21 +89,11 @@ export default function Shop() {
       <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "3rem 1.5rem" }}>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "1.5rem" }}>
           {PRODUCT_DATA.map((product) => (
-            <div 
-              key={product.id} 
-              onClick={() => setSelectedProduct(product)}
-              onMouseEnter={() => setHoveredProductId(product.id)}
-              onMouseLeave={() => setHoveredProductId(null)}
-              style={{ cursor: "pointer" }}
-            >
-              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem", position: "relative" }}>
-                <img 
-                  src={hoveredProductId === product.id ? product.images[1] : product.images[0]} 
-                  alt={product.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.3s ease" }} 
-                />
+            <div key={product.id} onClick={() => setSelectedProduct(product)} style={{ cursor: "pointer" }}>
+              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem" }}>
+                <img src={product.images[0]} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
-              <h3 style={{ margin: 0, fontSize: "13px", fontWeight: "500" }}>{product.name}</h3>
+              <h3 style={{ margin: 0, fontSize: "14px", fontWeight: "900", textTransform: "uppercase" }}>{product.name}</h3>
               <p style={{ margin: 0, opacity: 0.6, fontSize: "13px" }}>{product.price}</p>
             </div>
           ))}
@@ -130,13 +130,13 @@ export default function Shop() {
               </div>
 
               <div style={{ flex: 0.8, padding: "30px", display: "flex", flexDirection: "column" }}>
-                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontSize: "12px", letterSpacing: "0.1em" }}>✕ CLOSE</button>
-                <h2 style={{ fontSize: "20px", marginTop: "10px" }}>{selectedProduct.name}</h2>
-                <p style={{ fontSize: "15px", fontWeight: "600", margin: "5px 0 15px 0" }}>{selectedProduct.price}</p>
-                <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#444" }}>{selectedProduct.description}</p>
+                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontWeight: "900" }}>✕ CLOSE</button>
+                <h2 style={{ fontSize: "24px", marginTop: "10px", fontWeight: "900" }}>{selectedProduct.name}</h2>
+                <p style={{ fontSize: "16px", fontWeight: "900", margin: "5px 0 15px 0" }}>{selectedProduct.price}</p>
+                <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#444" }}>{selectedProduct.description}</p>
                 
                 <div style={{ marginTop: "auto" }}>
-                  <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontSize: "12px", letterSpacing: "0.1em" }}>
+                  <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontWeight: "900", textTransform: "uppercase" }}>
                     {selectedProduct.purchasePath ? "GO TO PRODUCT PAGE" : "BUY NOW"}
                   </button>
                 </div>
