@@ -22,7 +22,7 @@ const PRODUCT_DATA = [
     id: "dick-man-key-charm",
     name: "Dick man key-charm",
     price: "¥3,500",
-    description: "ドイツ留学時に触れた「性の寛容さ」に感銘を受け、日本ではタブー視されがちな性をどこまでポップに表現できるか挑戦したキャラクター。日常にユーモアと解放を。",
+    description: "「性の寛容さ」に感銘を受け、日本ではタブー視されがちな性表現できるか挑戦したキャラクター。日常にユーモアと解放を。",
     images: ["/assets/Dick正面.png", "/assets/Dick横.png"],
     sizes: ["ONE SIZE"],
     stripeUrl: "https://buy.stripe.com/9B67sL4Q773tg2Q6Qc3wQ04"
@@ -30,12 +30,11 @@ const PRODUCT_DATA = [
   {
     id: "angr-kun-key-holder",
     name: "Angr-Kun key-holder",
-    price: "¥3,500",
+    price: "¥2,500",
     description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png", "/assets/アングル2.jpg",
-       "/assets/アングル3.jpg", "/assets/アングル4.jpg", "/assets/アングル5.jpg",
-      "/assets/アングル6.jpg", "/assets/アングル7.jpg"
+      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png",
+       "/assets/アングル3.jpg", "/assets/アングル5.jpg",
     ],
     sizes: ["ONE SIZE"],
     stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05"
