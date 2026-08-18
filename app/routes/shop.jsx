@@ -47,7 +47,7 @@ const PRODUCT_DATA = [
   {
     id: "pest-mask",
     name: "Pests Mask",
-    price: "¥3,500",
+    price: "¥1,100",
     description: "極度の潔癖症である男が、自らの手で作り上げた特製ガスマスク。マスクを通してしか心地良さを感じられない彼のアイテム",
     images: [
       "/assets/Gam2.PNG",
@@ -59,7 +59,7 @@ const PRODUCT_DATA = [
   {
     id: "joe-blad-commander",
     name: "JOE BLAD Commander",
-    price: "¥4,500",
+    price: "Sold out",
     description: "北欧の軍人で軍人気質。口数が少ないが、何を考えているのかは分かりやすい。",
     images: [
      　"/assets/Joe2.PNG",
@@ -73,7 +73,7 @@ const PRODUCT_DATA = [
   {
     id: "double-cigarette-holder",
     name: "Double Cigarette Holder",
-    price: "¥3,000",
+    price: "¥1,200",
     description: "タバコを2本同時に差し、1度に1本吸えるという驚きの喫煙者向け便利グッズ。",
     images: [
       "/assets/py1.PNG",
