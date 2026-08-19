@@ -183,39 +183,49 @@ export default function Articles() {
                   <article 
                     key={article.id} 
                     onClick={() => setSelectedArticle(article)}
-                    style={{ borderBottom: "1px solid #222", paddingBottom: "3.5rem", cursor: "pointer" }}
+                    style={{ 
+                      position: "relative", width: "100%", height: "420px", 
+                      backgroundColor: "#111", borderRadius: "6px", overflow: "hidden", 
+                      cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "flex-end",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.5)"
+                    }}
                   >
-                    {/* 💡 要望対応：サムネイル画像をタイトルの「上」に大きめに配置 */}
+                    {/* 1. 【最下位レイヤー】背景画像 */}
                     {article.image && (
-                      <div style={{ 
-                        width: "100%", height: "320px", backgroundColor: "#111", 
-                        display: "flex", alignItems: "center", justifyContent: "center", 
-                        overflow: "hidden", marginBottom: "1.5rem", borderRadius: "4px" 
-                      }}>
+                      <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <img 
                           src={article.image} 
                           alt={article.title} 
-                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", objectPosition: "center", display: "block" }} 
+                          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} 
                         />
                       </div>
                     )}
 
-                    <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "8px", letterSpacing: "0.05em" }}>
-                      <span>{article.category}</span>
-                      <span>/</span>
-                      <span>{article.date}</span>
-                    </div>
+                    {/* 2. 【中間レイヤー】文字を読みやすくするための黒グラデーションオーバーレイ */}
+                    <div style={{ 
+                      position: "absolute", inset: 0, zIndex: 2, 
+                      background: "linear-gradient(to top, rgba(0,0,0,0.95) 15%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.2) 100%)" 
+                    }} />
 
-                    <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "1rem", lineHeight: "1.3" }}>
-                      {article.title}
-                    </h2>
+                    {/* 3. 【最前面レイヤー】見出し・テキスト情報 */}
+                    <div style={{ position: "relative", zIndex: 3, padding: "2rem" }}>
+                      <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#ccc", marginBottom: "8px", letterSpacing: "0.05em", textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>
+                        <span>{article.category}</span>
+                        <span>/</span>
+                        <span>{article.date}</span>
+                      </div>
 
-                    <p style={{ fontSize: "14px", lineHeight: "1.8", color: "#aaa" }}>
-                      {article.excerpt}
-                    </p>
+                      <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "0.8ns", lineHeight: "1.3", color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.9)" }}>
+                        {article.title}
+                      </h2>
 
-                    <div style={{ marginTop: "1.5rem", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff" }}>
-                      Read Article →
+                      <p style={{ fontSize: "13px", lineHeight: "1.6", color: "#ddd", textShadow: "0 1px 4px rgba(0,0,0,0.9)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                        {article.excerpt}
+                      </p>
+
+                      <div style={{ marginTop: "1rem", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff", textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}>
+                        Read Article →
+                      </div>
                     </div>
                   </article>
                 ))
@@ -236,7 +246,7 @@ export default function Articles() {
         <div style={{
           position: "fixed", bottom: 0, left: 0, right: 0, height: "65px",
           backgroundColor: "#111", borderTop: "1px solid #222", display: "flex",
-          alignItem: "center", justifyContent: "space-around", padding: "0 10px", zIndex: 100
+          alignItems: "center", justifyContent: "space-around", padding: "0 10px", zIndex: 100
         }}>
           {/* 1. サイト内検索BOX */}
           <div style={{ display: "flex", alignItems: "center", flex: "1.2", paddingRight: "8px" }}>
