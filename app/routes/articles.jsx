@@ -8,7 +8,7 @@ export const links = () => [
 ];
 
 // ==========================================
-// 💡 【ここに記事をコピペで追加していく】
+// 💡 記事データ（ここに追加していくだけで自動反映）
 // ==========================================
 const ARTICLES_DATA = [
   {
@@ -16,9 +16,13 @@ const ARTICLES_DATA = [
     title: "エラー0.1mmにキレる夜と、手造りの泥臭さ",
     date: "2026.05.18",
     category: "BEHIND THE SCENES",
-    image: "/assets/ピンク正面.png", // 👈 ここに記事の挿絵にしたい画像のパスを入れる
+    image: "/assets/ピンク正面.png",
     excerpt: "画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。",
-    fullText: "画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。\n\nデジタル画面上で完璧に見えても、いざ出力して手で触れると違和感がある。この泥臭い試行錯誤の繰り返しこそが、WACCAのプロダクトの核心にある。"
+    fullText: `画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。
+
+デジタル画面上で完璧に見えても、いざ出力して手で触れると違和感がある。この違和感を大事にしたい。最近AI生成に頼りきりで、その成果物で作った気になってる人が多い。だが、正直気持ち悪いのだ。何かが。違和感を信じて改善する。この泥臭い試行錯誤の繰り返しこそが、WACCAのプロダクトの核心にある。審美眼を鍛えていこう
+
+完璧な工業製品にはない、人間の手が生み出す揺らぎや執念を、どうやってこの小さな造形に落とし込むか。毎夜、モニターの光に照らされながら考え続けている。`
   },
   {
     id: "02",
@@ -27,7 +31,11 @@ const ARTICLES_DATA = [
     category: "DIARY / INSPIRATION",
     image: "/assets/Dick正面.png",
     excerpt: "留学先で目撃したタブーのない圧倒的な表現の自由。Dick man key-charmという変態的でポップなキャラクターが生まれた本当の理由。",
-    fullText: "留学先で目撃したタブーのない圧倒的な表現の自由。Dick man key-charmという変態的でポップなキャラクターが生まれた本当の理由。\n\n日本ではどうしてもタブー視されがちなモチーフも、向こうでは日常のユーモアとしてリスペクトされている。その空気を、そのままこの小さなキーチャームに閉じ込めたかった。"
+    fullText: `留学先で目撃したタブーのない圧倒的な表現の自由。Dick man key-charmという変態的でポップなキャラクターが生まれた本当の理由。
+
+日本ではどうしてもタブー視されがちなモチーフも、向こうでは日常のユーモアとしてリスペクトされている。その空気を、そのままこの小さなキーチャームに閉じ込めたかった。
+
+真面目すぎる日常に、少しの毒とポップな解放感を。僕らが作るものは、いつもそういう「日常への小さな反抗」から始まっている。`
   },
   {
     id: "03",
@@ -36,21 +44,17 @@ const ARTICLES_DATA = [
     category: "DAILY LIFE",
     image: "/assets/angr正面.png",
     excerpt: "3Dプリンターの稼働音が響くワンルーム。失敗作の山に囲まれながら、僕らが毎夜考えているくだらないこだわりと、これからの話。",
-    fullText: "3Dプリンターの稼働音が響くワンルーム。失敗作の山に囲まれながら、僕らが毎夜考えているくだらないこだわりと、これからの話。\n\n綺麗に並べられたお店の商品棚の裏側には、無数の失敗とボツになった残骸が転がっている。その「過程の熱量」も含めて、カルチャーとして楽しんでもらいたい。"
+    fullText: `3Dプリンターの稼働音が響くワンルーム。失敗作の山に囲まれながら、僕らが毎夜考えているくだらないこだわりと、これからの話。
+
+綺麗に並べられたお店の商品棚の裏側には、無数の失敗とボツになった残骸が転がっている。その「過程の熱量」も含めて、カルチャーとして楽しんでもらいたい。
+
+今日も明日も、新しい造形を出力しては直し、出しては直しの日々。この部屋のゴミの山こそが、WACCAの原動力だ。`
   }
 ];
 
 export default function Articles() {
-  // どの記事が「Read More」で開かれているかを管理する状態
-  const [openArticleId, setOpenArticleId] = useState(null);
-
-  const toggleReadMore = (id) => {
-    if (openArticleId === id) {
-      setOpenArticleId(null); // すでに開いてたら閉じる
-    } else {
-      setOpenArticleId(id); // 開く
-    }
-  };
+  // 現在選択されている詳細表示中の記事（nullなら一覧表示）
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   return (
     <div style={{ backgroundColor: "#000", minHeight: "100vh", color: "#fff", fontFamily: "'Montserrat', sans-serif", paddingBottom: "100px" }}>
@@ -77,57 +81,124 @@ export default function Articles() {
       </header>
 
       {/* メインコンテンツ */}
-      <main style={{ maxWidth: "720px", margin: "0 auto", padding: "3rem 1.5rem" }}>
-        <h1 style={{ fontSize: "32px", fontWeight: "900", textTransform: "uppercase", marginBottom: "3rem", letterSpacing: "-0.03em" }}>
-          Articles & Logs
-        </h1>
+      <main style={{ maxWidth: "760px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+        
+        {selectedArticle ? (
+          // ==========================================
+          // 💡 【個別記事の詳細ビュー】
+          // ==========================================
+          <div style={{ animation: "fadeIn 0.3s ease" }}>
+            {/* 一覧に戻るボタン */}
+            <button 
+              onClick={() => setSelectedArticle(null)}
+              style={{ 
+                background: "none", border: "none", color: "#888", fontSize: "12px", fontWeight: "900", 
+                textTransform: "uppercase", letterSpacing: "0.15em", cursor: "pointer", padding: 0, 
+                marginBottom: "2rem", display: "flex", alignItems: "center", gap: "8px", transition: "color 0.2s"
+              }}
+              onMouseEnter={(e) => e.target.style.color = "#fff"}
+              onMouseLeave={(e) => e.target.style.color = "#888"}
+            >
+              ← BACK TO LIST
+            </button>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
-          {ARTICLES_DATA.map((article) => {
-            const isOpen = openArticleId === article.id;
+            {/* カテゴリ ＆ 日付 */}
+            <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "10px", letterSpacing: "0.05em" }}>
+              <span>{selectedArticle.category}</span>
+              <span>/</span>
+              <span>{selectedArticle.date}</span>
+            </div>
 
-            return (
-              <article key={article.id} style={{ borderBottom: "1px solid #222", paddingBottom: "3rem" }}>
-                <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "8px", letterSpacing: "0.05em" }}>
-                  <span>{article.category}</span>
-                  <span>/</span>
-                  <span>{article.date}</span>
-                </div>
+            {/* タイトル */}
+            <h1 style={{ fontSize: "28px", fontWeight: "900", marginBottom: "2rem", lineHeight: "1.3" }}>
+              {selectedArticle.title}
+            </h1>
 
-                <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "1.2rem", lineHeight: "1.3" }}>
-                  {article.title}
-                </h2>
+            {/* 挿絵画像（objectFit: "contain" ＆ 中央配置で絶対にオブジェクトが切れないように修正） */}
+            {selectedArticle.image && (
+              <div style={{ 
+                width: "100%", height: "420px", backgroundColor: "#111", 
+                display: "flex", alignItems: "center", justifyContent: "center", 
+                overflow: "hidden", marginBottom: "2.5rem", borderRadius: "4px" 
+              }}>
+                <img 
+                  src={selectedArticle.image} 
+                  alt={selectedArticle.title} 
+                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", objectPosition: "center", display: "block" }} 
+                />
+              </div>
+            )}
 
-                {/* 記事の挿絵画像 */}
-                {article.image && (
-                  <div style={{ width: "100%", maxHeight: "400px", backgroundColor: "#111", overflow: "hidden", marginBottom: "1.5rem", borderRadius: "4px" }}>
-                    <img src={article.image} alt={article.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                  </div>
-                )}
+            {/* 全文テキスト */}
+            <div style={{ fontSize: "15px", lineHeight: "1.9", color: "#ddd", whiteSpace: "pre-line", marginBottom: "4rem" }}>
+              {selectedArticle.fullText}
+            </div>
 
-                {/* リード文 or 全文 */}
-                <p style={{ fontSize: "14px", lineHeight: "1.8", color: "#ccc", whiteSpace: "pre-line" }}>
-                  {isOpen ? article.fullText : article.excerpt}
-                </p>
+            {/* 下部の一覧に戻るボタン */}
+            <button 
+              onClick={() => setSelectedArticle(null)}
+              style={{ 
+                width: "100%", padding: "16px", backgroundColor: "#222", color: "#fff", border: "none", 
+                fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", cursor: "pointer", borderRadius: "4px" 
+              }}
+            >
+              BACK TO LIST
+            </button>
+          </div>
+        ) : (
+          // ==========================================
+          // 💡 【見出し一覧ビュー】
+          // ==========================================
+          <div>
+            <h1 style={{ fontSize: "32px", fontWeight: "900", textTransform: "uppercase", marginBottom: "3rem", letterSpacing: "-0.03em" }}>
+              Articles & Logs
+            </h1>
 
-                {/* Read More ボタン（押すとその場でパッと開閉するギミック） */}
-                <button 
-                  onClick={() => toggleReadMore(article.id)}
-                  style={{ 
-                    marginTop: "1.5rem", background: "none", border: "none", color: "#fff", 
-                    fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", 
-                    cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: "6px",
-                    opacity: 0.8, transition: "opacity 0.2s"
-                  }}
-                  onMouseEnter={(e) => e.target.style.opacity = "1"}
-                  onMouseLeave={(e) => e.target.style.opacity = "0.8"}
+            <div style={{ display: "flex", flexDirection: "column", gap: "3.5rem" }}>
+              {ARTICLES_DATA.map((article) => (
+                <article 
+                  key={article.id} 
+                  onClick={() => setSelectedArticle(article)}
+                  style={{ borderBottom: "1px solid #222", paddingBottom: "3rem", cursor: "pointer" }}
                 >
-                  {isOpen ? "Close [↑]" : "Read More [↓]"}
-                </button>
-              </article>
-            );
-          })}
-        </div>
+                  <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "8px", letterSpacing: "0.05em" }}>
+                    <span>{article.category}</span>
+                    <span>/</span>
+                    <span>{article.date}</span>
+                  </div>
+
+                  <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "1rem", lineHeight: "1.3" }}>
+                    {article.title}
+                  </h2>
+
+                  {/* 一覧のサムネイル画像（ここも綺麗に中央・全体表示） */}
+                  {article.image && (
+                    <div style={{ 
+                      width: "100%", height: "260px", backgroundColor: "#111", 
+                      display: "flex", alignItems: "center", justifyContent: "center", 
+                      overflow: "hidden", marginBottom: "1.2rem", borderRadius: "4px" 
+                    }}>
+                      <img 
+                        src={article.image} 
+                        alt={article.title} 
+                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", objectPosition: "center", display: "block" }} 
+                      />
+                    </div>
+                  )}
+
+                  <p style={{ fontSize: "14px", lineHeight: "1.8", color: "#aaa" }}>
+                    {article.excerpt}
+                  </p>
+
+                  <div style={{ marginTop: "1.2rem", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff" }}>
+                    Read Article →
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
