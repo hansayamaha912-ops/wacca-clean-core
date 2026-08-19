@@ -9,17 +9,25 @@ export const links = () => [
 
 export default function RequestPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState("custom"); // 3Dカスタムか、雑談/メッセージか切り替えギミック
+  const [activeTab, setActiveTab] = useState("custom"); // "custom" 又は "secret"
+  const [fileName, setFileName] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    // 外部サービス（FormspreeやMake.comなど）への送信処理をここに記述
     setSubmitted(true);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFileName(e.target.files[0].name);
+    }
   };
 
   return (
     <div style={{ backgroundColor: "#000", minHeight: "100vh", color: "#fff", fontFamily: "'Montserrat', sans-serif", paddingBottom: "100px" }}>
       
-      {/* ミニマムでソリッドなヘッダー */}
+      {/* ヘッダー */}
       <header style={{ 
         maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", 
         display: "flex", justifyContent: "space-between", alignItems: "center" 
@@ -33,22 +41,24 @@ export default function RequestPage() {
 
         <nav style={{ display: "flex", gap: "1.5rem", fontWeight: "900", fontSize: "12px", textTransform: "uppercase" }}>
           <Link to="/" style={{ color: "#fff", textDecoration: "none", opacity: 0.4 }}>Home</Link>
-          <Link to="/shop" style={{ color: "#fff", textDecoration: "none", opacity: 0.4 }}>Shop</Link>
+          <Link to="/concept" style={{ color: "#fff", textDecoration: "none", opacity: 0.4 }}>Concept</Link>
+          <Link to="/articles" style={{ color: "#fff", textDecoration: "none", opacity: 0.4 }}>Articles</Link>
           <Link to="/request" style={{ color: "#fff", textDecoration: "none", borderBottom: "2px solid #fff" }}>Request</Link>
+          <Link to="/shop" style={{ color: "#fff", textDecoration: "none", opacity: 0.4 }}>Shop</Link>
         </nav>
       </header>
 
-      {/* メイン：余白を活かしたミニマムな入力フォーム */}
+      {/* メインフォーム */}
       <main style={{ maxWidth: "560px", margin: "4rem auto 0 auto", padding: "0 1.5rem" }}>
         
-        {/* モードを切り替えるちょっとしたインタラクション・タブ */}
-        <div style={{ display: "flex", gap: "1rem", marginBottom: "2.5rem", borderBottom: "1px solid #222", paddingBottom: "1rem" }}>
+        {/* タブ切り替え */}
+        <div style={{ display: "flex", gap: "1.5rem", marginBottom: "2.5rem", borderBottom: "1px solid #222", paddingBottom: "1rem" }}>
           <button 
             onClick={() => setActiveTab("custom")}
             style={{ 
               background: "none", border: "none", color: "#fff", cursor: "pointer",
               fontSize: "14px", fontWeight: "900", opacity: activeTab === "custom" ? 1 : 0.3,
-              transition: "opacity 0.2s ease"
+              transition: "opacity 0.2s ease", padding: 0
             }}
           >
             01. 3D CUSTOM / ORDER
@@ -58,7 +68,7 @@ export default function RequestPage() {
             style={{ 
               background: "none", border: "none", color: "#fff", cursor: "pointer",
               fontSize: "14px", fontWeight: "900", opacity: activeTab === "secret" ? 1 : 0.3,
-              transition: "opacity 0.2s ease"
+              transition: "opacity 0.2s ease", padding: 0
             }}
           >
             02. SECRET NOTE
@@ -72,7 +82,7 @@ export default function RequestPage() {
           }}>
             <h3 style={{ fontSize: "20px", fontWeight: "900", marginBottom: "10px", letterSpacing: "0.05em" }}>TRANSMISSION COMPLETE</h3>
             <p style={{ fontSize: "12px", color: "#888", lineHeight: "1.6" }}>
-              電波は受信されました。波長が合えば、折り返し連絡します。
+              リクエストを受け付けました。波長が合えば、WACCAチームより連絡します。
             </p>
           </div>
         ) : (
@@ -82,20 +92,37 @@ export default function RequestPage() {
               <>
                 <div>
                   <label style={{ display: "block", fontSize: "11px", fontWeight: "900", textTransform: "uppercase", marginBottom: "8px", color: "#888" }}>
-                    What do you want to shape? (アイデア)
+                    What do you want to shape? (アイデア・要望)
                   </label>
                   <textarea 
                     required 
                     rows="4" 
-                    placeholder="作ってほしいもの、形、テクスチャのイメージ..." 
+                    placeholder="作ってほしいもの、サイズ感、モチーフなど..." 
                     style={{ 
                       width: "100%", padding: "16px", backgroundColor: "#111", border: "1px solid #333", 
-                      color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none",
-                      transition: "border-color 0.2s ease"
+                      color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none", resize: "vertical"
                     }} 
-                    onFocus={(e) => e.target.style.borderColor = "#fff"}
-                    onBlur={(e) => e.target.style.borderColor = "#333"}
                   />
+                </div>
+
+                {/* 💡 【3Dカスタム専用】PDF・画像・その他ファイルに対応したアップロード欄 */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", fontWeight: "900", textTransform: "uppercase", marginBottom: "8px", color: "#888" }}>
+                    Reference File (画像 / PDF / 3Dデータなど)
+                  </label>
+                  <label style={{ 
+                    display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", 
+                    backgroundColor: "#111", border: "1px dashed #444", borderRadius: "4px", cursor: "pointer",
+                    fontSize: "12px", color: fileName ? "#fff" : "#888", fontWeight: "700"
+                  }}>
+                    {fileName ? `Attached: ${fileName}` : "+ Choose File (PDF, Images, 3D, ZIP)"}
+                    <input 
+                      type="file" 
+                      accept=".pdf,.png,.jpg,.jpeg,.zip,.stl,.obj,.step,.iges,image/*,application/pdf" 
+                      onChange={handleFileChange} 
+                      style={{ display: "none" }} 
+                    />
+                  </label>
                 </div>
               </>
             ) : (
@@ -105,11 +132,11 @@ export default function RequestPage() {
                 </label>
                 <textarea 
                   required 
-                  rows="4" 
-                  placeholder="制作陣へのメッセージや、くだらない日常の独り言でも..." 
+                  rows="5" 
+                  placeholder="制作陣へのメッセージや独り言..." 
                   style={{ 
                     width: "100%", padding: "16px", backgroundColor: "#111", border: "1px solid #333", 
-                    color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none"
+                    color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none", resize: "vertical"
                   }} 
                 />
               </div>
@@ -122,7 +149,7 @@ export default function RequestPage() {
               <input 
                 type="text" 
                 required 
-                placeholder="メールアドレス または SNS ID" 
+                placeholder="メールアドレス または SNS ID (X / Instagram)" 
                 style={{ 
                   width: "100%", padding: "16px", backgroundColor: "#111", border: "1px solid #333", 
                   color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none" 
@@ -130,7 +157,6 @@ export default function RequestPage() {
               />
             </div>
 
-            {/* 押したときにちょっと色が変わったり沈み込む楽しいギミックボタン */}
             <button 
               type="submit" 
               style={{ 
