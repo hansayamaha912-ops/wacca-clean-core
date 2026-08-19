@@ -65,19 +65,17 @@ const ARTICLES_DATA = [
 
 export default function Articles() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const articleId = searchParams.get("id"); // URLの ?id=XX を取得
+  const articleId = searchParams.get("id");
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 💡 URLのIDと一致する記事データを取得
   const selectedArticle = ARTICLES_DATA.find(article => article.id === articleId) || null;
 
-  // 記事の選択・解除（URLのクエリパラメータを書き換える）
   const handleSelectArticle = (article) => {
     if (article) {
-      setSearchParams({ id: article.id }); // URLに ?id=01 を付与
+      setSearchParams({ id: article.id });
     } else {
-      setSearchParams({}); // クエリを消して一覧に戻る
+      setSearchParams({});
     }
   };
 
@@ -125,7 +123,7 @@ export default function Articles() {
 
             <h1 style={{ fontSize: "30px", fontWeight: "900", marginBottom: "2.5rem", lineHeight: "1.3" }}>{selectedArticle.title}</h1>
 
-            {/* 💡 個別記事のURL（?id=XX付き）が正しくコピーされるシェアボタン */}
+            {/* シェア＆リンクコピーボタン */}
             <div style={{ display: "flex", gap: "1rem", marginBottom: "3rem", alignItems: "center" }}>
               <a 
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} 
@@ -138,7 +136,8 @@ export default function Articles() {
               <button 
                 onClick={() => { 
                   navigator.clipboard.writeText(window.location.href); 
-                  alert("この記事のリンクをコピーしました！"); 
+                  // 💡 ここでポップアップの文章をカスタマイズしています
+                  alert("Connect with WACCA\n記事のリンクをコピーしました！"); 
                 }} 
                 style={{ padding: "10px 20px", backgroundColor: "#222", color: "#fff", border: "1px solid #444", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px", cursor: "pointer" }}
               >
