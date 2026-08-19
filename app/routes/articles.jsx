@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
 export const links = () => [
@@ -64,9 +64,22 @@ const ARTICLES_DATA = [
 ];
 
 export default function Articles() {
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const articleId = searchParams.get("id"); // URLの ?id=XX を取得
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // 💡 URLのIDと一致する記事データを取得
+  const selectedArticle = ARTICLES_DATA.find(article => article.id === articleId) || null;
+
+  // 記事の選択・解除（URLのクエリパラメータを書き換える）
+  const handleSelectArticle = (article) => {
+    if (article) {
+      setSearchParams({ id: article.id }); // URLに ?id=01 を付与
+    } else {
+      setSearchParams({}); // クエリを消して一覧に戻る
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -102,7 +115,7 @@ export default function Articles() {
         {selectedArticle ? (
           <div style={{ animation: "fadeIn 0.3s ease" }}>
             <button 
-              onClick={() => setSelectedArticle(null)}
+              onClick={() => handleSelectArticle(null)}
               style={{ background: "none", border: "none", color: "#888", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.15em", cursor: "pointer", padding: 0, marginBottom: "2rem", display: "flex", alignItems: "center", gap: "8px" }}
             >← BACK TO LIST</button>
 
@@ -112,20 +125,19 @@ export default function Articles() {
 
             <h1 style={{ fontSize: "30px", fontWeight: "900", marginBottom: "2.5rem", lineHeight: "1.3" }}>{selectedArticle.title}</h1>
 
-            {/* 💡 個別記事専用のシェア＆リンクコピーボタン（記事固有のIDやパスを綺麗に共有できるように設定） */}
+            {/* 💡 個別記事のURL（?id=XX付き）が正しくコピーされるシェアボタン */}
             <div style={{ display: "flex", gap: "1rem", marginBottom: "3rem", alignItems: "center" }}>
               <a 
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? `${window.location.origin}/articles?id=${selectedArticle.id}` : '')}`} 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} 
                 target="_blank" 
-                 rel="noopener noreferrer" 
+                rel="noopener noreferrer" 
                 style={{ padding: "10px 20px", backgroundColor: "#fff", color: "#000", textDecoration: "none", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px" }}
               >
                 Share on X
               </a>
               <button 
                 onClick={() => { 
-                  const articleUrl = `${window.location.origin}/articles?id=${selectedArticle.id}`;
-                  navigator.clipboard.writeText(articleUrl); 
+                  navigator.clipboard.writeText(window.location.href); 
                   alert("この記事のリンクをコピーしました！"); 
                 }} 
                 style={{ padding: "10px 20px", backgroundColor: "#222", color: "#fff", border: "1px solid #444", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px", cursor: "pointer" }}
@@ -158,7 +170,7 @@ export default function Articles() {
             )}
 
             <button 
-              onClick={() => setSelectedArticle(null)}
+              onClick={() => handleSelectArticle(null)}
               style={{ width: "100%", padding: "16px", backgroundColor: "#222", color: "#fff", border: "none", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", cursor: "pointer", borderRadius: "4px" }}
             >
               BACK TO LIST
@@ -170,7 +182,7 @@ export default function Articles() {
             <input type="text" placeholder="Search articles..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: "100%", padding: "12px 16px", backgroundColor: "#111", border: "1px solid #333", color: "#fff", borderRadius: "4px", fontSize: "13px" }} />
             <div style={{ display: "flex", flexDirection: "column", gap: "4rem", marginTop: "3rem" }}>
               {filteredArticles.map((article) => (
-                <article key={article.id} onClick={() => setSelectedArticle(article)} style={{ position: "relative", width: "100%", height: "420px", backgroundColor: "#111", borderRadius: "6px", overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+                <article key={article.id} onClick={() => handleSelectArticle(article)} style={{ position: "relative", width: "100%", height: "420px", backgroundColor: "#111", borderRadius: "6px", overflow: "hidden", cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
                   <img src={article.image} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                   <div style={{ position: "absolute", inset: 0, zIndex: 2, background: "linear-gradient(to top, #000 0%, transparent 70%)" }} />
                   <div style={{ position: "relative", zIndex: 3, padding: "2rem" }}>
