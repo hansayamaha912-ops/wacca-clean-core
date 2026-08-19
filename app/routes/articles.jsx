@@ -112,10 +112,26 @@ export default function Articles() {
 
             <h1 style={{ fontSize: "30px", fontWeight: "900", marginBottom: "2.5rem", lineHeight: "1.3" }}>{selectedArticle.title}</h1>
 
-            {/* 💡 SNSシェアボタンエリア */}
+            {/* 💡 個別記事専用のシェア＆リンクコピーボタン（記事固有のIDやパスを綺麗に共有できるように設定） */}
             <div style={{ display: "flex", gap: "1rem", marginBottom: "3rem", alignItems: "center" }}>
-              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`} target="_blank" rel="noopener noreferrer" style={{ padding: "10px 20px", backgroundColor: "#fff", color: "#000", textDecoration: "none", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px" }}>Share on X</a>
-              <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Copied!"); }} style={{ padding: "10px 20px", backgroundColor: "#222", color: "#fff", border: "1px solid #444", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px", cursor: "pointer" }}>Copy Link</button>
+              <a 
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? `${window.location.origin}/articles?id=${selectedArticle.id}` : '')}`} 
+                target="_blank" 
+                 rel="noopener noreferrer" 
+                style={{ padding: "10px 20px", backgroundColor: "#fff", color: "#000", textDecoration: "none", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px" }}
+              >
+                Share on X
+              </a>
+              <button 
+                onClick={() => { 
+                  const articleUrl = `${window.location.origin}/articles?id=${selectedArticle.id}`;
+                  navigator.clipboard.writeText(articleUrl); 
+                  alert("この記事のリンクをコピーしました！"); 
+                }} 
+                style={{ padding: "10px 20px", backgroundColor: "#222", color: "#fff", border: "1px solid #444", fontWeight: "900", fontSize: "11px", textTransform: "uppercase", borderRadius: "4px", cursor: "pointer" }}
+              >
+                Copy Link
+              </button>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem", marginBottom: "4rem" }}>
@@ -140,6 +156,13 @@ export default function Articles() {
                 </div>
               </div>
             )}
+
+            <button 
+              onClick={() => setSelectedArticle(null)}
+              style={{ width: "100%", padding: "16px", backgroundColor: "#222", color: "#fff", border: "none", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", cursor: "pointer", borderRadius: "4px" }}
+            >
+              BACK TO LIST
+            </button>
           </div>
         ) : (
           <div>
