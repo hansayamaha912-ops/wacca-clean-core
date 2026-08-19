@@ -23,7 +23,7 @@ const ARTICLES_DATA = [
       { type: "text", value: "画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。\n\nデジタル画面上で完璧に見えても、いざ出力して手で触れると違和感がある。この泥臭い試行錯誤の繰り返しこそが、WACCAのプロダクトの核心にある。" },
       { type: "image", value: "/assets/ピンク横.png" },
       { type: "text", value: "完璧な工業製品にはない、人間の手が生み出す揺らぎや執念を、どうやってこの小さな造形に落とし込むか。毎夜、モニターの光に照らされながら考え続けている。" },
-      { type: "youtube", value: "dQw4w9WgXcQ" }
+      { type: "youtube", value: "LUyyR_mZe58" }
     ],
     // 💡 商品を紐づけたい場合だけこれを書く（書かなければ表示されません）
     relatedProduct: {
