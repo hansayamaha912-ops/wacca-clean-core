@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -20,7 +20,7 @@ const ARTICLES_DATA = [
     excerpt: "画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。",
     fullText: `画面の前で何度マウスを投げ出したことか。Master Handの指のカーブ、血管の浮き上がり。そのわずか0.1ミリの誤差が、プロダクトを生かすも殺すも決めてしまう。
 
-デジタル画面上で完璧に見えても、いざ出力して手で触れると違和感がある。この違和感を大事にしたい。最近AI生成に頼りきりで、その成果物で作った気になってる人が多い。だが、正直気持ち悪いのだ。何かが。違和感を信じて改善する。この泥臭い試行錯誤の繰り返しこそが、WACCAのプロダクトの核心にある。審美眼を鍛えていこう
+デジタル画面上で完璧に見えても、いざ出力して手で触れると違和感がある。この泥臭い試行錯誤の繰り返しこそが、WACCAのプロダクトの核心にある。
 
 完璧な工業製品にはない、人間の手が生み出す揺らぎや執念を、どうやってこの小さな造形に落とし込むか。毎夜、モニターの光に照らされながら考え続けている。`
   },
@@ -53,13 +53,27 @@ const ARTICLES_DATA = [
 ];
 
 export default function Articles() {
-  // 現在選択されている詳細表示中の記事（nullなら一覧表示）
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 検索ワードにひっかかる記事を絞り込み
+  const filteredArticles = ARTICLES_DATA.filter(article => 
+    article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    article.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div style={{ backgroundColor: "#000", minHeight: "100vh", color: "#fff", fontFamily: "'Montserrat', sans-serif", paddingBottom: "100px" }}>
+    <div style={{ backgroundColor: "#000", minHeight: "100vh", color: "#fff", fontFamily: "'Montserrat', sans-serif", paddingBottom: isMobile ? "120px" : "100px" }}>
       
-      {/* ヘッダー */}
+      {/* PC用ヘッダー */}
       <header style={{ 
         maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", 
         display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem"
@@ -81,14 +95,13 @@ export default function Articles() {
       </header>
 
       {/* メインコンテンツ */}
-      <main style={{ maxWidth: "760px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+      <main style={{ maxWidth: "760px", margin: "0 auto", padding: "2rem 1.5rem" }}>
         
         {selectedArticle ? (
           // ==========================================
           // 💡 【個別記事の詳細ビュー】
           // ==========================================
           <div style={{ animation: "fadeIn 0.3s ease" }}>
-            {/* 一覧に戻るボタン */}
             <button 
               onClick={() => setSelectedArticle(null)}
               style={{ 
@@ -102,24 +115,18 @@ export default function Articles() {
               ← BACK TO LIST
             </button>
 
-            {/* カテゴリ ＆ 日付 */}
             <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "10px", letterSpacing: "0.05em" }}>
               <span>{selectedArticle.category}</span>
               <span>/</span>
               <span>{selectedArticle.date}</span>
             </div>
 
-            {/* タイトル */}
-            <h1 style={{ fontSize: "28px", fontWeight: "900", marginBottom: "2rem", lineHeight: "1.3" }}>
-              {selectedArticle.title}
-            </h1>
-
-            {/* 挿絵画像（objectFit: "contain" ＆ 中央配置で絶対にオブジェクトが切れないように修正） */}
+            {/* 詳細ページのサムネイル画像（大きめ＆中央配置） */}
             {selectedArticle.image && (
               <div style={{ 
                 width: "100%", height: "420px", backgroundColor: "#111", 
                 display: "flex", alignItems: "center", justifyContent: "center", 
-                overflow: "hidden", marginBottom: "2.5rem", borderRadius: "4px" 
+                overflow: "hidden", marginBottom: "2rem", borderRadius: "4px" 
               }}>
                 <img 
                   src={selectedArticle.image} 
@@ -129,12 +136,14 @@ export default function Articles() {
               </div>
             )}
 
-            {/* 全文テキスト */}
+            <h1 style={{ fontSize: "28px", fontWeight: "900", marginBottom: "2.5rem", lineHeight: "1.3" }}>
+              {selectedArticle.title}
+            </h1>
+
             <div style={{ fontSize: "15px", lineHeight: "1.9", color: "#ddd", whiteSpace: "pre-line", marginBottom: "4rem" }}>
               {selectedArticle.fullText}
             </div>
 
-            {/* 下部の一覧に戻るボタン */}
             <button 
               onClick={() => setSelectedArticle(null)}
               style={{ 
@@ -150,56 +159,114 @@ export default function Articles() {
           // 💡 【見出し一覧ビュー】
           // ==========================================
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: "900", textTransform: "uppercase", marginBottom: "3rem", letterSpacing: "-0.03em" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: "900", textTransform: "uppercase", marginBottom: "2rem", letterSpacing: "-0.03em" }}>
               Articles & Logs
             </h1>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "3.5rem" }}>
-              {ARTICLES_DATA.map((article) => (
-                <article 
-                  key={article.id} 
-                  onClick={() => setSelectedArticle(article)}
-                  style={{ borderBottom: "1px solid #222", paddingBottom: "3rem", cursor: "pointer" }}
-                >
-                  <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "8px", letterSpacing: "0.05em" }}>
-                    <span>{article.category}</span>
-                    <span>/</span>
-                    <span>{article.date}</span>
-                  </div>
+            {/* 記事一覧内での簡易検索バー */}
+            <div style={{ marginBottom: "3rem" }}>
+              <input 
+                type="text" 
+                placeholder="Search articles..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  width: "100%", padding: "12px 16px", backgroundColor: "#111", border: "1px solid #333",
+                  color: "#fff", borderRadius: "4px", fontSize: "13px", outline: "none", fontWeight: "700"
+                }}
+              />
+            </div>
 
-                  <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "1rem", lineHeight: "1.3" }}>
-                    {article.title}
-                  </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "4rem" }}>
+              {filteredArticles.length > 0 ? (
+                filteredArticles.map((article) => (
+                  <article 
+                    key={article.id} 
+                    onClick={() => setSelectedArticle(article)}
+                    style={{ borderBottom: "1px solid #222", paddingBottom: "3.5rem", cursor: "pointer" }}
+                  >
+                    {/* 💡 要望対応：サムネイル画像をタイトルの「上」に大きめに配置 */}
+                    {article.image && (
+                      <div style={{ 
+                        width: "100%", height: "320px", backgroundColor: "#111", 
+                        display: "flex", alignItems: "center", justifyContent: "center", 
+                        overflow: "hidden", marginBottom: "1.5rem", borderRadius: "4px" 
+                      }}>
+                        <img 
+                          src={article.image} 
+                          alt={article.title} 
+                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", objectPosition: "center", display: "block" }} 
+                        />
+                      </div>
+                    )}
 
-                  {/* 一覧のサムネイル画像（ここも綺麗に中央・全体表示） */}
-                  {article.image && (
-                    <div style={{ 
-                      width: "100%", height: "260px", backgroundColor: "#111", 
-                      display: "flex", alignItems: "center", justifyContent: "center", 
-                      overflow: "hidden", marginBottom: "1.2rem", borderRadius: "4px" 
-                    }}>
-                      <img 
-                        src={article.image} 
-                        alt={article.title} 
-                        style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", objectPosition: "center", display: "block" }} 
-                      />
+                    <div style={{ display: "flex", gap: "15px", fontSize: "11px", fontWeight: "900", color: "#666", marginBottom: "8px", letterSpacing: "0.05em" }}>
+                      <span>{article.category}</span>
+                      <span>/</span>
+                      <span>{article.date}</span>
                     </div>
-                  )}
 
-                  <p style={{ fontSize: "14px", lineHeight: "1.8", color: "#aaa" }}>
-                    {article.excerpt}
-                  </p>
+                    <h2 style={{ fontSize: "22px", fontWeight: "900", marginBottom: "1rem", lineHeight: "1.3" }}>
+                      {article.title}
+                    </h2>
 
-                  <div style={{ marginTop: "1.2rem", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff" }}>
-                    Read Article →
-                  </div>
-                </article>
-              ))}
+                    <p style={{ fontSize: "14px", lineHeight: "1.8", color: "#aaa" }}>
+                      {article.excerpt}
+                    </p>
+
+                    <div style={{ marginTop: "1.5rem", fontSize: "12px", fontWeight: "900", textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff" }}>
+                      Read Article →
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <p style={{ color: "#666", fontSize: "14px" }}>No articles found.</p>
+              )}
             </div>
           </div>
         )}
 
       </main>
+
+      {/* ==========================================
+          📱 【スマホ専用 下部固定フッター】
+          左から: 検索BOX / カートロゴ / メニューバー
+         ========================================== */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, height: "65px",
+          backgroundColor: "#111", borderTop: "1px solid #222", display: "flex",
+          alignItem: "center", justifyContent: "space-around", padding: "0 10px", zIndex: 100
+        }}>
+          {/* 1. サイト内検索BOX */}
+          <div style={{ display: "flex", alignItems: "center", flex: "1.2", paddingRight: "8px" }}>
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: "100%", padding: "8px 10px", backgroundColor: "#222", border: "none",
+                color: "#fff", borderRadius: "4px", fontSize: "11px", outline: "none"
+              }}
+            />
+          </div>
+
+          {/* 2. 買い物カートのロゴ (Cart 0) */}
+          <Link to="/shop" style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: "0.8", textDecoration: "none", color: "#fff", fontSize: "11px", fontWeight: "900", gap: "4px" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>(0)</span>
+          </Link>
+
+          {/* 3. メニューバー（主要ページへのリンク集） */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around", flex: "1.5", fontSize: "10px", fontWeight: "900", textTransform: "uppercase" }}>
+            <Link to="/" style={{ color: "#fff", textDecoration: "none", opacity: 0.7 }}>Home</Link>
+            <Link to="/concept" style={{ color: "#fff", textDecoration: "none", opacity: 0.7 }}>Concept</Link>
+            <Link to="/request" style={{ color: "#fff", textDecoration: "none", opacity: 0.7 }}>Req</Link>
+            <Link to="/shop" style={{ color: "#fff", textDecoration: "none", opacity: 0.7 }}>Shop</Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
