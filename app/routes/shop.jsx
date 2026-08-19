@@ -8,7 +8,7 @@ export const links = () => [
 ];
 
 // ==========================================
-// 商品マスタデータ（拡張子を実際の .PNG に合わせました）
+// 商品マスタデータ（色が被らないように配置順を最適化）
 // ==========================================
 const PRODUCT_DATA = [
   {
@@ -24,6 +24,20 @@ const PRODUCT_DATA = [
     purchasePath: "/products"
   },
   {
+    id: "joe-blad-commander",
+    name: "JOE BLAD Commander",
+    price: "Sold out",
+    description: "北欧の軍人で軍人気質。口数が少ないが、何を考えているのかは分かりやすい。",
+    images: [
+      "/assets/Joe2.PNG",
+      "/assets/Joe1.PNG",
+      "/assets/Joe3.PNG",
+      "/assets/Joe4.PNG"
+    ],
+    sizes: ["ONE SIZE"],
+    stripeUrl: null
+  },
+  {
     id: "dick-man-key-charm",
     name: "Dick man key-charm",
     price: "¥3,500",
@@ -31,18 +45,6 @@ const PRODUCT_DATA = [
     images: ["/assets/Dick正面.png", "/assets/Dick横.png"],
     sizes: ["ONE SIZE"],
     stripeUrl: "https://buy.stripe.com/9B67sL4Q773tg2Q6Qc3wQ04"
-  },
-  {
-    id: "angr-kun-key-holder",
-    name: "Angr-Kun key-holder",
-    price: "¥2,500",
-    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
-    images: [
-      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png",
-       "/assets/アングル3.jpg", "/assets/アングル5.jpg",
-    ],
-    sizes: ["ONE SIZE"],
-    stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05"
   },
   {
     id: "pest-mask",
@@ -58,18 +60,16 @@ const PRODUCT_DATA = [
     stripeUrl: null
   },
   {
-    id: "joe-blad-commander",
-    name: "JOE BLAD Commander",
-    price: "Sold out",
-    description: "北欧の軍人で軍人気質。口数が少ないが、何を考えているのかは分かりやすい。",
+    id: "angr-kun-key-holder",
+    name: "Angr-Kun key-holder",
+    price: "¥2,500",
+    description: "「怒り」という感情から生まれた正直すぎるキャラクター。本心を隠さず、ありのままを表現する彼を身につければ、自分にも正直になれるはず。",
     images: [
-     　"/assets/Joe2.PNG",
-      "/assets/Joe1.PNG",
-      "/assets/Joe3.PNG",
-      "/assets/Joe4.PNG"
+      "/assets/angr正面.png", "/assets/アングル1.jpg", "/assets/angr横.png",
+      "/assets/アングル3.jpg", "/assets/アングル5.jpg",
     ],
     sizes: ["ONE SIZE"],
-    stripeUrl: null
+    stripeUrl: "https://buy.stripe.com/14AcN5eqH0F517WdeA3wQ05"
   },
   {
     id: "double-cigarette-holder",
