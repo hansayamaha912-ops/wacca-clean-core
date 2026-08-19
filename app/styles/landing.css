@@ -42,7 +42,7 @@ html, body, #__remix {
 }
 @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
 
-/* 各種固定ラベル（左右・上下） */
+/* 各種固定ラベル（4方向） */
 .fixed-label {
   position: absolute; 
   font-family: 'Space Grotesk', sans-serif; 
@@ -99,7 +99,7 @@ body.state1 .fixed-label { opacity: 0.4; }
 }
 body.state1 .node-item { opacity: 1; }
 
-/* 4方向の回転と展開 */
+/* 4方向の回転と展開（PC基準） */
 .node-item.left   { transform: rotate(calc(var(--ang) + 180deg)); }
 .node-item.right  { transform: rotate(var(--ang)); }
 .node-item.top    { transform: rotate(calc(var(--ang) - 90deg)); }
@@ -143,7 +143,7 @@ body.state1 .node-item .line { width: var(--len); }
 }
 
 /* ==========================================
-   📱 スマホ専用レスポンシブ最適化
+   📱 スマホ専用レスポンシブ最適化（質素・見やすい・押しやすい）
    ========================================== */
 @media (max-width: 768px) {
   .enter-guide { 
@@ -152,14 +152,15 @@ body.state1 .node-item .line { width: var(--len); }
   }
   
   .fixed-label { 
-    font-size: 0.7rem; 
-    letter-spacing: 0.1em; 
+    font-size: 0.75rem; 
+    letter-spacing: 0.15em; 
   }
   
-  .shop-label    { left: 6%; }
-  .concept-label { right: 6%; }
-  .articles-label{ top: 8vh; }
-  .request-label { bottom: 8vh; }
+  /* スマホ時はラベル位置をスッキリと配置 */
+  .shop-label    { left: 8%; }
+  .concept-label { right: 8%; }
+  .articles-label{ top: 7vh; }
+  .request-label { bottom: 7vh; }
 
   .stats-display { 
     font-size: 0.5rem; 
@@ -173,14 +174,18 @@ body.state1 .node-item .line { width: var(--len); }
     left: 10px;
   }
   
-  /* スマホ時はロゴサイズを少しコンパクトに */
   .logo-container {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
   }
   
-  /* モバイル用：ノードの画像サイズを小さくし、画面からはみ出さないように調整 */
+  /* 
+    スマホでは画像群を「質素に、見やすく、押しやすく」するため、
+    ノードの画像を少し大きく（またはタップしやすいサイズに）しつつ、
+    広がりを抑えてごちゃつきを解消します。
+  */
   .node-img { 
-    width: 26px; 
+    width: 36px; /* タップしやすい適度な大きさを確保 */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); /* 視認性を上げる微かな影 */
   }
 }
