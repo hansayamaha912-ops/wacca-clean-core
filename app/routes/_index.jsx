@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
 import { Link, useLoaderData, useFetcher } from '@remix-run/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from "@supabase/supabase-js";
 import stylesUrl from "../styles/landing.css?url";
 
@@ -41,6 +41,20 @@ export default function Index() {
   const { stats } = useLoaderData();
   const fetcher = useFetcher();
   const [isOpen, setIsOpen] = useState(false);
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [labels] = useState(() => ({
+    view: ['Σ', 'Ψ', 'Φ', 'Δ', 'Ω', 'Ξ'][Math.floor(Math.random() * 6)],
+    click: ['α', 'β', 'γ', 'δ', 'ε', 'ζ'][Math.floor(Math.random() * 6)]
+  }));
+
+  useEffect(() => {
+    fetcher.submit({ type: 'view' }, { method: "post" });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setLocation({ lat: pos.coords.latitude.toFixed(2), lng: pos.coords.longitude.toFixed(2) });
+      });
+    }
+  }, []);
 
   const handleLogoClick = () => {
     if (!isOpen) { 
@@ -51,13 +65,19 @@ export default function Index() {
 
   return (
     <main className="index-container">
+      {/* 統計と位置情報の表示 */}
+      <div className="stats-display">
+        {location.lat !== 0 ? `LOC: ${location.lat}, ${location.lng} | ` : ""}
+        %{labels.view}＊5: {stats?.view_count} | 2｜6{labels.click}: {stats?.click_count}
+      </div>
+
       {/* メインのロゴエリア */}
       <div className={`center-logo ${isOpen ? 'active' : ''}`} onClick={handleLogoClick}>
         {!isOpen && <div className="enter-text">［ENTER］</div>}
         <img src="/assets/IN.png" alt="WACCA" className="logo-img" />
       </div>
 
-      {/* 4方向のミニマムガイド（展開時のみ表示） */}
+      {/* 4方向のガイド（展開時のみ表示） */}
       {isOpen && (
         <nav className="nav-guides">
           <Link to="/articles" className="guide-item top">ARTICLES</Link>
@@ -67,9 +87,8 @@ export default function Index() {
         </nav>
       )}
 
-      {/* フッター情報 */}
+      {/* フッター */}
       <footer className="footer-info">
-        <div>STATS: {stats?.view_count}</div>
         <Link to="/policies" style={{ color: "inherit", textDecoration: "none" }}>LEGAL</Link>
       </footer>
     </main>

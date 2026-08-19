@@ -1,126 +1,61 @@
 html, body, #__remix { 
-  margin: 0; 
-  padding: 0; 
-  height: 100vh; 
-  width: 100vw; 
-  background-color: #ffffff !important; 
-  overflow: hidden; 
+  margin: 0; padding: 0; height: 100vh; width: 100vw; 
+  background-color: #ffffff !important; overflow: hidden; 
 }
 
 .index-container {
-  height: 100vh; 
-  width: 100vw; 
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  background: #fff; 
-  position: relative;
+  height: 100vh; width: 100vw; display: flex;
+  justify-content: center; align-items: center;
+  background: #fff; position: relative;
+}
+
+.stats-display {
+  position: fixed; bottom: 24px; right: 24px;
+  font-family: 'Space Grotesk', monospace; font-size: 0.7rem; color: #333;
+  letter-spacing: 0.15em; text-transform: uppercase; z-index: 100;
+  pointer-events: none; opacity: 0.6;
 }
 
 .center-logo {
-  cursor: pointer; 
-  z-index: 10;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer; z-index: 10;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.center-logo.active { 
-  transform: scale(0.6); 
-}
+.center-logo.active { transform: scale(0.6); }
 
-.logo-img { 
-  width: 150px; 
-  height: auto;
-}
+.logo-img { width: 150px; height: auto; }
 
 .enter-text { 
-  position: absolute; 
-  top: 120%; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  font-family: 'Space Grotesk', monospace, sans-serif;
-  font-size: 1.2rem;
-  letter-spacing: 0.2em;
-  color: #333; 
+  position: absolute; top: 120%; left: 50%; 
+  transform: translateX(-50%); font-family: 'Space Grotesk', monospace;
+  font-size: 1.2rem; letter-spacing: 0.3em; color: #333; 
   animation: blink 1.5s infinite;
-  white-space: nowrap;
 }
+@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
 
-@keyframes blink { 
-  0%, 100% { opacity: 0.2; } 
-  50% { opacity: 1; } 
-}
-
-/* 4方向のテキストガイド */
-.nav-guides {
-  position: absolute; 
-  inset: 0;
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  pointer-events: none;
-}
+.nav-guides { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
 
 .guide-item {
-  position: absolute;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 900; 
-  letter-spacing: 0.25em;
-  color: #111; 
-  text-decoration: none;
-  font-size: 1rem; 
-  opacity: 0.5;
-  pointer-events: auto;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute; font-family: 'Montserrat', sans-serif;
+  font-weight: 900; letter-spacing: 0.25em; color: #111; 
+  text-decoration: none; font-size: 1rem; opacity: 0.5;
+  pointer-events: auto; transition: opacity 0.3s ease, transform 0.3s ease;
 }
-.guide-item:hover { 
-  opacity: 1; 
-  transform: scale(1.05);
-}
+.guide-item:hover { opacity: 1; transform: scale(1.05); }
 
 .top    { top: 25%; }
 .bottom { bottom: 25%; }
 .left   { left: 22%; }
 .right  { right: 22%; }
 
-.footer-info {
-  position: fixed; 
-  bottom: 20px; 
-  right: 20px;
-  font-family: 'Space Grotesk', monospace, sans-serif; 
-  font-size: 0.7rem; 
-  color: #999;
-  letter-spacing: 0.1em;
-  display: flex;
-  gap: 15px;
-  z-index: 50;
-}
+.footer-info { position: fixed; bottom: 20px; left: 20px; font-size: 0.7rem; color: #999; }
 
-/* スマホ対応（レイアウト崩れ防止とタップしやすさの確保） */
 @media (max-width: 768px) {
-  .logo-img { 
-    width: 110px; 
-  }
-  
-  .enter-text {
-    font-size: 1rem;
-  }
-
-  .guide-item { 
-    font-size: 0.85rem; 
-    letter-spacing: 0.15em;
-  }
-  
+  .logo-img { width: 110px; }
+  .enter-text { font-size: 1rem; }
+  .guide-item { font-size: 0.85rem; }
+  .stats-display { bottom: 10px; right: 10px; font-size: 0.5rem; }
   .top    { top: 18%; }
   .bottom { bottom: 18%; }
   .left   { left: 12%; }
   .right  { right: 12%; }
-  
-  .footer-info {
-    bottom: 12px;
-    right: 12px;
-    font-size: 0.6rem;
-  }
 }
