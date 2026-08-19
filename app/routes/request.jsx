@@ -9,10 +9,20 @@ export const links = () => [
 
 // 送信完了時にランダムで出る制作陣からのシュールな返事たち
 const SECRET_RESPONSES = [
-  "「その視点は面白かった。闇に保存した。」",
-  "「電波は受信された。続きは次のログで。」",
+  "「その視点は面白かった。保存した。」",
+  "「情報は受信された。続きは次のログで。」",
   "「クレイジーだな。気に入った。」",
-  "「その独り言、夜中に一人で読んでニヤニヤしとくわ。」"
+  "「その独り言、いいな。ニヤついた。」",
+  "「結構アリだぞ、検討させてもらう。」",
+  "「もっとくれ、そういうの欲しかったんだよ。」",
+  "「イかれてんな、最高だぜ。」",
+  "「その発想、面白いな。」",
+  "「そのアイデア、最高だ。」",
+  "「もっと早く聞きたかったぜ、それ。」",
+  "「そのゴミ、ウチで回収しとくわ。」",
+  "「脳内からダイレクトに受信。面白そうだな。」",
+  "「ガラクタの山に放り込んどいた。気が向いたら形にする。」",
+  "「シュレッダーにかけるか、新作のヒントにするか迷うところだな。」"
 ];
 
 export default function RequestPage() {
@@ -56,7 +66,7 @@ export default function RequestPage() {
       {/* メインフォーム */}
       <main style={{ maxWidth: "560px", margin: "4rem auto 0 auto", padding: "0 1.5rem" }}>
         
-        {/* タブ */}
+        {/* タブ切替（IDEA BOXにリニューアル） */}
         <div style={{ display: "flex", gap: "1.5rem", marginBottom: "2.5rem", borderBottom: "1px solid #222", paddingBottom: "1rem" }}>
           <button 
             onClick={() => setActiveTab("custom")}
@@ -65,10 +75,10 @@ export default function RequestPage() {
             01. 3D CUSTOM / ORDER
           </button>
           <button 
-            onClick={() => setActiveTab("secret")}
-            style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", fontSize: "14px", fontWeight: "900", opacity: activeTab === "secret" ? 1 : 0.3, padding: 0 }}
+            onClick={() => setActiveTab("idea")}
+            style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", fontSize: "14px", fontWeight: "900", opacity: activeTab === "idea" ? 1 : 0.3, padding: 0 }}
           >
-            02. SECRET NOTE
+            02. IDEA BOX (みんなのゴミ箱)
           </button>
         </div>
 
@@ -76,7 +86,7 @@ export default function RequestPage() {
           /* 💡 送信完了時の気持ちいいフィードバック演出 */
           <div style={{ padding: "4rem 2rem", backgroundColor: "#111", textAlign: "center", borderRadius: "8px", animation: "fadeIn 0.4s ease", border: "1px solid #333" }}>
             <div style={{ fontSize: "10px", fontWeight: "900", letterSpacing: "0.2em", color: "#888", marginBottom: "1.5rem", textTransform: "uppercase" }}>
-              // TRANSMISSION SUCCESSFUL
+              // THROWN INTO THE BIN
             </div>
             <p style={{ fontSize: "16px", fontWeight: "900", color: "#fff", lineHeight: "1.6", marginBottom: "2rem" }}>
               {randomReply}
@@ -85,7 +95,7 @@ export default function RequestPage() {
               onClick={() => setSubmitted(false)}
               style={{ background: "none", border: "1px solid #555", color: "#aaa", padding: "10px 20px", fontSize: "11px", fontWeight: "900", textTransform: "uppercase", cursor: "pointer", borderRadius: "4px" }}
             >
-              Throw another note →
+              Throw another idea →
             </button>
           </div>
         ) : (
@@ -118,12 +128,12 @@ export default function RequestPage() {
             ) : (
               <div>
                 <label style={{ display: "block", fontSize: "11px", fontWeight: "900", textTransform: "uppercase", marginBottom: "8px", color: "#888" }}>
-                  Drop a Note (妄想、雑談、秘密、クレーム、なんでも)
+                  Drop your idea / trash in the bin (アイデア・脳内ガラクタ置き場)
                 </label>
                 <textarea 
                   required 
                   rows="5" 
-                  placeholder="ここに吐き出したいこと、あるいはくだらない独り言を..." 
+                  placeholder="「こんなの作ったら面白そう」「こういうネタ好き」みたいな頭の中の独り言を気軽にポイッと..." 
                   style={{ width: "100%", padding: "16px", backgroundColor: "#111", border: "1px solid #333", color: "#fff", borderRadius: "4px", fontSize: "14px", outline: "none", resize: "vertical" }} 
                 />
               </div>
@@ -148,7 +158,7 @@ export default function RequestPage() {
               onMouseEnter={(e) => e.target.style.backgroundColor = "#ddd"}
               onMouseLeave={(e) => e.target.style.backgroundColor = "#fff"}
             >
-              SEND TO THE VOID
+              THROW INTO THE BIN
             </button>
           </form>
         )}
