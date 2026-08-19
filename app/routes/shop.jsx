@@ -8,7 +8,7 @@ export const links = () => [
 ];
 
 // ==========================================
-// 商品マスタデータ（色が被らないように配置順を最適化）
+// 商品マスタデータ
 // ==========================================
 const PRODUCT_DATA = [
   {
@@ -108,10 +108,10 @@ export default function Shop() {
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "'Montserrat', sans-serif", paddingBottom: "140px" }}>
       
-      {/* ヘッダー */}
+      {/* ヘッダー：Concept、Articles、Request などの導線を追加してメディア感を強化 */}
       <header style={{ 
         maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.2rem 1rem" : "2rem 1.5rem", 
-        display: "flex", justifyContent: "space-between", alignItems: "center" 
+        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem"
       }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: isMobile ? "8px" : "12px", textDecoration: "none", color: "#000" }}>
           <img src="/assets/IN.png" alt="Logo" style={{ height: isMobile ? "22px" : "30px", width: "auto", objectFit: "contain" }} />
@@ -120,8 +120,11 @@ export default function Shop() {
           </span>
         </Link>
 
-        <nav style={{ display: "flex", gap: isMobile ? "1.2rem" : "2rem", fontWeight: "900", fontSize: isMobile ? "12px" : "14px", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+        <nav style={{ display: "flex", gap: isMobile ? "1rem" : "1.8rem", fontWeight: "900", fontSize: isMobile ? "11px" : "13px", letterSpacing: "0.05em", textTransform: "uppercase", flexWrap: "wrap" }}>
           <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
+          <Link to="/concept" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Concept</Link>
+          <Link to="/articles" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Articles</Link>
+          <Link to="/request" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Request</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "2px solid #000" }}>Shop</Link>
         </nav>
       </header>
@@ -151,7 +154,7 @@ export default function Shop() {
         </div>
       </main>
 
-      {/* ポップアップモーダル（スマホ・PC両対応の完全スクロール設計） */}
+      {/* ポップアップモーダル */}
       <div style={{
         position: "fixed", inset: 0, zIndex: 50,
         pointerEvents: selectedProduct ? "auto" : "none",
@@ -171,7 +174,7 @@ export default function Shop() {
         }}>
           {selectedProduct && (
             <>
-              {/* 左側：ギャラリー（独立スクロール） */}
+              {/* 左側：ギャラリー */}
               <div style={{ 
                 flex: isMobile ? "1.2" : "1", 
                 overflowY: "auto", 
@@ -190,7 +193,7 @@ export default function Shop() {
                 ))}
               </div>
 
-              {/* 右側：詳細情報・購入ボタン（独立スクロール） */}
+              {/* 右側：詳細情報 */}
               <div style={{ 
                 flex: "1", 
                 padding: isMobile ? "20px" : "30px", 
