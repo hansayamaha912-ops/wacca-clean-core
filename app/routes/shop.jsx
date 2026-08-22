@@ -15,7 +15,7 @@ const PRODUCT_DATA = [
     id: "master-hand",
     name: "Master Hand",
     price: "¥4,000",
-    description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたシグネチャー的グッズです。",
+    description: "WACCAの新たな「第3の手」。ただの雑貨ではなく、これを持つことであなたも輪（WACCA）のメンバーとしてジョインするというメッセージを込めたシグネチャー적グッズです。",
     images: [
       "/assets/ピンク正面.png", "/assets/ピンク横.png", "/assets/c2.jpg", "/assets/c6.jpg",
       "/assets/c1.jpg", "/assets/c3.jpg", "/assets/c7.jpg", "/assets/c8.jpg", "/assets/c9.jpg"
@@ -108,7 +108,7 @@ export default function Shop() {
   return (
     <div style={{ backgroundColor: "#fff", minHeight: "100vh", color: "#000", fontFamily: "'Montserrat', sans-serif", paddingBottom: "140px" }}>
       
-      {/* ヘッダー：Concept、Articles、Request などの導線を追加してメディア感を強化 */}
+      {/* ヘッダー */}
       <header style={{ 
         maxWidth: "1200px", margin: "0 auto", padding: isMobile ? "1.2rem 1rem" : "2rem 1.5rem", 
         display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem"
@@ -121,10 +121,10 @@ export default function Shop() {
         </Link>
 
         <nav style={{ display: "flex", gap: isMobile ? "1rem" : "1.8rem", fontWeight: "900", fontSize: isMobile ? "11px" : "13px", letterSpacing: "0.05em", textTransform: "uppercase", flexWrap: "wrap" }}>
-          <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5 }}>Home</Link>
-          <Link to="/concept" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Concept</Link>
-          <Link to="/articles" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Articles</Link>
-          <Link to="/request" style={{ color: "#000", textDecoration: "none", opacity: 0.7 }}>Request</Link>
+          <Link to="/" style={{ color: "#000", textDecoration: "none", opacity: 0.5, transition: "opacity 0.2s" }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.5}>Home</Link>
+          <Link to="/concept" style={{ color: "#000", textDecoration: "none", opacity: 0.7, transition: "opacity 0.2s" }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>Concept</Link>
+          <Link to="/articles" style={{ color: "#000", textDecoration: "none", opacity: 0.7, transition: "opacity 0.2s" }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>Articles</Link>
+          <Link to="/request" style={{ color: "#000", textDecoration: "none", opacity: 0.7, transition: "opacity 0.2s" }} onMouseEnter={(e) => e.target.style.opacity = 1} onMouseLeave={(e) => e.target.style.opacity = 0.7}>Request</Link>
           <Link to="/shop" style={{ color: "#000", textDecoration: "none", borderBottom: "2px solid #000" }}>Shop</Link>
         </nav>
       </header>
@@ -138,17 +138,23 @@ export default function Shop() {
               onClick={() => setSelectedProduct(product)}
               onMouseEnter={() => setHoveredProductId(product.id)}
               onMouseLeave={() => setHoveredProductId(null)}
-              style={{ cursor: "pointer" }}
+              style={{ 
+                cursor: "pointer", 
+                padding: "10px", 
+                borderRadius: "6px", 
+                transition: "background-color 0.2s ease, transform 0.2s ease",
+                backgroundColor: hoveredProductId === product.id ? "#f4f4f4" : "transparent" // 💡 ホバー時にカラム背景がグレーに変化
+              }}
             >
-              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem", position: "relative" }}>
+              <div style={{ width: "100%", aspectRatio: "3/4", backgroundColor: "#f9f9f9", overflow: "hidden", marginBottom: "0.8rem", position: "relative", borderRadius: "4px" }}>
                 <img 
                   src={hoveredProductId === product.id && product.images[1] ? product.images[1] : product.images[0]} 
                   alt={product.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", transition: "all 0.3s ease" }} 
+                  style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.3s ease" }} 
                 />
               </div>
               <h3 style={{ margin: 0, fontSize: "14px", fontWeight: "900", textTransform: "uppercase" }}>{product.name}</h3>
-              <p style={{ margin: 0, opacity: 0.6, fontSize: "13px" }}>{product.price}</p>
+              <p style={{ margin: "4px 0 0 0", opacity: 0.6, fontSize: "13px" }}>{product.price}</p>
             </div>
           ))}
         </div>
@@ -203,14 +209,29 @@ export default function Shop() {
                 backgroundColor: "#fff",
                 WebkitOverflowScrolling: "touch" 
               }}>
-                <button onClick={() => setSelectedProduct(null)} style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontWeight: "900", fontSize: "14px", padding: "5px" }}>✕ CLOSE</button>
+                {/* 💡 閉じるボタンのホバー変化 */}
+                <button 
+                  onClick={() => setSelectedProduct(null)} 
+                  style={{ alignSelf: "flex-end", cursor: "pointer", border: "none", background: "none", fontWeight: "900", fontSize: "14px", padding: "5px", opacity: 0.6, transition: "opacity 0.2s" }}
+                  onMouseEnter={(e) => e.target.style.opacity = 1}
+                  onMouseLeave={(e) => e.target.style.opacity = 0.6}
+                >
+                  ✕ CLOSE
+                </button>
+                
                 <h2 style={{ fontSize: isMobile ? "20px" : "24px", marginTop: "5px", fontWeight: "900" }}>{selectedProduct.name}</h2>
                 <p style={{ fontSize: "16px", fontWeight: "900", margin: "5px 0 15px 0" }}>{selectedProduct.price}</p>
                 <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#444" }}>{selectedProduct.description}</p>
                 
                 <div style={{ marginTop: "auto", paddingTop: "25px" }}>
                   {selectedProduct.stripeUrl || selectedProduct.purchasePath ? (
-                    <button onClick={() => handlePurchase(selectedProduct)} style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontWeight: "900", textTransform: "uppercase" }}>
+                    /* 💡 購入ボタンのホバー変化（黒からグレーへ変化） */
+                    <button 
+                      onClick={() => handlePurchase(selectedProduct)} 
+                      style={{ width: "100%", padding: "15px", background: "#000", color: "#fff", border: "none", cursor: "pointer", fontWeight: "900", textTransform: "uppercase", transition: "background-color 0.2s" }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = "#333"}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = "#000"}
+                    >
                       {selectedProduct.purchasePath ? "GO TO PRODUCT PAGE" : "BUY NOW"}
                     </button>
                   ) : (
